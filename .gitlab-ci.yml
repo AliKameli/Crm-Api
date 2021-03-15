@@ -1,0 +1,39 @@
+stages:
+  - development
+  - production
+
+variables:
+  PUBLISH_DEVELOPMENT: "false"
+  PUBLISH_PRODUCTION: "true"
+
+crm-api-prod:
+  stage: production
+  before_script:
+    - export NODE_ENV=production
+
+  script:
+    - docker-compose up -d --build
+    - docker image prune -f
+  only:
+    refs:
+      - master
+    variables:
+      - $PUBLISH_PRODUCTION == 'true'
+  tags:
+    - crm
+
+crm-api-dev:
+  stage: development
+  before_script:
+    - export NODE_ENV=development
+
+  script:
+    - docker-compose up -d --build
+    - docker image prune -f
+  only:
+    refs:
+      - master
+    variables:
+      - $PUBLISH_DEVELOPMENT == 'true'
+  tags:
+    - crm-develop

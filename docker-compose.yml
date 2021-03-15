@@ -1,0 +1,9 @@
+version: '3'
+services:
+  CRM-API:
+    build: .
+    image: CRM-API
+    container_name : CRM-API
+    restart: always
+    ports:
+      - '9092:80'
