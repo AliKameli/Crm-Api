@@ -1,24 +1,23 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Authentication;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
 {
-    public class JwtValidator : IJwtValidator
+    public class TokenValidator: ITokenValidator
     {
-        private readonly IAdminRepository _adminRepository;
         private readonly ITokenStoreService _tokenStoreService;
-
-        public JwtValidator(IAdminRepository userRepository, ITokenStoreService tokenStoreService)
+        private readonly IAdminRepository _adminRepository;
+        public TokenValidator(IAdminRepository adminRepository, ITokenStoreService tokenStoreService)
         {
-            _adminRepository = userRepository;
+            _adminRepository = adminRepository;
             _tokenStoreService = tokenStoreService;
         }
         public async Task ValidateAsync(TokenValidatedContext context)
@@ -37,18 +36,26 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
                 return;
             }
 
-            var adminIdString = claimsIdentity.FindFirst(ClaimTypes.UserData).Value;
-            if (!int.TryParse(adminIdString, out int adminId))
+            var userIdString = claimsIdentity.FindFirst(ClaimTypes.UserData).Value;
+            if (!int.TryParse(userIdString, out int adminId))
             {
                 context.Fail("This is not our issued token. It has no user-id.");
                 return;
             }
 
-            var user = await _adminRepository.FindAdminAsync(adminId);
-            if (user == null || user.SerialNumber != serialNumberClaim.Value || !user.IsActive)
+            var dataResponse = await _adminRepository.GetByIdAsync(adminId);
+            if (dataResponse.Success == false)
+            {
+                // user has changed his/her password/roles/stat/IsActive
+                context.Fail("This is not our issued token. It has no user-id.");
+                return;
+            }
+            var admin = dataResponse?.Data;
+            if (admin == null || admin.SerialNumber != serialNumberClaim.Value || !admin.IsActive)
             {
                 // user has changed his/her password/roles/stat/IsActive
                 context.Fail("This token is expired. Please login again.");
+                return;
             }
 
             if (!(context.SecurityToken is JwtSecurityToken accessToken) || string.IsNullOrWhiteSpace(accessToken.RawData) ||

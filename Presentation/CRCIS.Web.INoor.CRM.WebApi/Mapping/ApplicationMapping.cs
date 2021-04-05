@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Answers.AnswerMethod.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseStatus.Commands;
@@ -14,6 +15,7 @@ using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Account;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Admin;
+using CRCIS.Web.INoor.CRM.WebApi.Models.Answer;
 using CRCIS.Web.INoor.CRM.WebApi.Models.AnswerMethod;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
 using CRCIS.Web.INoor.CRM.WebApi.Models.CaseStatus;
@@ -95,6 +97,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             CreateMap<AdminUpdateModel, AdminUpdateCommand>();
             CreateMap<LoginModel, AdminLoginQuery>();
             #endregion
+
+            #region Answering
+            CreateMap<AnsweringCreateModel, AnsweringCreateDto>();
+            #endregion
         }
 
         private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseNewCreateModel model)
@@ -110,7 +116,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
                 noorUserId,
                 model.ProductId,
                 model.ManualImportAdminId,
-                model.CaseStatusId
+                model.Mobile
                 );
         }
 
@@ -123,8 +129,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
                 model.Family,
                 model.Mobile);
         }
-        
-
 
         private SubjectCreateCommand mapSubjectCreateModelToSubjectCreateCommand(SubjectCreateModel model)
         {
