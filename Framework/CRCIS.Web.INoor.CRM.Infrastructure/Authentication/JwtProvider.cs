@@ -52,15 +52,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return (token.ValidTo, tokenHandler.WriteToken(token));
         }
-        private IEnumerable<Claim> _getClaims(AdminModel user)
+        private IEnumerable<Claim> _getClaims(AdminModel admin)
         {
-            //var result = await signInManager.ClaimsFactory.CreateAsync(user);
-
-
             //add custom claims
 
             var list = new List<Claim>();
-            list.Add(new Claim(ClaimTypes.MobilePhone, "09123456987"));
+            list.Add(new Claim(ClaimTypes.SerialNumber,admin.SerialNumber));
+            list.Add(new Claim(ClaimTypes.UserData, admin.Id.ToString()));
+            list.Add(new Claim(ClaimTypes.Role, "Admin"));
 
 
             //var list = new List<Claim>

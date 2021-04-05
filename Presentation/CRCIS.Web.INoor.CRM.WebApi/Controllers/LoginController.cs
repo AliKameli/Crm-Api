@@ -43,6 +43,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             var accessTokenData = new AccessTokenData
             {
                 ExpireAtUtc = expireDate,
+                ValidToMilliseconds = (expireDate - DateTime.UtcNow).TotalMilliseconds,
+                User = responseUser.Data.Id == 1 ? "crmAdministrator" : "admin",//hard code permission
                 AccessToken = responseToken,
                 RedreshToken = Guid.NewGuid().ToString()
             };
@@ -56,7 +58,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             }
             else
             {
-                var result = new DataResponse<int>(new List<string> { "عملیات لاگین ناموفق بود"});
+                var result = new DataResponse<int>(new List<string> { "عملیات لاگین ناموفق بود" });
                 return Ok(result);
             }
         }

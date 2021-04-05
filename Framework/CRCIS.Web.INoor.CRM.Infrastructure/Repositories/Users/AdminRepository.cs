@@ -196,7 +196,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         }
         public async Task UpdateAdminLastActivityDateAsync(int adminId)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
     }
 }

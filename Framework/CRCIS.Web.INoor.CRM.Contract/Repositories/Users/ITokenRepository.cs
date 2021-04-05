@@ -11,5 +11,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Users
     public interface ITokenRepository : IBaseRepository
     {
         Task<DataResponse<int>> CreateAsync(TokenCreateCommand command);
+        Task<DataResponse<int>> GetTokenAsync(string hashAccessToken);
     }
 }

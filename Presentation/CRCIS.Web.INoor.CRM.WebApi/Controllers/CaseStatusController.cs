@@ -49,29 +49,29 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(CaseStatusCreateModel model)
-        {
+        //[HttpPost]
+        //public async Task<IActionResult> Post(CaseStatusCreateModel model)
+        //{
 
-            var command = _mapper.Map<CaseStatusCreateCommand>(model);
-            var response = await _caseStatusRepository.CreateAsync(command);
-            return Ok(response);
-        }
+        //    var command = _mapper.Map<CaseStatusCreateCommand>(model);
+        //    var response = await _caseStatusRepository.CreateAsync(command);
+        //    return Ok(response);
+        //}
 
-        [HttpPut]
-        public async Task<IActionResult> Put(CaseStatusUpdateModel model)
-        {
-            var command = _mapper.Map<CaseStatusUpdateCommand>(model);
-            var response = await _caseStatusRepository.UpdateAsync(command);
+        //[HttpPut]
+        //public async Task<IActionResult> Put(CaseStatusUpdateModel model)
+        //{
+        //    var command = _mapper.Map<CaseStatusUpdateCommand>(model);
+        //    var response = await _caseStatusRepository.UpdateAsync(command);
 
-            return Ok(response);
-        }
+        //    return Ok(response);
+        //}
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var response = await _caseStatusRepository.DeleteAsync(id);
-            return Ok(response);
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var response = await _caseStatusRepository.DeleteAsync(id);
+        //    return Ok(response);
+        //}
     }
 }

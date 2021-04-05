@@ -8,6 +8,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands
 {
     public class ImportCaseCreateCommand
     {
+        public long Id { get; set; }
         public string Title { get; private set; }
         public string NameFamily { get; private set; }
         public string Email { get; private set; }
@@ -19,8 +20,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands
         public int? ManualImportAdminId { get; private set; }
         public DateTime ImportDateTime { get; private set; }
         public DateTime CreateDateTime { get; private set; }
-        public int CaseStatusId { get; private set; }
-        public ImportCaseCreateCommand(string title, string nameFamily, string email, string description, int sourceTypeId, Guid? noorUserId, int? productId, int? manualImportAdminId, int caseStatusId)
+        public ImportCaseCreateCommand(string title, string nameFamily, string email, string description,
+            int sourceTypeId, Guid? noorUserId, int? productId, int? manualImportAdminId,string mobile)
         {
             Title = title;
             NameFamily = nameFamily;
@@ -30,10 +31,9 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands
             NoorUserId = noorUserId;
             ProductId = productId;
             ManualImportAdminId = manualImportAdminId;
-            CaseStatusId = caseStatusId;
             ImportDateTime = DateTime.Now;
             CreateDateTime = DateTime.Now;
-
+            Mobile = mobile;
         }
     }
 }

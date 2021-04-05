@@ -17,7 +17,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.Case
         public string NoorUserId { get; set; }
         public int? ProductId { get; set; }
         public int? ManualImportAdminId { get; set; }
-        public int CaseStatusId { get; set; }
 
         public List<int> SubjectIds { get; set; }
     }

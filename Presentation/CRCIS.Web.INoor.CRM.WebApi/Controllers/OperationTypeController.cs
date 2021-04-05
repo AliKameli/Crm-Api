@@ -43,27 +43,27 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
             return Ok(response);
         }
-        [HttpPost]
-        public async Task<IActionResult> Post(OperationTypeCreateModel model)
-        {
+        //[HttpPost]
+        //public async Task<IActionResult> Post(OperationTypeCreateModel model)
+        //{
 
-            var command = _mapper.Map<OperationTypeCreateCommand>(model);
-            var response = await _operationTypeRepository.CreateAsync(command);
-            return Ok(response);
-        }
-        [HttpPut]
-        public async Task<IActionResult> Put(OperationTypeUpdateModel model)
-        {
-            var command = _mapper.Map<OperationTypeUpdateCommand>(model);
-            var response = await _operationTypeRepository.UpdateAsync(command);
+        //    var command = _mapper.Map<OperationTypeCreateCommand>(model);
+        //    var response = await _operationTypeRepository.CreateAsync(command);
+        //    return Ok(response);
+        //}
+        //[HttpPut]
+        //public async Task<IActionResult> Put(OperationTypeUpdateModel model)
+        //{
+        //    var command = _mapper.Map<OperationTypeUpdateCommand>(model);
+        //    var response = await _operationTypeRepository.UpdateAsync(command);
 
-            return Ok(response);
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var response = await _operationTypeRepository.DeleteAsync(id);
-            return Ok(response);
-        }
+        //    return Ok(response);
+        //}
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var response = await _operationTypeRepository.DeleteAsync(id);
+        //    return Ok(response);
+        //}
     }
 }

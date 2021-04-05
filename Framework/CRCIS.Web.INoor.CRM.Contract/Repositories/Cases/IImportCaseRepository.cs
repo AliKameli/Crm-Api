@@ -14,7 +14,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
     {
         Task<DataResponse<int>> CreateAsync(ImportCaseCreateCommand command, List<int> caseSubjectIds);
         Task<DataResponse<int>> CreateAndMoveToAdmin(ImportCaseCreateCommand command, int adminId, List<int> caseSubjectIds);
-        Task<DataResponse<int>> DeleteAsync(long id);
         Task<DataTableResponse<IEnumerable<ImportCaseGetDto>>> GetAsync(ImportCaseDataTableQuery query);
         Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);
         Task<DataResponse<int>> MoveCaseToArchive(MoveCaseToArchiveCommand command);

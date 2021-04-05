@@ -18,6 +18,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         public TokenRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
         {
         }
+
+
+        public async Task <DataResponse<int>> GetTokenAsync(string hashAccessToken)
+        {
+            return new DataResponse<int>(true);
+        }
         public async Task<DataResponse<int>> CreateAsync(TokenCreateCommand command)
         {
             //command.PasswordHash = co

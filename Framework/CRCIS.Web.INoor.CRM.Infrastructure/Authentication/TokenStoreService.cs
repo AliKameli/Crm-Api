@@ -22,9 +22,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
             _tokenRepository = tokenRepository;
         }
 
-        public Task<bool> IsValidTokenAsync(string accessToken, int adminId)
+        public async Task<bool> IsValidTokenAsync(string accessToken, int adminId)
         {
-            throw new NotImplementedException();
+            var hashAccess = _securityService.GetSha256Hash(accessToken);
+            await _tokenRepository.GetTokenAsync(hashAccess);
+            return true;
         }
 
         public async Task<DataResponse<int>> CreateAsync(AccessTokenData accessToken, int adminId)

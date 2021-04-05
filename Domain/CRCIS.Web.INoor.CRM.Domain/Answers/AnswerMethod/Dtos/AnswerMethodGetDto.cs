@@ -11,6 +11,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.AnswerMethod.Dtos
         public int Id { get; set; }
         public string Title { get; set; }
         public int RowNumber { get; set; }
-        public int Total { get; set; }
+        public int TotalCount { get; set; }
     }
 }

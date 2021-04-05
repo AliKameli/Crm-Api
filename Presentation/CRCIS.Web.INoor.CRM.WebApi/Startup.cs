@@ -69,7 +69,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             app.UseRouting();
 
             app.UseCors(MyAllowSpecificOrigins);
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

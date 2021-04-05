@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris;
+using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
@@ -67,9 +68,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 await dbConnection
                     .QueryFirstOrDefaultAsync(sqlDelete, commandDelete, commandType: CommandType.StoredProcedure, transaction: transaction);
 
+                var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+                var commandCaseHistory = new CaseHistoryCreateCommand(
+                    command.AdminId, command.CaseId, DateTime.Now,
+                    7//	بازگشت از آرشیو به کارتابل خودم
+                    );
+                var caseHistoryId =
+                           await dbConnection
+                          .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
 
                 transaction.Commit();
-
 
                 return new DataResponse<int>(true);
             }

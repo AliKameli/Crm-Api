@@ -4,6 +4,7 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries;
+using CRCIS.Web.INoor.CRM.Utility.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using System;
@@ -33,7 +34,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                 var list =
                      await dbConnection
                     .QueryAsync<CommonAnswerGetDto>(sql, query, commandType: CommandType.StoredProcedure);
-                int totalCount = list == null ? 0 : list.Count();
+                int totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
                 var result = new DataTableResponse<IEnumerable<CommonAnswerGetDto>>(list,totalCount);
                 return result;
                     
@@ -72,6 +73,29 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<CommonAnswerModel>(errors);
+                return result;
+            }
+        }
+        public async Task<DataResponse<IEnumerable<DropDownListDto>>> GetDropDownListAsync()
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "DropDownList");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<DropDownListDto>(sql, commandType: CommandType.StoredProcedure);
+
+                var result = new DataResponse<IEnumerable<DropDownListDto>>(list);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<IEnumerable<DropDownListDto>>(errors);
                 return result;
             }
         }
