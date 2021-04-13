@@ -6,7 +6,7 @@ ENV https_proxy 'http://172.16.20.207:3128'
 ENV no_proxy 'localhost,127.0.0.0/8,.local,172.16.0.0/12,192.168.0.0/16,.ir,.noornet.net'
 
 # Copy csproj and restore as distinct layers
-COPY Presentation/CRCIS.Web.INoor.CRM.WebApi/*.csproj ./
+COPY . ./
 RUN dotnet restore
 
 # Copy everything else and build
