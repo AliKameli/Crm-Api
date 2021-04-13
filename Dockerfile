@@ -6,11 +6,11 @@ ENV https_proxy 'http://172.16.20.207:3128'
 ENV no_proxy 'localhost,127.0.0.0/8,.local,172.16.0.0/12,192.168.0.0/16,.ir,.noornet.net'
 
 # Copy csproj and restore as distinct layers
-COPY Presentaion/CRCIS.Web.INoor.CRM.WebApi/*.csproj ./
+COPY Presentation/CRCIS.Web.INoor.CRM.WebApi/*.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
-COPY Presentaion/CRCIS.Web.INoor.CRM.WebApi/. ./
+COPY Presentation/CRCIS.Web.INoor.CRM.WebApi/. ./
 RUN dotnet publish -c Release -o out
 
 ENV http_proxy 'http://172.16.20.207:3128'
