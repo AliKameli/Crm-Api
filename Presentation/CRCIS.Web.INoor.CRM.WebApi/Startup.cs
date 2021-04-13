@@ -64,7 +64,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRCIS.Web.INoor.CRM.WebApi v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
