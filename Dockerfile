@@ -20,8 +20,8 @@ ENV no_proxy 'localhost,127.0.0.0/8,.local,172.16.0.0/12,192.168.0.0/16,.ir,.noo
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
-WORKDIR /app
-COPY --from=build-env /app/out ./
+WORKDIR /app/Presentation/CRCIS.Web.INoor.CRM.WebApi
+COPY --from=build-env /app/Presentation/CRCIS.Web.INoor.CRM.WebApi/out ./
 EXPOSE 80
 # EXPOSE 5000
 # EXPOSE 5001
