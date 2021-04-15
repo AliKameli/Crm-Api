@@ -3,7 +3,7 @@ stages:
   - production
 
 variables:
-  PUBLISH_DEVELOPMENT: "false"
+  PUBLISH_DEVELOPMENT: "true"
   PUBLISH_PRODUCTION: "true"
 
 crm-api-prod:
