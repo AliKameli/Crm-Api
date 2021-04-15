@@ -20,6 +20,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Security
             return Convert.ToBase64String(byteHash);
         }
 
+
+        public bool IsEquals(string planText, string hashed)
+        {
+            var hashText = this.GetSha256Hash(planText);
+            return hashText.Equals(hashed);
+        }
         public Guid CreateCryptographicallySecureGuid()
         {
             var bytes = new byte[16];

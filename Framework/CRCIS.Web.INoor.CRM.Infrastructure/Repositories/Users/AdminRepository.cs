@@ -16,7 +16,7 @@ using CRCIS.Web.INoor.CRM.Contract.Security;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
 {
-    public class AdminRepository:BaseRepository, IAdminRepository
+    public class AdminRepository : BaseRepository, IAdminRepository
     {
         private readonly ISecurityService _securityService;
         protected override string TableName => "Admin";
@@ -49,6 +49,35 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 return result;
             }
         }
+        public async Task<DataResponse<AdminModel>> GetProfileByIdAsync(int id)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "ProfileGetById");
+                var command = new { Id = id };
+                var adminModel =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+
+                if (adminModel != null)
+                    return new DataResponse<AdminModel>(adminModel);
+
+                var errors = new List<string> { "وضعیت مورد یافت نشد" };
+                var result = new DataResponse<AdminModel>(errors);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<AdminModel>(errors);
+                return result;
+            }
+        }
         public async Task<DataResponse<AdminModel>> GetByIdAsync(int id)
         {
             try
@@ -78,7 +107,32 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 return result;
             }
         }
+        public async Task<DataResponse<int>> UpdatePasswordHashAsync(int adminId, string newPasswordHash)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "UpdatePassword");
+                var command = new
+                {
+                    Id = adminId,
+                    PasswordHash = newPasswordHash
+                };
+                var execute =
+                     await dbConnection
+                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
 
+                return new DataResponse<int>(true);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<int>(errors);
+                return result;
+            }
+        }
         public async Task<DataResponse<IEnumerable<AdminDropDownListDto>>> GetDropDownListAsync()
         {
 
@@ -153,14 +207,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
         }
 
-        public async Task<DataResponse<AdminModel>>FindAdminAsync(AdminLoginQuery query)
+        public async Task<DataResponse<AdminModel>> FindAdminAsync(AdminLoginQuery query)
         {
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByUserAndPasswordHash");
-                var command = new {
+                var command = new
+                {
                     Username = query.Username,
                     PasswordHash = _securityService.GetSha256Hash(query.Password)
                 };
@@ -186,17 +241,37 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
         }
 
-        public async Task<AdminModel> FindAdminAsync(int adminId)
+        public async Task<DataResponse<AdminModel>> FindAdminAsync(int adminId)
         {
-            var response = await this.GetByIdAsync(adminId);
-            if (response == null || response.Success == false)
-                return null;
-            else
-                return response.Data;
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetDetailsById");
+                var command = new { Id = adminId };
+                var adminModel =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+
+                if (adminModel != null)
+                    return new DataResponse<AdminModel>(adminModel);
+
+                var errors = new List<string> { "وضعیت مورد یافت نشد" };
+                var result = new DataResponse<AdminModel>(errors);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<AdminModel>(errors);
+                return result;
+            }
         }
         public async Task UpdateAdminLastActivityDateAsync(int adminId)
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }
