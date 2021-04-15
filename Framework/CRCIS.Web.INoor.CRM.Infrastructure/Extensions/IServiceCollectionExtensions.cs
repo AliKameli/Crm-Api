@@ -6,6 +6,7 @@ using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Contract.Security;
+using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Contract.Settings;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication;
@@ -16,6 +17,7 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Infrastructure.Security;
+using CRCIS.Web.INoor.CRM.Infrastructure.Service;
 using CRCIS.Web.INoor.CRM.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -112,7 +114,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
                     };
                 });
 
-
             return services;
         }
 
@@ -139,6 +140,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             //Users:
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
+
+            //BL Admin
+            services.AddTransient<IAdminService, AdminService>();
+
 
             return services;
         }
