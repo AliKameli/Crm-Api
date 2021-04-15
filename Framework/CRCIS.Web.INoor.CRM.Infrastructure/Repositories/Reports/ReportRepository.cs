@@ -23,8 +23,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
         public async Task<DataResponse<CaseHistoryChartDto>> GetCaseHistoryReportAsync()
         {
 
-            // try
-            // {
+            try
+            {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "LastWeekCaseHistory");
 
@@ -69,15 +69,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
                 var result = new DataResponse<CaseHistoryChartDto>(historyChartDto);
                 return result;
-            // }
-            // catch (Exception ex)
-            // {
-            //     //_logger.LogError(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
 
-            //     var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-            //     var result = new DataResponse<CaseHistoryChartDto>(errors);
-            //     return result;
-            // }
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<CaseHistoryChartDto>(errors);
+                return result;
+            }
         }
     }
 }
