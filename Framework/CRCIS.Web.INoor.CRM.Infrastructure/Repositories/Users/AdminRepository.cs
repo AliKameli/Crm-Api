@@ -163,7 +163,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         {
            command =  new AdminCreateCommand(
                 command.Username,
-                command.PasswordHash,
+                _securityService.GetSha256Hash(command.PasswordHash),
                 command.Name,
                 command.Family,
                 command.Mobile);
