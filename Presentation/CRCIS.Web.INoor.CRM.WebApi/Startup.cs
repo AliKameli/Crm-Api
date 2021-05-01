@@ -51,6 +51,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://172.16.22.77:9011")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
             });
         }
 
