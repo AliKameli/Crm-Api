@@ -161,7 +161,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         }
         public async Task<DataResponse<int>> CreateAsync(AdminCreateCommand command)
         {
-            //command.PasswordHash = co
+           command =  new AdminCreateCommand(
+                command.Username,
+                command.PasswordHash,
+                command.Name,
+                command.Family,
+                command.Mobile);
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
