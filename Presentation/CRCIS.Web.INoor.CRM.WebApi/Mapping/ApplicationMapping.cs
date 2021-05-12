@@ -127,7 +127,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
                 model.Password,
                 model.Name,
                 model.Family,
-                model.Mobile);
+                model.Mobile,
+                model.NoorPersonId);
         }
 
         private SubjectCreateCommand mapSubjectCreateModelToSubjectCreateCommand(SubjectCreateModel model)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
-    public interface ICaseSubjectRepository : IBaseRepository
+    public interface ICaseSubjectRepository
     {
         Task<DataResponse<int>> CreateAsync(CaseSubjectCreateCommand command);
         Task<DataTableResponse<IEnumerable<CaseSubjectGetDto>>> GetAsync(CaseSubjectDataTableQuery query);

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
-    public interface IImportCaseRepository : IBaseRepository
+    public interface IImportCaseRepository
     {
         Task<DataResponse<int>> CreateAsync(ImportCaseCreateCommand command, List<int> caseSubjectIds);
         Task<DataResponse<int>> CreateAndMoveToAdmin(ImportCaseCreateCommand command, int adminId, List<int> caseSubjectIds);

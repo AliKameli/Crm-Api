@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Users
 {
-    public interface ITokenRepository : IBaseRepository
+    public interface ITokenRepository
     {
         Task<DataResponse<int>> CreateAsync(TokenCreateCommand command);
         Task<DataResponse<int>> GetTokenAsync(string hashAccessToken);

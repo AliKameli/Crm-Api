@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
-    public interface ISubjectRepository : IBaseRepository
+    public interface ISubjectRepository
     {
         Task<DataResponse<int>> CreateAsync(SubjectCreateCommand command);
         Task<DataResponse<int>> DeleteAsync(int id);

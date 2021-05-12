@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Sources
 {
-    public interface ISourceConfigRepository : IBaseRepository
+    public interface ISourceConfigRepository
     {
         Task<DataResponse<int>> CreateAsync(SourceConfigCreateCommand command);
         Task<DataResponse<IEnumerable<SourceConfigGetDto>>> GetAsync(SourceConfigDataTableQuery query);

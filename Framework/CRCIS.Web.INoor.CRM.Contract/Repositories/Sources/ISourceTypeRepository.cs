@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Sources
 {
-    public interface ISourceTypeRepository : IBaseRepository
+    public interface ISourceTypeRepository
     {
         Task<DataResponse<int>> CreateAsync(SourceTypeCreateCommand command);
         Task<DataResponse<int>> DeleteAsync(int id);

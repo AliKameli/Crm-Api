@@ -19,11 +19,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             _adminService = adminService;
         }
-        [HttpPut]
-        public async Task<IActionResult> Put(ChangePasswordModel model)
-        {
-            var response = await _adminService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
-            return Ok(response);
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> Put(ChangePasswordModel model)
+        //{
+        //    var response = await _adminService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
+        //    return Ok(response);
+        //}
     }
 }
