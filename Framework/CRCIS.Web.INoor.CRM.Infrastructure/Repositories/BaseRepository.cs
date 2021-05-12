@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories
 {
-    public abstract class BaseRepository : IBaseRepository
+    public abstract class BaseRepository
     {
         /// <summary>
         /// Gets the table name.

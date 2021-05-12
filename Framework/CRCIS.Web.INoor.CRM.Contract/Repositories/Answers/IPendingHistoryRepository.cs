@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Answers
 {
-    public interface IPendingHistoryRepository : IBaseRepository
+    public interface IPendingHistoryRepository
     {
         Task<DataResponse<int>> CreateAsync(AnsweringCreateDto dto);
     }

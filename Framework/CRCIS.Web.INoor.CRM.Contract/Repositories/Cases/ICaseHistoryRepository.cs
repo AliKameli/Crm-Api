@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
-    public interface ICaseHistoryRepository : IBaseRepository
+    public interface ICaseHistoryRepository
     {
         Task<DataResponse<IEnumerable<CaseHistoriesDto>>> GetReportForCaseAsync(long id);
     }

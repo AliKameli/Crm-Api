@@ -17,12 +17,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
     {
         private readonly IIdentity _identity;
         private readonly ISecurityService _securityService;
-        IAdminRepository _adminRepository;
-        public AdminService(IIdentity identity, ISecurityService securityService, IAdminRepository adminRepository)
+        private readonly IAdminRepository _adminRepository;
+        private readonly IAdminVerifyTokenRepository _adminVerifyTokenRepository;
+        public AdminService(IIdentity identity, ISecurityService securityService,
+            IAdminRepository adminRepository,
+            IAdminVerifyTokenRepository adminVerifyTokenRepository)
         {
             _identity = identity;
             _securityService = securityService;
             _adminRepository = adminRepository;
+            _adminVerifyTokenRepository = adminVerifyTokenRepository;
         }
 
         public async Task<DataResponse<int>> ChangePasswordAsync(string oldPassword, string newPassword)
@@ -39,6 +43,25 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             var newPasswordHash = _securityService.GetSha256Hash(newPassword);
             var response = await _adminRepository.UpdatePasswordHashAsync(adminId, newPasswordHash);
             return response;
+        }
+
+        public async Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name,string family, string personId)
+        {
+            var admin = await _adminRepository.FindAdminAsync(personId);
+            if (admin == null)
+            {
+                var command = new Domain.Users.Admin.Commands.AdminCreateCommand(username, username + username, name, family, "",personId);
+                await _adminRepository.CreateAsync(command);
+                admin = await _adminRepository.FindAdminAsync(personId);
+            }
+            if (admin.Success ==false)
+            {
+                return new DataResponse<Guid>(admin.ApiErrors);
+            }
+
+            var token = await _adminVerifyTokenRepository.CreateTokenAsync(admin.Data.Id);
+            
+            return token;
         }
     }
 }

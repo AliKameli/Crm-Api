@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
-    public interface IArchiveCaseRepository : IBaseRepository
+    public interface IArchiveCaseRepository 
     {
         Task<DataTableResponse<IEnumerable<ArchiveCaseGetDto>>> GetAsync(ArchiveCaseDataTableQuery query);
         Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);

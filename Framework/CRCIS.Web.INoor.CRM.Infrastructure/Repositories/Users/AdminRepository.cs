@@ -64,7 +64,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 if (adminModel != null)
                     return new DataResponse<AdminModel>(adminModel);
 
-                var errors = new List<string> { "وضعیت مورد یافت نشد" };
+                var errors = new List<string> { "ادمین یافت نشد" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;
 
@@ -93,7 +93,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 if (adminModel != null)
                     return new DataResponse<AdminModel>(adminModel);
 
-                var errors = new List<string> { "وضعیت مورد یافت نشد" };
+                var errors = new List<string> { "ادمین یافت نشد" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;
 
@@ -166,7 +166,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 _securityService.GetSha256Hash(command.PasswordHash),
                 command.Name,
                 command.Family,
-                command.Mobile);
+                command.Mobile,
+                command.NoorPersonId);
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
@@ -261,7 +262,36 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 if (adminModel != null)
                     return new DataResponse<AdminModel>(adminModel);
 
-                var errors = new List<string> { "وضعیت مورد یافت نشد" };
+                var errors = new List<string> { "ادمین یافت نشد" };
+                var result = new DataResponse<AdminModel>(errors);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<AdminModel>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataResponse<AdminModel>> FindAdminAsync(string personId)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
+                var command = new { PersonId = personId };
+                var adminModel =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+
+                if (adminModel != null)
+                    return new DataResponse<AdminModel>(adminModel);
+
+                var errors = new List<string> { "ادمین یافت نشد" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;
 

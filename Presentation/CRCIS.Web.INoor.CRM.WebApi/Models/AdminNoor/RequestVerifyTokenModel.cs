@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace CRCIS.Web.INoor.CRM.WebApi.Models.AdminNoor
+{
+    public class RequestVerifyTokenModel
+    {
+        public string PersonId { get; set; }
+        public string Name { get; set; }
+        public string Family { get; set; }
+        public string Username { get; set; }
+    }
+}

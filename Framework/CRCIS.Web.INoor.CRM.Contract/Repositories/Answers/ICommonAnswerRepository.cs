@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Answers
 {
-    public interface ICommonAnswerRepository : IBaseRepository
+    public interface ICommonAnswerRepository
     {
         Task<DataResponse<int>> CreateAsync(CommonAnswerCreateCommand command);
         Task<DataResponse<int>> DeleteAsync(int id);
