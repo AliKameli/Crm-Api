@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Authentication;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Utility.Response;
+using CRCIS.Web.INoor.CRM.WebApi.Models.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,9 +25,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _tokenStoreService = tokenStoreService;
         }
         [HttpPost]
-        public async Task<IActionResult> Post(string verifyToken)
+        public async Task<IActionResult> Post(LoginVerifyTokenModel verifyToken)
         {
-            var responseUser = await _adminVerifyTokenRepository.GetAdminByVerifyToken(Guid.Parse(verifyToken));
+            var responseUser = await _adminVerifyTokenRepository.GetAdminByVerifyToken(Guid.Parse(verifyToken.VerifyToken));
             if (responseUser.Success == false)
             {
                 return Ok(responseUser);

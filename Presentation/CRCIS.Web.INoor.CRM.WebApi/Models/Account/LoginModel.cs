@@ -11,4 +11,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.Account
         public string Password { get; set; }
 
     }
+    public class LoginVerifyTokenModel
+    {
+       
+        public string VerifyToken { get; set; }
+
+    }
 }
