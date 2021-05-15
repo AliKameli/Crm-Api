@@ -143,6 +143,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 
             //BL Admin
             services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
 
 
             return services;

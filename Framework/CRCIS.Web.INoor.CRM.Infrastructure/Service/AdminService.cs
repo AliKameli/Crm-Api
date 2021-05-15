@@ -48,7 +48,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
         public async Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name,string family, string personId)
         {
             var admin = await _adminRepository.FindAdminAsync(personId);
-            if (admin == null)
+            if (admin == null || admin.Success==false)
             {
                 var command = new Domain.Users.Admin.Commands.AdminCreateCommand(username, username + username, name, family, "",personId);
                 await _adminRepository.CreateAsync(command);
