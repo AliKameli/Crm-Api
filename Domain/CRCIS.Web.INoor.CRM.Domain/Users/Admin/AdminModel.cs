@@ -16,4 +16,17 @@ namespace CRCIS.Web.INoor.CRM.Domain.Users.Admin
         public string SerialNumber { get; set; }
         public string PasswordHash { get; set; }
     }
+
+    public class AdminByVerifyTokenModl
+    {
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public bool IsActive { get; set; }
+        public string SerialNumber { get; set; }
+        public string Name { get; set; }
+        public string Family { get; set; }
+        public string Action { get; set; }
+        public string JsonData { get; set; }
+
+    }
 }

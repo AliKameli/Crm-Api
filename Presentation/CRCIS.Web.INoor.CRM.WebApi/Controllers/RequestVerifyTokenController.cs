@@ -20,9 +20,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _adminService = adminService;
         }
         [HttpPost]
-        public async Task<IActionResult> Post(RequestVerifyTokenModel model  )
+        public async Task<IActionResult> Post(RequestVerifyTokenModel model)
         {
-            var dataResponse = await _adminService.GetVerifyTokenForNoorAdmin(model.Username, model.Name, model.Family, model.PersonId);
+            var dataResponse = await _adminService.GetVerifyTokenForNoorAdmin(model.Username, model.Name, model.Family, model.PersonId, model.Action, model.QueryString);
             return Ok(dataResponse);
         }
     }
