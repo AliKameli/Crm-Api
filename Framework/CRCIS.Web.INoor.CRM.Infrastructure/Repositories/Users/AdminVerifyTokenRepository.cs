@@ -19,8 +19,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         {
         }
 
-        public async Task<DataResponse<Guid>> CreateTokenAsync(int adminId)
+        public async Task<DataResponse<Guid>> CreateTokenAsync(int adminId, Dictionary<string, string> queryString, string action = "")
         {
+            if (queryString == null)
+            {
+                queryString = new Dictionary<string, string>();
+            }
+            if (action == null)
+            {
+                action = "";
+            }
+
             try
             {
                 var command = new
@@ -29,6 +38,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                     CreateAt = DateTime.Now,
                     ExpireAt = DateTime.Now.AddMinutes(2),
                     AdminId = adminId,
+                    Action = action,
+                    JsonData = System.Text.Json.JsonSerializer.Serialize(queryString)
                 };
 
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
@@ -51,7 +62,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
         }
 
-        public async Task<DataResponse<AdminModel>> GetAdminByVerifyToken(Guid verifyId)
+        public async Task<DataResponse<AdminByVerifyTokenModl>> GetAdminByVerifyToken(Guid verifyId)
         {
             try
             {
@@ -61,13 +72,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 var command = new { Id = verifyId };
                 var adminModel =
                      await dbConnection
-                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+                    .QueryFirstOrDefaultAsync<AdminByVerifyTokenModl>(sql, command, commandType: CommandType.StoredProcedure);
 
                 if (adminModel != null)
-                    return new DataResponse<AdminModel>(adminModel);
+                    return new DataResponse<AdminByVerifyTokenModl>(adminModel);
 
                 var errors = new List<string> { "اذمین یافت نشد" };
-                var result = new DataResponse<AdminModel>(errors);
+                var result = new DataResponse<AdminByVerifyTokenModl>(errors);
                 return result;
 
             }
@@ -76,7 +87,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 //_logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<AdminModel>(errors);
+                var result = new DataResponse<AdminByVerifyTokenModl>(errors);
                 return result;
             }
         }

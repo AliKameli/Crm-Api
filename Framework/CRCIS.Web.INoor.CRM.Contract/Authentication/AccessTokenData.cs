@@ -13,6 +13,9 @@ namespace CRCIS.Web.INoor.CRM.Contract.Authentication
         public string AccessToken { get; set; }
         public string RedreshToken { get; set; }
         public string User { get; set; }
+        public string Action { get; set; }
+        public string jsonData { get; set; }
+        public string Admin { get; set; }
     }
  
 }

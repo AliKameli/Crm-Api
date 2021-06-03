@@ -10,7 +10,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos
     {
         public long Id { get; set; }
         public string Title { get; set; }
-        public string NameFamily { get; set; }
+        public string NameFamiy { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
         public string Description { get; set; }

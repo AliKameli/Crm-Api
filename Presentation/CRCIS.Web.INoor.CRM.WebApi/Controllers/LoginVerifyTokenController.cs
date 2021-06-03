@@ -32,15 +32,26 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             {
                 return Ok(responseUser);
             }
-
-            var (expireDate, responseToken) = await _jwtProvider.GenerateAsync(responseUser.Data);
+            var adminModel = new Domain.Users.Admin.AdminModel
+            {
+                Id = responseUser.Data.Id,
+                Name = responseUser.Data.Name,
+                Family = responseUser.Data.Family,
+                IsActive = responseUser.Data.IsActive,
+                SerialNumber = responseUser.Data.SerialNumber,
+                Username = responseUser.Data.Username,
+            };
+            var (expireDate, responseToken) = await _jwtProvider.GenerateAsync(adminModel);
             var accessTokenData = new AccessTokenData
             {
                 ExpireAtUtc = expireDate,
                 ValidToMilliseconds = (expireDate - DateTime.UtcNow).TotalMilliseconds,
                 User = responseUser.Data.Id == 1 ? "crmAdministrator" : "admin",//hard code permission
                 AccessToken = responseToken,
-                RedreshToken = Guid.NewGuid().ToString()
+                RedreshToken = Guid.NewGuid().ToString(),
+                Action = responseUser.Data.Action,
+                jsonData = responseUser.Data.JsonData,
+                Admin = responseUser.Data.Family
             };
 
             var responseStore = await _tokenStoreService.CreateAsync(accessTokenData, responseUser.Data.Id);
