@@ -48,6 +48,35 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                 return result;
             }
         }
+        public async Task<DataResponse<ProductModel>> GetBySecretKeyAsync(string secretKey)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetBySecretKey");
+                var command = new { SecretKey = secretKey };
+                var product =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<ProductModel>(sql, command, commandType: CommandType.StoredProcedure);
+
+                if (product != null)
+                    return new DataResponse<ProductModel>(product);
+
+                var errors = new List<string> { "محصول یافت نشد" };
+                var result = new DataResponse<ProductModel>(errors);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<ProductModel>(errors);
+                return result;
+            }
+        }
         public async Task<DataResponse<ProductModel>> GetByIdAsync(int id)
         {
             try
@@ -56,14 +85,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetById");
                 var command = new { Id = id };
-                var answerMethod =
+                var product =
                      await dbConnection
                     .QueryFirstOrDefaultAsync<ProductModel>(sql, command, commandType: CommandType.StoredProcedure);
 
-                if (answerMethod != null)
-                    return new DataResponse<ProductModel>(answerMethod);
+                if (product != null)
+                    return new DataResponse<ProductModel>(product);
 
-                var errors = new List<string> { "وضعیت مورد یافت نشد" };
+                var errors = new List<string> { "محصول یافت نشد" };
                 var result = new DataResponse<ProductModel>(errors);
                 return result;
 

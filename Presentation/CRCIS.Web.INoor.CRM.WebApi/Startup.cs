@@ -1,4 +1,5 @@
 using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq;
 using CRCIS.Web.INoor.CRM.WebApi.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 
             services.AddControllers();
 
-            //services.AddJwtAuthentication();
+            services.AddHostedService<ConsumerRabbitMQHostedService>();
             services.AddAutoMapper();
             services.AddDatabaseServices(Configuration);
             services.AddDatabaseRepositoris();
@@ -44,20 +45,20 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddCors(options =>
             {
 
-                //options.AddPolicy(name: MyAllowSpecificOrigins,
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://localhost:8080")
-                //                            .AllowAnyHeader()
-                //                            .AllowAnyMethod();
-                //    });
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://172.16.22.77:9011")
+                        builder.WithOrigins("http://localhost:8080")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });
+                //options.AddPolicy(name: MyAllowSpecificOrigins,
+                //    builder =>
+                //    {
+                //        builder.WithOrigins("http://172.16.22.77:9011")
+                //                            .AllowAnyHeader()
+                //                            .AllowAnyMethod();
+                //    });
             });
         }
 

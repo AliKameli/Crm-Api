@@ -13,15 +13,17 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands
         public int? ParentId { get;private set; }
         public bool IsActive { get;private set; }
         public int? Priority { get;private set; }
+        public int? Code { get;private set; }
         public DateTime CreateAt { get;private set; }
 
-        public SubjectCreateCommand(string title, int? parentId, bool isActive, int? priority)
+        public SubjectCreateCommand(string title, int? parentId, bool isActive, int? priority, int? code)
         {
             Title = title;
             ParentId = parentId;
-            IsActive = isActive;
+            IsActive = isActive; 
             Priority = priority;
             CreateAt = DateTime.Now;
+            Code = code;
         }
     }
 }

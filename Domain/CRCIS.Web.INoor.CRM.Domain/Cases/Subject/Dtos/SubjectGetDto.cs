@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Dtos
         public string Title { get; set; }
         public int? ParentId { get; set; }
         public DateTime CreateAt { get; set; }
+        public int? Code { get; set; }
         public bool IsActive { get; set; }
         public int RowNumber { get; set; }
         public int TotalCount { get; set; }

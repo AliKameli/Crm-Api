@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
         Task<DataTableResponse<IEnumerable<ImportCaseGetDto>>> GetAsync(ImportCaseDataTableQuery query);
         Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);
         Task<DataResponse<int>> MoveCaseToArchive(MoveCaseToArchiveCommand command);
+        
     }
 }

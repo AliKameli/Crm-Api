@@ -9,5 +9,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.Product
     {
         public string Title { get; set; }
         public int ProductTypeId { get; set; }
+        public int? Code { get;  set; }
     }
 }
