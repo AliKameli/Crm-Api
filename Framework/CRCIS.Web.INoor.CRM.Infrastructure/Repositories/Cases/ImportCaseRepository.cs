@@ -4,6 +4,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
@@ -288,5 +289,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
         }
 
+     
     }
 }

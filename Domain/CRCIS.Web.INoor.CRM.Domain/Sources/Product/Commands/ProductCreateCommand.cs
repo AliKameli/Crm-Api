@@ -10,12 +10,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.Product.Commands
     {
         public string Title { get;private set; }
         public int ProductTypeId { get;private set; }
+        public int? Code { get; private set; }
 
-
-        public ProductCreateCommand(string title, int productTypeId)
+        public ProductCreateCommand(string title, int productTypeId, int? code)
         {
             Title = title;
             ProductTypeId = productTypeId;
+            Code = code;
         }
     }
 }

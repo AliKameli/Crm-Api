@@ -133,7 +133,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 
         private SubjectCreateCommand mapSubjectCreateModelToSubjectCreateCommand(SubjectCreateModel model)
         {
-            return new SubjectCreateCommand(model.Title, model.ParentId, model.IsActive, model.Priority);
+            return new SubjectCreateCommand(model.Title, model.ParentId, model.IsActive, model.Priority,model.Code);
         }
     }
 }

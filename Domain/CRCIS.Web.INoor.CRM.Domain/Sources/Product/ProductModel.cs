@@ -9,7 +9,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.Product
     public class ProductModel
     {
         public int Id { get; set; }
-        public int Title { get; set; }
+        public string Title { get; set; }
         public int ProductTypeId { get; set; }
     }
 }

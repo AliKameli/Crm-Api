@@ -18,6 +18,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Sources
         Task<DataResponse<int>> DeleteAsync(int id);
         Task<DataTableResponse<IEnumerable<ProductGetDto>>> GetAsync(ProductDataTableQuery query);
         Task<DataResponse<ProductModel>> GetByIdAsync(int id);
+        Task<DataResponse<ProductModel>> GetBySecretKeyAsync(string secretKey);
         Task<DataResponse<IEnumerable<ProductDropDownListDto>>> GetDropDownListAsync();
         Task<DataResponse<int>> UpdateAsync(ProductUpdateCommand command);
     }

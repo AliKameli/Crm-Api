@@ -1,7 +1,11 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Data.Database;
+using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports;
 using CRCIS.Web.INoor.CRM.Domain.Reports.CaseHistory.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
+using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using System;
@@ -79,5 +83,35 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 return result;
             }
         }
+
+        public async Task<DataTableResponse<IEnumerable<PersonReportResponse>>> GetPersonReport(PersonReportQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Person");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<PersonReportResponse>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+                var result = new DataTableResponse<IEnumerable<PersonReportResponse>>(list, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<PersonReportResponse>>(errors);
+                return result;
+            }
+        }
+
     }
+
+
 }
+
