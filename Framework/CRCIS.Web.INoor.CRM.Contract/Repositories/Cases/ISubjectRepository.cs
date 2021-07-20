@@ -15,6 +15,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
         Task<DataTableResponse<IEnumerable<SubjectGetDto>>> GetAsync(SubjectDataTableQuery query);
         Task<DataResponse<SubjectModel>> GetByIdAsync(int id);
         Task<DataTableResponse<IEnumerable<SubjectChildrenGetDto>>> GetChildrenAsync(SubjectChildrenDataTableQuery query);
+        Task<DataResponse<IEnumerable<SubjectDropDownListDto>>> GetDropDownListAsync();
         Task<DataResponse<int>> UpdateAsync(SubjectUpdateCommand command);
     }
 }
