@@ -119,6 +119,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                      await dbConnection
                     .QueryAsync<ProductDropDownListDto>(sql, commandType: CommandType.StoredProcedure);
 
+                list = list.Select(p => new ProductDropDownListDto
+                {
+                    Id = p.Id,
+                    Title = $"{ p.Title }  {p.Code}".Trim(),
+                    Code = p.Code,
+                    ProductTypeId = p.ProductTypeId
+                });
+
                 var result = new DataResponse<IEnumerable<ProductDropDownListDto>>(list);
                 return result;
             }

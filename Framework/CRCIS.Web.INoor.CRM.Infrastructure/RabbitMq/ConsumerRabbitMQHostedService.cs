@@ -84,6 +84,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             _logger.LogInformation($"crm received {content}");
 
             var dto = System.Text.Json.JsonSerializer.Deserialize<RabbitImportCaseCreateDto>(content);
+            
             if (dto == null)
             {
             }

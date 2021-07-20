@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Queries
 {
-    public class SubjectChildrenDataTableQuery
+    public class SubjectChildrenDataTableQuery : AbstractDataTableQuery
     {
-        public int? ParentId { get;private set; }
+        public int? ParentId { get; private set; }
 
-        public SubjectChildrenDataTableQuery(int? parentId)
+        public SubjectChildrenDataTableQuery(int pageIndex, int pageSize, int? parentId)
+            : base(pageIndex, pageSize)
         {
             ParentId = parentId;
         }

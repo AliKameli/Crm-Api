@@ -98,7 +98,37 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
+        public async Task<DataResponse<IEnumerable<SubjectDropDownListDto>>> GetDropDownListAsync()
+        {
 
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "DropDownList");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<SubjectDropDownListDto>(sql, commandType: CommandType.StoredProcedure);
+
+                list = list.Select(p => new SubjectDropDownListDto
+                {
+                    Id = p.Id,
+                    Title = $"{ p.Title }  {p.Code}".Trim(),
+                    Code = p.Code,
+                });
+
+                var result = new DataResponse<IEnumerable<SubjectDropDownListDto>>(list);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<IEnumerable<SubjectDropDownListDto>>(errors);
+                return result;
+            }
+        }
         public async Task<DataResponse<int>> UpdateAsync(SubjectUpdateCommand command)
         {
             try
@@ -159,10 +189,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 
                 int totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
                 var result = new DataTableResponse<IEnumerable<SubjectChildrenGetDto>>(list, totalCount);
-                for (int i = 0; i < result.TotalCount; i++)
-                {
-                    result.Data.AsList()[i].RowNumber = i + 1;
-                }
+                //for (int i = 0; i < result.TotalCount; i++)
+                //{
+                //    result.Data.AsList()[i].RowNumber = i + 1;
+                //}
                 
                 return result;
 
