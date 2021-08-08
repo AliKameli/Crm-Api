@@ -1,4 +1,6 @@
+using CRCIS.Web.INoor.CRM.Contract.Notifications;
 using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Notifications;
 using CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq;
 using CRCIS.Web.INoor.CRM.WebApi.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -19,21 +21,28 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
+
         readonly string MyAllowSpecificOrigins = "Policy";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (WebHostEnvironment.IsDevelopment() == false)
+            {
+                services.AddHostedService<ConsumerRabbitMQHostedService>();
+            }
 
+            services.AddTransient<MailService, MailService>();
             services.AddControllers();
 
-            services.AddHostedService<ConsumerRabbitMQHostedService>();
             services.AddAutoMapper();
             services.AddDatabaseServices(Configuration);
             services.AddDatabaseRepositoris();

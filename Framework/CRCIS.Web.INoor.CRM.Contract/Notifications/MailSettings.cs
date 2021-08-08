@@ -9,6 +9,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Notifications
     public class MailSettings
     {
         public string Mail { get; set; }
+        public string UserName { get; set; }
         public string DisplayName { get; set; }
         public string Password { get; set; }
         public string Host { get; set; }

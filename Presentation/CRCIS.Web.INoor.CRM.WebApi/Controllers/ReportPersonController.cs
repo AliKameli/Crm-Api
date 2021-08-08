@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Domain.Reports;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

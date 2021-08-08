@@ -74,7 +74,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             //consumer.Unregistered += OnConsumerUnregistered;
             //consumer.ConsumerCancelled += OnConsumerConsumerCancelled;
 
-            _channel.BasicConsume("user-report-support", false, consumer);
+            _channel.BasicConsume("user-report-support", false, consumer);/////////////////////////////////////////////////////////////////
             return Task.CompletedTask;
 
         }
