@@ -9,7 +9,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 {
     public class MailService : IMailService
     {
-        public async Task SendEmailAsync(MailRequest mailRequest,MailSettings mailSettings)
+        public async Task SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
         {
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(mailSettings.Mail);
@@ -36,7 +36,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
             smtp.Connect(mailSettings.Host, mailSettings.Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(mailSettings.Mail, mailSettings.Password);
+            if (string.IsNullOrEmpty(mailSettings.Password) == false)
+            {
+                smtp.Authenticate(mailSettings.UserName, mailSettings.Password);
+            }
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
         }

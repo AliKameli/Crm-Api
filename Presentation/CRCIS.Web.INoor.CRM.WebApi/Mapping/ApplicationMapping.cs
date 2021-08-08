@@ -5,11 +5,9 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseStatus.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.OperationType.Commands;
-using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.ProductType.Commands;
-using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceTypes.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Queries;
@@ -23,13 +21,9 @@ using CRCIS.Web.INoor.CRM.WebApi.Models.CommonAnswer;
 using CRCIS.Web.INoor.CRM.WebApi.Models.OpreationType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Product;
 using CRCIS.Web.INoor.CRM.WebApi.Models.ProductType;
-using CRCIS.Web.INoor.CRM.WebApi.Models.SourceConfig;
 using CRCIS.Web.INoor.CRM.WebApi.Models.SourceType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Subject;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 {
@@ -69,11 +63,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #region Product
             CreateMap<ProductCreateModel, ProductCreateCommand>();
             CreateMap<ProductUpdateModel, ProductUpdateCommand>();
-            #endregion
-
-            #region SourceConfig
-            CreateMap<SourceConfigCreateModel, SourceConfigCreateCommand>();
-            CreateMap<SourceConfigUpdateModel, SourceConfigUpdateCommand>();
             #endregion
 
             #region SourceConfig
