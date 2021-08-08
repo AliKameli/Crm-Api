@@ -40,7 +40,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
             }
 
-            services.AddTransient<MailService, MailService>();
+            services.AddTransient<IMailService, MailService>();
             services.AddControllers();
 
             services.AddAutoMapper();
