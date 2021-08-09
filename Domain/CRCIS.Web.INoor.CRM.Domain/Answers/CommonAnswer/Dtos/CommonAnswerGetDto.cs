@@ -9,6 +9,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Dtos
     public class CommonAnswerGetDto
     {
         public int Id { get; set; }
+        public string Title { get; set; }
         public string AnswerText { get; set; }
         public int Priority { get; private set; }
         public int RowNumber { get; set; }

@@ -14,6 +14,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos
         public string ProductTitle { get; set; }
         public long RowNumber { get; set; }
         public string SourceTypeTitle { get; set; }
+        public string FirstSubject { get; set; }
         public long TotalCount { get; set; }
     }
 }

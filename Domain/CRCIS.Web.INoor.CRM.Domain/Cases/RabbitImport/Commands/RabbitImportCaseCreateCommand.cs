@@ -22,18 +22,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public DateTime ImportDateTime { get; private set; }
         public DateTime CreateDateTime { get; private set; }
 
-        public string PageTitle { get; private set; }
-        public string PageUrl { get; private set; }
-        public string ToMailBox { get; private set; }
-        public string FileUrl { get; private set; }
-        public string FileType { get; private set; }
-        public string UserLanguage { get; private set; }
-        public string Ip { get; private set; }
-        public string Browser { get; private set; }
-        public string UserAgent { get; private set; }
-        public string Platform { get; private set; }
-        public string Os { get; private set; }
-        public string DeviceScreenSize { get; private set; }
+        public string MoreData { get; private set; }
 
         public RabbitImportCaseCreateCommand(string title, string nameFamily, string email, string description,
             int sourceTypeId, Guid? noorUserId, int? productId, int? manualImportAdminId, string mobile,
@@ -50,11 +39,36 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             ImportDateTime = DateTime.Now;
             CreateDateTime = DateTime.ParseExact(createDateTime, "yyyymmddHHMMss", CultureInfo.InvariantCulture);
             Mobile = mobile;
+
+            var moreDataObject = new MoreDataObject(pageTitle, pageUrl, toMailBox, fileUrl, fileType,
+                userLanguage, ip, browser, userAgent, platform, os, deviceScreenSize);
+            MoreData = System.Text.Json.JsonSerializer.Serialize(moreDataObject);
+        }
+    }
+
+    public class MoreDataObject
+    {
+        public string PageTitle { get; private set; }
+        public string PageUrl { get; private set; }
+        public string ToMailBox { get; private set; }
+        public string FileUrl { get; private set; }
+        public string FileType { get; private set; }
+        public string UserLanguage { get; private set; }
+        public string Ip { get; private set; }
+        public string Browser { get; private set; }
+        public string UserAgent { get; private set; }
+        public string Platform { get; private set; }
+        public string Os { get; private set; }
+        public string DeviceScreenSize { get; private set; }
+
+        public MoreDataObject(string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
+            string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize)
+        {
             PageTitle = pageTitle;
             PageUrl = pageUrl;
+            ToMailBox = toMailBox;
             FileUrl = fileUrl;
             FileType = fileType;
-            ToMailBox = toMailBox;
             UserLanguage = userLanguage;
             Ip = ip;
             Browser = browser;

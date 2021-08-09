@@ -10,5 +10,6 @@ namespace CRCIS.Web.INoor.CRM.Utility.Dtos
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string AnswerText { get; set; }
     }
 }

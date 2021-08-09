@@ -7,6 +7,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.CommonAnswer
 {
     public class CommonAnswerCreateModel
     {
+        public string Title { get; set; }
         public string AnswerText { get; set; }
         public int Priority { get; set; }
     }
