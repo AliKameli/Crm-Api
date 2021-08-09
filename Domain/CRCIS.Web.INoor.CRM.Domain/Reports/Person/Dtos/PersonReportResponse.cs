@@ -16,6 +16,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
         public string SourceTypeTitle { get; set; }
         public int TblNumber { get; set; }
         public string TblName { get; set; }
+        public string FirstSubject { get; set; }
         public long TotalCount { get; set; }
     }
 }
