@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,9 +15,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
 {
     public class AdminVerifyTokenRepository : BaseRepository, IAdminVerifyTokenRepository
     {
+        private readonly ILogger _logger;
         protected override string TableName => "AdminCrmVerifyToken";
-        public AdminVerifyTokenRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        public AdminVerifyTokenRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory) 
+            : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<AdminVerifyTokenRepository>();
         }
 
         public async Task<DataResponse<Guid>> CreateTokenAsync(int adminId, Dictionary<string, string> queryString, string action = "")
@@ -84,7 +88,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminByVerifyTokenModl>(errors);
