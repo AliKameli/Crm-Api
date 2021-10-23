@@ -4,6 +4,7 @@ using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +19,27 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         private readonly IAdminVerifyTokenRepository _adminVerifyTokenRepository;
         private readonly IJwtProvider _jwtProvider;
         private readonly ITokenStoreService _tokenStoreService;
-        public LoginVerifyTokenController(IAdminVerifyTokenRepository adminVerifyTokenRepository, IJwtProvider jwtProvider, ITokenStoreService tokenStoreService)
+        private readonly ILogger _logger;
+        public LoginVerifyTokenController(IAdminVerifyTokenRepository adminVerifyTokenRepository,
+            IJwtProvider jwtProvider, ITokenStoreService tokenStoreService,
+            ILoggerFactory loggerFactory)
         {
             _adminVerifyTokenRepository = adminVerifyTokenRepository;
             _jwtProvider = jwtProvider;
             _tokenStoreService = tokenStoreService;
+            _logger = loggerFactory.CreateLogger<LoginVerifyTokenController>();
         }
+
         [HttpPost]
         public async Task<IActionResult> Post(LoginVerifyTokenModel verifyToken)
         {
+            _logger.LogCritical($"LoginVerifyTokenModel start : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
             var responseUser = await _adminVerifyTokenRepository.GetAdminByVerifyToken(Guid.Parse(verifyToken.VerifyToken));
             if (responseUser.Success == false)
             {
                 return Ok(responseUser);
             }
+            _logger.LogCritical($"VerifyToken founded : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
             var adminModel = new Domain.Users.Admin.AdminModel
             {
                 Id = responseUser.Data.Id,
@@ -54,7 +62,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 Admin = responseUser.Data.Family
             };
 
+            _logger.LogCritical($"AccessToken generated : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
+
             var responseStore = await _tokenStoreService.CreateAsync(accessTokenData, responseUser.Data.Id);
+
+            _logger.LogCritical($"AccessToken stored : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
 
             if (responseStore.Success)
             {
@@ -63,6 +75,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             }
             else
             {
+                _logger.LogCritical($"Login Failed : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
                 var result = new DataResponse<int>(new List<string> { "عملیات لاگین ناموفق بود" });
                 return Ok(result);
             }

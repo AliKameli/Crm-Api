@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,8 +14,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
     public class SourceConfigRepository : BaseRepository, ISourceConfigRepository
     {
         protected override string TableName => "SourceConfig";
-        public SourceConfigRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        private readonly ILogger _logger;
+        public SourceConfigRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory)
+            : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<SourceConfigRepository>();
         }
 
         public async Task<DataResponse<SourceConfigModel>> GetByIdAsync(int id)
@@ -39,7 +43,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<SourceConfigModel>(errors);
@@ -69,7 +73,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<IEnumerable<SourceConfigModel>>(errors);

@@ -5,6 +5,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingHistory.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,8 +18,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
     public class PendingHistoryRepository : BaseRepository, IPendingHistoryRepository
     {
         protected override string TableName => "CaseHistory";
-        public PendingHistoryRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        private ILogger _logger;
+        public PendingHistoryRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory)
+            : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<PendingHistoryRepository>();
         }
 
         public async Task<DataResponse<int>> CreateAsync(AnsweringCreateDto dto)

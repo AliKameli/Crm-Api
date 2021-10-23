@@ -13,6 +13,7 @@ using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Commands;
 using CRCIS.Web.INoor.CRM.Contract.Security;
+using Microsoft.Extensions.Logging;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
 {
@@ -20,9 +21,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
     {
         private readonly ISecurityService _securityService;
         protected override string TableName => "Admin";
-        public AdminRepository(ISqlConnectionFactory sqlConnectionFactory, ISecurityService securityService) : base(sqlConnectionFactory)
+        private ILogger _logger;
+        public AdminRepository(ISqlConnectionFactory sqlConnectionFactory, ISecurityService securityService,
+            ILoggerFactory loggerFactory) 
+            : base(sqlConnectionFactory)
         {
-            _securityService = securityService;
+            _securityService = securityService; 
+            _logger = loggerFactory.CreateLogger<AdminRepository>();
         }
         public async Task<DataTableResponse<IEnumerable<AdminGetDto>>> GetAsync(AdminDataTableQuery query)
         {
@@ -43,7 +48,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<AdminGetDto>>(errors);
                 return result;
@@ -71,7 +76,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
@@ -100,7 +105,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
@@ -126,7 +131,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
@@ -153,7 +158,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<IEnumerable<AdminDropDownListDto>>(errors);
                 return result;
@@ -182,7 +187,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
@@ -205,7 +210,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
@@ -239,7 +244,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
@@ -269,7 +274,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;
@@ -298,7 +303,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;
