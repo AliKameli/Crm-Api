@@ -40,13 +40,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             CreateDateTime = DateTime.ParseExact(createDateTime, "yyyymmddHHMMss", CultureInfo.InvariantCulture);
             Mobile = mobile;
 
-            var moreDataObject = new MoreDataObject(pageTitle, pageUrl, toMailBox, fileUrl, fileType,
+            var moreDataObject = new RabbitImportCaseMoreDataObject(pageTitle, pageUrl, toMailBox, fileUrl, fileType,
                 userLanguage, ip, browser, userAgent, platform, os, deviceScreenSize);
             MoreData = System.Text.Json.JsonSerializer.Serialize(moreDataObject);
         }
     }
 
-    public class MoreDataObject
+    public class RabbitImportCaseMoreDataObject
     {
         public string PageTitle { get; private set; }
         public string PageUrl { get; private set; }
@@ -61,7 +61,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public string Os { get; private set; }
         public string DeviceScreenSize { get; private set; }
 
-        public MoreDataObject(string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
+        public RabbitImportCaseMoreDataObject(string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
             string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize)
         {
             PageTitle = pageTitle;
@@ -76,6 +76,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             Platform = platform;
             Os = os;
             DeviceScreenSize = deviceScreenSize;
+        }
+        public RabbitImportCaseMoreDataObject(string toMailBox)
+        {
+            ToMailBox = toMailBox;
         }
     }
 }

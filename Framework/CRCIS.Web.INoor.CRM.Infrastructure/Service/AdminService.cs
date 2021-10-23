@@ -29,22 +29,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             _adminVerifyTokenRepository = adminVerifyTokenRepository;
         }
 
-        public async Task<DataResponse<int>> ChangePasswordAsync(string oldPassword, string newPassword)
-        {
-            var adminId = _identity.GetAdminId();
-            var admin = await _adminRepository.FindAdminAsync(adminId);
-            if (admin.Success == false || admin?.Data == null)
-                return new DataResponse<int>(new string[] { "خطایی رخ داده است" });
-
-            var eq = _securityService.IsEquals(oldPassword, admin.Data.PasswordHash);
-            if (eq == false)
-                return new DataResponse<int>(new string[] { "پسورد صحیح نیست" });
-
-            var newPasswordHash = _securityService.GetSha256Hash(newPassword);
-            var response = await _adminRepository.UpdatePasswordHashAsync(adminId, newPasswordHash);
-            return response;
-        }
-
         public async Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, string personId, string action, Dictionary<string, string> queryString = null)
         {
             var admin = await _adminRepository.FindAdminAsync(personId);

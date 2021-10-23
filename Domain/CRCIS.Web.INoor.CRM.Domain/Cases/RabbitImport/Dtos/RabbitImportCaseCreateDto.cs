@@ -38,6 +38,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos
         public string NoorUserId { get; set; }
         public string UserLanguage { get; set; }
         public string Ip { get; set; }
+        public string NoorOrganizationId { get; set; }
+        public string SessionId { get; set; }
     }
 
     public class Device

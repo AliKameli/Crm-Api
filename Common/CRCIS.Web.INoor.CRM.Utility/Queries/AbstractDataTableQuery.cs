@@ -11,13 +11,10 @@ namespace CRCIS.Web.INoor.CRM.Utility.Queries
         public int PageIndex { get; protected set; }
         public int PageSize { get; protected set; }
       
-
-
         public AbstractDataTableQuery(int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
             PageSize = pageSize;
-           
         }
     }
 }

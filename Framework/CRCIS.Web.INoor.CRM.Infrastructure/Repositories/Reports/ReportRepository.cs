@@ -28,7 +28,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
         public async Task<DataResponse<CaseHistoryChartDto>> GetCaseHistoryReportAsync()
         {
-
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();

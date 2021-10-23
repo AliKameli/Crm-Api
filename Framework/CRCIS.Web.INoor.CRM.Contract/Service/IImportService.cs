@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Service
 {
-    public interface IImportService
-    {
-        Task InsertAsync(dynamic caseDto);
+    //public interface IImportService
+    //{
+    //    Task InsertAsync(dynamic caseDto);
 
 
-    }
+    //}
 
 
     //public class EmailForwordService : IImportService

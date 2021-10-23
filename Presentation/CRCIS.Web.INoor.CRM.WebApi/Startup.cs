@@ -1,5 +1,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Notifications;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Logs;
 using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.MailReader;
 using CRCIS.Web.INoor.CRM.Infrastructure.Notifications;
 using CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq;
 using CRCIS.Web.INoor.CRM.WebApi.Extensions;
@@ -15,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.WebApi
@@ -30,7 +33,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment WebHostEnvironment { get; }
 
-        readonly string MyAllowSpecificOrigins = "Policy";
+        private readonly string MyAllowSpecificOrigins = "Policy";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,9 +41,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             if (WebHostEnvironment.IsDevelopment() == false)
             {
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
+                services.AddHostedService<TimedMailReaderHostedService>();
             }
 
-            services.AddTransient<IMailService, MailService>();
+            services.AddSingleton<IMailService, MailService>();
             services.AddControllers();
 
             services.AddAutoMapper();

@@ -13,5 +13,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig
         public int ProductId { get; set; }
         public int SourceTypeId { get; set; }
         public string ConfigJson { get; set; }
+        public DateTime LastUpdateTime { get; set; }
     }
 }

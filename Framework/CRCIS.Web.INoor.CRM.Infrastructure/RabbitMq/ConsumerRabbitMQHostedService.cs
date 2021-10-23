@@ -43,12 +43,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             // create connection  
             _connection = factory.CreateConnection();
 
+            Dictionary<string, object> config = new Dictionary<string, object>();
+            config.Add("x-queue-mode", "lazy");
             // create channel  
             _channel = _connection.CreateModel();
 
-            //_channel.ExchangeDeclare("demo.exchange", ExchangeType.Topic);
-            //_channel.QueueDeclare("v", false, false, false, null);
-            //_channel.QueueBind("user-report-support", "", "user-report-support", null);
+            _channel.ExchangeDeclare("main", ExchangeType.Fanout, true, false);
+            _channel.QueueDeclare("user-report-support", true, false, false, null);
+            _channel.QueueDeclare("logs", true, false, false, config);
+            _channel.QueueBind("user-report-support", "main", "", null);
+            _channel.QueueBind("logs", "main", "", null);
             _channel.BasicQos(0, 1, false);
 
             _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
@@ -66,6 +70,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
 
                 // handle the received message  
                 HandleMessage(content);
+                //channel.BasicAck(args.DeliveryTag, false);
                 _channel.BasicAck(ea.DeliveryTag, false);
 
             };
@@ -84,59 +89,68 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             _logger.LogInformation($"crm received {content}");
 
             var dto = System.Text.Json.JsonSerializer.Deserialize<RabbitImportCaseCreateDto>(content);
-            
+
             if (dto == null)
             {
+                _logger.LogWarning($"json convert not worked: {content}");
+                return;
             }
-            if (string.IsNullOrEmpty(dto.Client.ClientSecret))
+            if (string.IsNullOrEmpty(dto?.Client?.ClientSecret))
             {
+                _logger.LogWarning($"client in json not founded: {content}");
+                return;
             }
 
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
                 IProductRepository _productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
-                var productResponse = _productRepository.GetBySecretKeyAsync(dto.Client.ClientSecret).Result;
+                var productResponse = _productRepository.GetBySecretKeyAsync(dto?.Client?.ClientSecret).Result;
                 Guid? noorUserId = null;
                 if (!string.IsNullOrEmpty(dto.User.NoorUserId))
                 {
                     Guid.TryParse(dto.User.NoorUserId, out Guid tempNoorUserId);
                     noorUserId = tempNoorUserId;
                 }
-                if (productResponse.Success)
+                if (productResponse.Success == false)
                 {
-                    var productId = productResponse.Data.Id;
-                    var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
-                        dto.MessageInfo.NameFamily,
-                        dto.MessageInfo.Email,
-                        dto.MessageInfo.Description,
-                        1,
-                        noorUserId,
-                        productId,
-                        null,
-                        "",
-                        dto.MessageInfo.CreateDateTime,
-                        dto.Client.PageTitle,
-                        dto.Client.PageUrl,
-                        dto.Client.ToMailBox,
-                        dto.MessageInfo.FileUrl,
-                        dto.MessageInfo.FileType,
-                        dto.User.UserLanguage,
-                        dto.User.Ip,
-                        dto.Device.Browser,
-                        dto.Device.UserAgent,
-                        dto.Device.Platform,
-                        dto.Device.Os,
-                        dto.Device.DeviceScreenSize
-                          );
-
-                    var t = command;
-
-                    using (IServiceScope scope2 = _serviceProvider.CreateScope())
-                    {
-                        IRabbitImportCaseRepository _importCaseRepository = scope2.ServiceProvider.GetRequiredService<IRabbitImportCaseRepository>();
-                        var insertResponse = _importCaseRepository.CreateFromRabbiImporttAsync(command).Result;
-                    }
+                    _logger.LogWarning($"product secret not found : {dto?.Client?.ClientSecret} ,json : {content}");
+                    return;
                 }
+                var productId = productResponse.Data.Id;
+                var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
+                    dto.MessageInfo.NameFamily,
+                    dto.MessageInfo.Email,
+                    dto.MessageInfo.Description,
+                    1,
+                    noorUserId,
+                    productId,
+                    null,
+                    "",
+                    dto.MessageInfo.CreateDateTime,
+                    dto.Client.PageTitle,
+                    dto.Client.PageUrl,
+                    dto.Client.ToMailBox,
+                    dto.MessageInfo.FileUrl,
+                    dto.MessageInfo.FileType,
+                    dto.User.UserLanguage,
+                    dto.User.Ip,
+                    dto.Device.Browser,
+                    dto.Device.UserAgent,
+                    dto.Device.Platform,
+                    dto.Device.Os,
+                    dto.Device.DeviceScreenSize
+                      );
+
+
+                using (IServiceScope scope2 = _serviceProvider.CreateScope())
+                {
+                    IRabbitImportCaseRepository _importCaseRepository = scope2.ServiceProvider.GetRequiredService<IRabbitImportCaseRepository>();
+                    var insertResponse = _importCaseRepository.CreateFromRabbiImportAsync(command).Result;
+
+                    if (insertResponse.Success == false)
+                        _logger.LogError($"rabbit insert not successful : {content}");
+                }
+
             }
         }
 

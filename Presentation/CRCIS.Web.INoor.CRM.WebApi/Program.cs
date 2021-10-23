@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CRCIS.Web.INoor.CRM.Infrastructure.LoggerProvider;
+using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
 
 namespace CRCIS.Web.INoor.CRM.WebApi
 {
@@ -19,6 +21,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+
+                .ConfigureLogging(logging =>
+                {
+                    //logging.ClearProviders();
+                    logging.AddInDbLogger();
+                })
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
                 config.SetBasePath(Directory.GetCurrentDirectory());

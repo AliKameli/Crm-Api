@@ -11,6 +11,19 @@ namespace Noor.Text
     /// </summary>
     public static class StringExtension
     {
+        public static string CrmSampleText(this string input)
+        {
+            return input.Sample(
+                removeSpace: true,
+                removeDigits: false,
+                removeEnglishAlpha: false,
+                removeEditingCharacters: true,
+                removeErabs: true,
+                sampleCharacterForSearch: true,
+                sampleCharacterForSort: false
+               );
+         }
+
         /// <inheritdoc />
         public enum NormalizeGroup
         {
@@ -29,6 +42,7 @@ namespace Noor.Text
             public string ReplacementString { get; set; } = null;
             public bool TobeReplaced { get; set; }
         }
+
         #region Sample
 
         /// <summary>
