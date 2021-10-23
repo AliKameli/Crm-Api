@@ -15,7 +15,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
     {
         protected override string TableName => "SourceConfig";
         private readonly ILogger _logger;
-        public SourceConfigRepository(ISqlConnectionFactory sqlConnectionFactory, LoggerFactory loggerFactory)
+        public SourceConfigRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory)
             : base(sqlConnectionFactory)
         {
             _logger = loggerFactory.CreateLogger<SourceConfigRepository>();
