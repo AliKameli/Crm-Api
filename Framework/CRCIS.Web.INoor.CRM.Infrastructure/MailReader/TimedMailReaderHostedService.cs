@@ -24,10 +24,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
         private readonly IServiceProvider _serviceProvider;
         private int executionCount = 0;
         private Timer _timer;
-        private readonly ILogger<TimedMailReaderHostedService> _logger;
-        public TimedMailReaderHostedService(ILogger<TimedMailReaderHostedService> logger, IServiceProvider serviceProvider)
+        private readonly ILogger _logger;
+        public TimedMailReaderHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<TimedMailReaderHostedService>();
             _serviceProvider = serviceProvider;
         }
         public Task StartAsync(CancellationToken cancellationToken)

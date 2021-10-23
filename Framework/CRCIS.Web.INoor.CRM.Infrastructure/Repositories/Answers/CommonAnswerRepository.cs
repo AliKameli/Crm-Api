@@ -7,6 +7,7 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,10 +19,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
     public class CommonAnswerRepository : BaseRepository, ICommonAnswerRepository
     {
         protected override string TableName =>"CommonAnswer";
-        public CommonAnswerRepository(ISqlConnectionFactory sqlConnectionFactory)
+        private ILogger _logger;
+        public CommonAnswerRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory)
             : base(sqlConnectionFactory)
         {
-
+            _logger = loggerFactory.CreateLogger<CommonAnswerRepository>();
         }
         public async Task<DataResponse<IEnumerable<CommonAnswerGetDto>>> GetAsync(CommonAnswerDataTableQuery query)
         {

@@ -8,6 +8,7 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,8 +21,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
     public class AnswerMethodRepository : BaseRepository, IAnswerMethodRepository
     {
         protected override string TableName => "AnswerMethod";
-        public AnswerMethodRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        private ILogger _logger;
+        public AnswerMethodRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory) 
+            : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<AnswerMethodRepository>();
         }
 
         public async Task<DataResponse<IEnumerable<AnswerMethodGetDto>>> GetAsync(AnswerMethodDataTableQuery query)

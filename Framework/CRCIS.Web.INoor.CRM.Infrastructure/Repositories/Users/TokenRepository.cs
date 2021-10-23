@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Users.Token.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,8 +16,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
     public class TokenRepository : BaseRepository, ITokenRepository
     {
         protected override string TableName => "Token";
-        public TokenRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        private ILogger _logger;
+        public TokenRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory) 
+            : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<TokenRepository>();
         }
 
 
@@ -26,7 +30,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         }
         public async Task<DataResponse<int>> CreateAsync(TokenCreateCommand command)
         {
-            //command.PasswordHash = co
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
@@ -41,7 +44,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
