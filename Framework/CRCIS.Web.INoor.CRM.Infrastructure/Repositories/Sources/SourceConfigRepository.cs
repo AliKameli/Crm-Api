@@ -46,5 +46,35 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                 return result;
             }
         }
+
+        public async Task<DataResponse<IEnumerable<SourceConfigModel>>> GetBySourceTypesId(int sourceTypeId)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetBySourceTypeId");
+                var command = new { SourceTypeId = sourceTypeId };
+                var sourceConfigModels =
+                     await dbConnection
+                    .QueryAsync<SourceConfigModel>(sql, command, commandType: CommandType.StoredProcedure);
+
+                if (sourceConfigModels != null)
+                    return new DataResponse<IEnumerable<SourceConfigModel>>(sourceConfigModels);
+
+                var errors = new List<string> { "منبع تنظیمات یافت نشد" };
+                var result = new DataResponse<IEnumerable<SourceConfigModel>>(errors);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<IEnumerable<SourceConfigModel>>(errors);
+                return result;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
+using CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,14 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Get()
         {
             var response = await _subjectRepository.GetDropDownListAsync();
+            return Ok(response);
+        }
+
+        [HttpGet("searchWord")]
+        public async Task<IActionResult>Get(string searchWord)
+        {
+            var query = new SubjectSearchDropDownQuery(searchWord);
+            var response = await _subjectRepository.GetSearchDropDownList(query);
             return Ok(response);
         }
     }

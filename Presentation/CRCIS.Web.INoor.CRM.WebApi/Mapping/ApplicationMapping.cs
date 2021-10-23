@@ -52,7 +52,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #region Subject
             CreateMap<SubjectCreateModel, SubjectCreateCommand>()
                 .ConvertUsing(src => mapSubjectCreateModelToSubjectCreateCommand(src));
-            CreateMap<SubjectUpdateModel, SubjectUpdateCommand>();
+            CreateMap<SubjectUpdateModel, SubjectUpdateCommand>()
+                .ConvertUsing(src => mapSubjectUpdateModelToSubjectUpateCommand(src));
             #endregion
 
             #region ProductType
@@ -90,7 +91,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #region Answering
             CreateMap<AnsweringCreateModel, AnsweringCreateDto>();
             #endregion
+
         }
+
 
         private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseNewCreateModel model)
         {
@@ -122,7 +125,19 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 
         private SubjectCreateCommand mapSubjectCreateModelToSubjectCreateCommand(SubjectCreateModel model)
         {
-            return new SubjectCreateCommand(model.Title, model.ParentId, model.IsActive, model.Priority,model.Code);
+            return new SubjectCreateCommand(model.Title, model.ParentId, model.IsActive, model.Priority, model.Code);
+        }
+
+        private SubjectUpdateCommand mapSubjectUpdateModelToSubjectUpateCommand(SubjectUpdateModel model)
+        {
+            return new SubjectUpdateCommand(
+                model.Id,
+                model.Title,
+                model.ParentId,
+                model.IsActive,
+                model.Priority,
+                model.Code
+                );
         }
     }
 }

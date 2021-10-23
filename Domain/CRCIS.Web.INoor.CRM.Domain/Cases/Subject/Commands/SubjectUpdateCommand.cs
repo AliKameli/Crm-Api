@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Noor.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands
         public int? Priority { get; private set; }
         public bool IsActive { get; private set; }
         public int? Code { get; private set; }
+        /// <summary>
+        /// برای عنوان و کد
+        /// </summary>
+        public string SampleWord { get; private set; }
         public SubjectUpdateCommand(int id, string title, int? parentId, bool isActive, int? priority, int? code)
         {
             Id = id;
@@ -22,6 +27,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands
             IsActive = isActive;
             Priority = priority;
             Code = code;
+            SampleWord = $"{title} - {code?.ToString()}".CrmSampleText();
         }
     }
 }

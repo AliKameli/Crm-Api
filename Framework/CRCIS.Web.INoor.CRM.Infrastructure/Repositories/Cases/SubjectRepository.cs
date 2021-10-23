@@ -129,6 +129,36 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
+        public async Task<DataResponse<IEnumerable<SubjectDropDownListDto>>> GetSearchDropDownList(SubjectSearchDropDownQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "SearchDropDownList");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<SubjectDropDownListDto>(sql, query,commandType: CommandType.StoredProcedure);
+
+                list = list.Select(p => new SubjectDropDownListDto
+                {
+                    Id = p.Id,
+                    Title = $"{ p.Title }  {p.Code}".Trim(),
+                    Code = p.Code,
+                });
+
+                var result = new DataResponse<IEnumerable<SubjectDropDownListDto>>(list);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<IEnumerable<SubjectDropDownListDto>>(errors);
+                return result;
+            }
+        }
         public async Task<DataResponse<int>> UpdateAsync(SubjectUpdateCommand command)
         {
             try
@@ -193,7 +223,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 //{
                 //    result.Data.AsList()[i].RowNumber = i + 1;
                 //}
-                
+
                 return result;
 
             }
@@ -205,5 +235,52 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
+
+        public async Task<DataResponse<int>> UpdateSampleAsync()
+        {
+            try
+            {
+                var query = new SubjectDataTableQuery(1, 9999999);
+                var list = await GetAsync(query);
+                if (list.Success == false)
+                {
+                    var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                    var result = new DataResponse<int>(errors);
+                    return result;
+                }
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                dbConnection.Open();
+
+                using var transaction = dbConnection.BeginTransaction();
+
+                foreach (var subject in list.Data)
+                {
+                    var command = new SubjectUpdateCommand(
+                        subject.Id,
+                        subject.Title,
+                        subject.ParentId,
+                        subject.IsActive,
+                        subject.Priority,
+                        subject.Code);
+
+                    var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Update");
+
+                    var execute =
+                         await dbConnection
+                        .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure,transaction: transaction);
+
+                }
+                transaction.Commit();
+                return new DataResponse<int>(true);
+
+            }
+            catch (Exception ex)
+            {
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<int>(errors);
+                return result;
+            }
+        }
+
     }
 }

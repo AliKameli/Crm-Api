@@ -9,7 +9,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Service
 {
     public interface IAdminService
     {
-        Task<DataResponse<int>> ChangePasswordAsync(string oldPassword, string newPassword);
+      
         Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, string personId, string action, Dictionary<string, string> queryString = null);
     }
 }

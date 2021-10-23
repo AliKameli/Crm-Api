@@ -1,7 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Authentication;
-using CRCIS.Web.INoor.CRM.Contract.Repositories;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Logs;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
@@ -10,7 +10,7 @@ using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Contract.Settings;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication;
-using CRCIS.Web.INoor.CRM.Infrastructure.Repositories;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports;
@@ -24,7 +24,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -32,6 +31,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using CRCIS.Web.INoor.CRM.Infrastructure.LoggerProvider;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 {
@@ -142,6 +142,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
 
+
+
             //BL Admin
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
@@ -158,6 +160,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 
             services.AddScoped<ISqlConnectionFactory, SqlConnectionFactory>();
             return services;
+        }
+
+
+        public static ILoggingBuilder AddInDbLogger(this ILoggingBuilder builder)
+        {
+            builder.Services.AddSingleton<ILoggerProvider, InDbLoggerProvider>();
+            //Logs
+            builder.Services.AddScoped<ILogRepository, LogRepository>();
+
+            return builder;
         }
     }
 }

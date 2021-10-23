@@ -10,19 +10,18 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubjectSearchWordController : ControllerBase
+    public class UpdateSamplesController : ControllerBase
     {
         private readonly ISubjectRepository _subjectRepository;
-        public SubjectSearchWordController(ISubjectRepository subjectRepository)
+        public UpdateSamplesController(ISubjectRepository subjectRepository)
         {
             _subjectRepository = subjectRepository;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Get(string searchWord)
+        [HttpPut]
+        public async Task<IActionResult> Put()
         {
-
-            return Ok();
+            var res = await _subjectRepository.UpdateSampleAsync();
+            return Ok(res);
         }
     }
 }
