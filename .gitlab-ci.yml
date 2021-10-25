@@ -9,7 +9,7 @@ variables:
 crm-api-prod:
   stage: production
   before_script:
-    - export NODE_ENV=production
+    - export ASONETCORE_ENVIRONMENT=production
 
   script:
     - docker-compose up -d --build --force-recreate
@@ -25,7 +25,7 @@ crm-api-prod:
 crm-api-dev:
   stage: development
   before_script:
-    - export NODE_ENV=development
+    - export ASONETCORE_ENVIRONMENT=development
 
   script:
     - docker-compose up -d --build
