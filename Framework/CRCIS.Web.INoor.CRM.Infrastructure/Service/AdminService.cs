@@ -34,9 +34,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             var admin = await _adminRepository.FindAdminAsync(personId);
             if (admin == null || admin.Success == false)
             {
-                var command = new Domain.Users.Admin.Commands.AdminCreateCommand(username, username + username, name, family, "", personId);
-                await _adminRepository.CreateAsync(command);
-                admin = await _adminRepository.FindAdminAsync(personId);
+                return new DataResponse<Guid>(new List<string> { "Admin not found" });
+                //var command = new Domain.Users.Admin.Commands.AdminCreateCommand(username, username + username, name, family, "", personId);
+                //await _adminRepository.CreateAsync(command);
+                //admin = await _adminRepository.FindAdminAsync(personId);
             }
             if (admin.Success == false)
             {
