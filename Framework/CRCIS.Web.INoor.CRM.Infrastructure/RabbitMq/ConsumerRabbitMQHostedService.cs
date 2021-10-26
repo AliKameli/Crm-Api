@@ -101,56 +101,63 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                 return;
             }
 
-            using (IServiceScope scope = _serviceProvider.CreateScope())
+            try
             {
-                IProductRepository _productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
-                var productResponse = _productRepository.GetBySecretKeyAsync(dto?.Client?.ClientSecret).Result;
-                Guid? noorUserId = null;
-                if (!string.IsNullOrEmpty(dto.User.NoorUserId))
+                using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
-                    Guid.TryParse(dto.User.NoorUserId, out Guid tempNoorUserId);
-                    noorUserId = tempNoorUserId;
+                    IProductRepository _productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
+                    var productResponse = _productRepository.GetBySecretKeyAsync(dto?.Client?.ClientSecret).Result;
+                    Guid? noorUserId = null;
+                    if (!string.IsNullOrEmpty(dto.User.NoorUserId))
+                    {
+                        Guid.TryParse(dto.User.NoorUserId, out Guid tempNoorUserId);
+                        noorUserId = tempNoorUserId;
+                    }
+                    if (productResponse.Success == false)
+                    {
+                        _logger.LogWarning($"product secret not found : {dto?.Client?.ClientSecret} ,json : {content}");
+                        return;
+                    }
+                    var productId = productResponse.Data.Id;
+                    var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
+                        dto.MessageInfo.NameFamily,
+                        dto.MessageInfo.Email,
+                        dto.MessageInfo.Description,
+                        1,
+                        noorUserId,
+                        productId,
+                        null,
+                        "",
+                        dto.MessageInfo.CreateDateTime,
+                        dto.Client.PageTitle,
+                        dto.Client.PageUrl,
+                        dto.Client.ToMailBox,
+                        dto.MessageInfo.FileUrl,
+                        dto.MessageInfo.FileType,
+                        dto.User.UserLanguage,
+                        dto.User.Ip,
+                        dto.Device.Browser,
+                        dto.Device.UserAgent,
+                        dto.Device.Platform,
+                        dto.Device.Os,
+                        dto.Device.DeviceScreenSize
+                          );
+
+
+                    using (IServiceScope scope2 = _serviceProvider.CreateScope())
+                    {
+                        IRabbitImportCaseRepository _importCaseRepository = scope2.ServiceProvider.GetRequiredService<IRabbitImportCaseRepository>();
+                        var insertResponse = _importCaseRepository.CreateFromRabbiImportAsync(command).Result;
+
+                        if (insertResponse.Success == false)
+                            _logger.LogError($"rabbit insert not successful : {content}");
+                    }
+
                 }
-                if (productResponse.Success == false)
-                {
-                    _logger.LogWarning($"product secret not found : {dto?.Client?.ClientSecret} ,json : {content}");
-                    return;
-                }
-                var productId = productResponse.Data.Id;
-                var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
-                    dto.MessageInfo.NameFamily,
-                    dto.MessageInfo.Email,
-                    dto.MessageInfo.Description,
-                    1,
-                    noorUserId,
-                    productId,
-                    null,
-                    "",
-                    dto.MessageInfo.CreateDateTime,
-                    dto.Client.PageTitle,
-                    dto.Client.PageUrl,
-                    dto.Client.ToMailBox,
-                    dto.MessageInfo.FileUrl,
-                    dto.MessageInfo.FileType,
-                    dto.User.UserLanguage,
-                    dto.User.Ip,
-                    dto.Device.Browser,
-                    dto.Device.UserAgent,
-                    dto.Device.Platform,
-                    dto.Device.Os,
-                    dto.Device.DeviceScreenSize
-                      );
-
-
-                using (IServiceScope scope2 = _serviceProvider.CreateScope())
-                {
-                    IRabbitImportCaseRepository _importCaseRepository = scope2.ServiceProvider.GetRequiredService<IRabbitImportCaseRepository>();
-                    var insertResponse = _importCaseRepository.CreateFromRabbiImportAsync(command).Result;
-
-                    if (insertResponse.Success == false)
-                        _logger.LogError($"rabbit insert not successful : {content}");
-                }
-
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
         }
 
