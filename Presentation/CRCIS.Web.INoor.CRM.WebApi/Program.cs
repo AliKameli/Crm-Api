@@ -21,19 +21,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-
                 .ConfigureLogging(logging =>
                 {
                     //logging.ClearProviders();
+                    logging.AddConsole();
                     logging.AddInDbLogger();
                 })
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.SetBasePath(Directory.GetCurrentDirectory());
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
-                config.AddEnvironmentVariables();
-            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
