@@ -15,6 +15,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     {
         IConfiguration _config;
 
+        public SqlFactoryController(IConfiguration config)
+        {
+            _config = config;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
