@@ -23,7 +23,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Content(_config["SqlServerSettings:ConnectionString"]);
+            return Content(""/*_config["SqlServerSettings:ConnectionString"]*/);
         }
     }
 }
