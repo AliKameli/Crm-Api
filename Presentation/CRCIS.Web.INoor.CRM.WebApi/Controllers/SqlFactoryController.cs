@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Data.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     [ApiController]
     public class SqlFactoryController : ControllerBase
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
-
-        public SqlFactoryController(ISqlConnectionFactory sqlConnectionFactory)
-        {
-            _sqlConnectionFactory = sqlConnectionFactory;
-        }
+        IConfiguration _config;
 
         [HttpGet]
         public IActionResult Get()
         {
-            var databas = _sqlConnectionFactory.GetOpenConnection().Database;
-            dynamic s = _sqlConnectionFactory.GetOpenConnection();
-            var dataSource = s.DataSource;
-            return Ok(new { databas,dataSource} );
+            return Content(_config["SqlServerSettings:ConnectionString"]);
         }
     }
 }
