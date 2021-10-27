@@ -290,13 +290,20 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
                 var command = new { PersonId = personId };
                 var adminModelList =
-                     await dbConnection
-                    .QueryAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+                     (await dbConnection
+                    .QueryAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure))
+                    .ToList();
 
-                _logger.LogCritical("spAdminGetByPersonId : personid {personid} , result {adminModelList}", personId, System.Text.Json.JsonSerializer.Serialize(adminModelList));
+                _logger.LogCritical("spAdminGetByPersonId => personId: {personId} ,  adminModelList.Count() : {adminId}", personId, adminModelList.Count());
+
+                foreach (var item in adminModelList)
+                {
+                    var adminId = item.Id;
+                    _logger.LogCritical("spAdminGetByPersonId : personid {personId} , result {adminId}", personId, item.Id);
+                }
 
                 var adminModel = adminModelList.FirstOrDefault();
-
+                _logger.LogCritical("spAdminGetByPersonId FirstOrDefault(): personid {personId} , result {adminId}", personId, adminModel.Id);
                 if (adminModel != null)
                     return new DataResponse<AdminModel>(adminModel);
 
