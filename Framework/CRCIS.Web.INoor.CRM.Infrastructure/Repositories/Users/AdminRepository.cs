@@ -315,6 +315,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                _logger.LogError(ex.InnerException?.Message);
+                _logger.LogError(ex.InnerException?.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;
