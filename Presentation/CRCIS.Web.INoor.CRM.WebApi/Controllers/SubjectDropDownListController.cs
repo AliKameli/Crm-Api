@@ -26,7 +26,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet("searchWord")]
-        public async Task<IActionResult>Get(string searchWord)
+        public async Task<IActionResult>Get([FromQuery] string searchWord)
         {
             var query = new SubjectSearchDropDownQuery(searchWord);
             var response = await _subjectRepository.GetSearchDropDownList(query);

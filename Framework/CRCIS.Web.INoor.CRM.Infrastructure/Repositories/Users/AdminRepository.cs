@@ -293,8 +293,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                      await dbConnection
                     .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
               
-
-              
                 var result = new DataResponse<AdminModel>(adminModel);
                 return result;
 
