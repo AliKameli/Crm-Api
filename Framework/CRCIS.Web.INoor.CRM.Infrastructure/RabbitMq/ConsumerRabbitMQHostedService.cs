@@ -34,7 +34,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
         {
             var factory = new ConnectionFactory
             {
-                HostName = "172.16.25.125",
+                HostName = "webrabbit.pars.local",
                 VirtualHost = "crm",
                 UserName = "crm",
                 Password = "jxeF5#e7Fp",

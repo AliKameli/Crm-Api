@@ -1,11 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Notifications;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
@@ -21,27 +16,17 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-
             var mailRequest = new MailRequest
             {
                 ToEmail = "Mabdollahi@noornet.net",
                 Subject = "تست ارسال crm",
                 Body = "تست برنامه نویس"
             };
-            //var mailSettings = new MailSettings
-            //{
-            //    UserName = "support.noormags.com",
-            //    Mail = "support.noormags.com",
-            //    Host = "support.noormags.com",
-            //    Port = 465
-
-            //};
             var mailSettings = new MailSettings
             {
-                UserName = "support@inoor.ir",
                 Mail = "support@inoor.ir",
-                Host = "mail.inoor.ir",
-                //Port = 1025,
+                Host = "mail.noornet.net",
+                Port = 25,
                 Password = "@*ldegF2**3MzVJHfsge"
 
             };

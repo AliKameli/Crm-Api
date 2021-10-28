@@ -13,17 +13,18 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     [ApiController]
     public class SqlFactoryController : ControllerBase
     {
-        IConfiguration _config;
+        ISqlConnectionFactory _sqlConnectionFactory;
 
-        public SqlFactoryController(IConfiguration config)
+        public SqlFactoryController(ISqlConnectionFactory sqlConnectionFactory)
         {
-            _config = config;
+            _sqlConnectionFactory = sqlConnectionFactory;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Content(""/*_config["SqlServerSettings:ConnectionString"]*/);
+            var database = _sqlConnectionFactory.GetOpenConnection().Database;
+            return Content(database);
         }
     }
 }
