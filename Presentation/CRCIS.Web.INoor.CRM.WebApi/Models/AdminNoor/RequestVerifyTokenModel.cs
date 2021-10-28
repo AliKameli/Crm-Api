@@ -7,7 +7,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.AdminNoor
 {
     public class RequestVerifyTokenModel
     {
-        public string PersonId { get; set; }
+        public Guid PersonId { get; set; }
         public string Name { get; set; }
         public string Family { get; set; }
         public string Username { get; set; }

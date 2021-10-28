@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Users.Admin;
+using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Users
     public interface IAdminVerifyTokenRepository
     {
         Task<DataResponse<Guid>> CreateTokenAsync(int adminId, Dictionary<string, string> queryString, string action = "");
-        Task<DataResponse<AdminByVerifyTokenModl>> GetAdminByVerifyToken(Guid verifyId);
+        Task<DataResponse<AdminByVerifyTokenDto>> GetAdminByVerifyToken(Guid verifyId);
     }
 }

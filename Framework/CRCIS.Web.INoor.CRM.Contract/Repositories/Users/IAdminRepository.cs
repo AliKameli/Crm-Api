@@ -16,7 +16,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Users
         Task<DataResponse<int>> CreateAsync(AdminCreateCommand command);
         Task<DataResponse<AdminModel>> FindAdminAsync(int adminId);
         Task<DataResponse<AdminModel>> FindAdminAsync(AdminLoginQuery query);
-        Task<DataResponse<AdminModel>> FindAdminAsync(string personId);
+        Task<DataResponse<AdminModel>> FindAdminAsync(Guid personId);
         Task<DataTableResponse<IEnumerable<AdminGetDto>>> GetAsync(AdminDataTableQuery query);
         Task<DataResponse<AdminModel>> GetByIdAsync(int id);
         Task<DataResponse<IEnumerable<AdminDropDownListDto>>> GetDropDownListAsync();
