@@ -13,6 +13,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Queries
 
         public SubjectSearchDropDownQuery(string searchWord)
         {
+            searchWord = string.IsNullOrEmpty(searchWord) ? string.Empty : searchWord;
             SearchWord = searchWord.CrmSampleText();
         }
     }

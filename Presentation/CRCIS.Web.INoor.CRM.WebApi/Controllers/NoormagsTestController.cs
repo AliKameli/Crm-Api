@@ -41,7 +41,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 UserName = "support@inoor.ir",
                 Mail = "support@inoor.ir",
                 Host = "mail.inoor.ir",
-                Port = 1025,
+                //Port = 1025,
                 Password = "@*ldegF2**3MzVJHfsge"
 
             };

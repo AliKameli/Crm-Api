@@ -29,7 +29,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             _adminVerifyTokenRepository = adminVerifyTokenRepository;
         }
 
-        public async Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, string personId, string action, Dictionary<string, string> queryString = null)
+        public async Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, Guid personId, string action, Dictionary<string, string> queryString = null)
         {
             var admin = await _adminRepository.FindAdminAsync(personId);
             if (admin == null || admin.Success == false)

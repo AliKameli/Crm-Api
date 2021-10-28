@@ -10,6 +10,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Service
     public interface IAdminService
     {
       
-        Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, string personId, string action, Dictionary<string, string> queryString = null);
+        Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, Guid personId, string action, Dictionary<string, string> queryString = null);
     }
 }

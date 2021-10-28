@@ -281,7 +281,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
         }
 
-        public async Task<DataResponse<AdminModel>> FindAdminAsync(string personId)
+        public async Task<DataResponse<AdminModel>> FindAdminAsync(Guid personId)
         {
             try
             {
@@ -289,26 +289,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
                 var command = new { PersonId = personId };
-                var adminModelList =
-                     (await dbConnection
-                    .QueryAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure))
-                    .ToList();
+                var adminModel =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+              
 
-                _logger.LogCritical("spAdminGetByPersonId => personId: {personId} ,  adminModelList.Count() : {adminId}", personId, adminModelList.Count());
-
-                foreach (var item in adminModelList)
-                {
-                    var adminId = item.Id;
-                    _logger.LogCritical("spAdminGetByPersonId : personid {personId} , result {adminId}", personId, item.Id);
-                }
-
-                var adminModel = adminModelList.FirstOrDefault();
-                _logger.LogCritical("spAdminGetByPersonId FirstOrDefault(): personid {personId} , result {adminId}", personId, adminModel.Id);
-                if (adminModel != null)
-                    return new DataResponse<AdminModel>(adminModel);
-
-                var errors = new List<string> { "ادمین یافت نشد" };
-                var result = new DataResponse<AdminModel>(errors);
+              
+                var result = new DataResponse<AdminModel>(adminModel);
                 return result;
 
             }
@@ -316,8 +303,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             {
                 _logger.LogError(ex.Message);
                 _logger.LogError(ex.StackTrace);
-                _logger.LogError(ex.InnerException?.Message);
-                _logger.LogError(ex.InnerException?.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<AdminModel>(errors);
                 return result;

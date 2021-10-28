@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin;
+using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -66,7 +67,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
         }
 
-        public async Task<DataResponse<AdminByVerifyTokenModl>> GetAdminByVerifyToken(Guid verifyId)
+        public async Task<DataResponse<AdminByVerifyTokenDto>> GetAdminByVerifyToken(Guid verifyId)
         {
             try
             {
@@ -76,13 +77,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 var command = new { Id = verifyId };
                 var adminModel =
                      await dbConnection
-                    .QueryFirstOrDefaultAsync<AdminByVerifyTokenModl>(sql, command, commandType: CommandType.StoredProcedure);
+                    .QueryFirstOrDefaultAsync<AdminByVerifyTokenDto>(sql, command, commandType: CommandType.StoredProcedure);
 
                 if (adminModel != null)
-                    return new DataResponse<AdminByVerifyTokenModl>(adminModel);
+                    return new DataResponse<AdminByVerifyTokenDto>(adminModel);
 
                 var errors = new List<string> { "اذمین یافت نشد" };
-                var result = new DataResponse<AdminByVerifyTokenModl>(errors);
+                var result = new DataResponse<AdminByVerifyTokenDto>(errors);
                 return result;
 
             }
@@ -91,7 +92,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<AdminByVerifyTokenModl>(errors);
+                var result = new DataResponse<AdminByVerifyTokenDto>(errors);
                 return result;
             }
         }
