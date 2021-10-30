@@ -23,10 +23,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         protected override string TableName => "Admin";
         private ILogger _logger;
         public AdminRepository(ISqlConnectionFactory sqlConnectionFactory, ISecurityService securityService,
-            ILoggerFactory loggerFactory) 
+            ILoggerFactory loggerFactory)
             : base(sqlConnectionFactory)
         {
-            _securityService = securityService; 
+            _securityService = securityService;
             _logger = loggerFactory.CreateLogger<AdminRepository>();
         }
         public async Task<DataTableResponse<IEnumerable<AdminGetDto>>> GetAsync(AdminDataTableQuery query)
@@ -166,13 +166,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         }
         public async Task<DataResponse<int>> CreateAsync(AdminCreateCommand command)
         {
-           command =  new AdminCreateCommand(
-                command.Username,
-                _securityService.GetSha256Hash(command.PasswordHash),
-                command.Name,
-                command.Family,
-                command.Mobile,
-                command.NoorPersonId);
+            command = new AdminCreateCommand(
+                 command.Username,
+                 _securityService.GetSha256Hash(command.PasswordHash),
+                 command.Name,
+                 command.Family,
+                 command.Mobile,
+                 command.NoorPersonId);
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
@@ -283,28 +283,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
 
         public async Task<DataResponse<AdminModel>> FindAdminAsync(Guid personId)
         {
-            try
-            {
-                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
-                var command = new { PersonId = personId };
-                var adminModel =
-                     await dbConnection
-                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
-              
-                var result = new DataResponse<AdminModel>(adminModel);
-                return result;
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
+            var command = new { PersonId = personId };
+            var adminModel =
+                 await dbConnection
+                .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                _logger.LogError(ex.StackTrace);
-                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<AdminModel>(errors);
-                return result;
-            }
+            var result = new DataResponse<AdminModel>(adminModel);
+            return result;
+
         }
         public async Task UpdateAdminLastActivityDateAsync(int adminId)
         {
