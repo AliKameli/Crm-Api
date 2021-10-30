@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build-env
+FROM hub.inoor.ir/common/dotnet/sdk:5.0 AS build-env
 WORKDIR /app
 
 ENV http_proxy 'http://172.16.20.207:3128'
@@ -19,7 +19,7 @@ ENV https_proxy ''
 ENV no_proxy 'localhost,127.0.0.0/8,.local,172.16.0.0/12,192.168.0.0/16,.ir,.noornet.net'
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
+FROM hub.inoor.ir/common/dotnet/aspnet:5.0-alpine
 WORKDIR /app/Presentation/CRCIS.Web.INoor.CRM.WebApi
 COPY --from=build-env /app/Presentation/CRCIS.Web.INoor.CRM.WebApi/out ./
 EXPOSE 80
