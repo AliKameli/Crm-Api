@@ -23,6 +23,8 @@ FROM hub.inoor.ir/common/dotnet/aspnet:5.0-alpine
 WORKDIR /app/Presentation/CRCIS.Web.INoor.CRM.WebApi
 COPY --from=build-env /app/Presentation/CRCIS.Web.INoor.CRM.WebApi/out ./
 EXPOSE 80
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 # EXPOSE 5000
 # EXPOSE 5001
 #ENV ASPNETCORE_URLS=http://+:8011
