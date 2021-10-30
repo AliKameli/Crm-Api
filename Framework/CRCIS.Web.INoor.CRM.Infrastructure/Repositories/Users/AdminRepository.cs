@@ -284,7 +284,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         public async Task<DataResponse<AdminModel>> FindAdminAsync(Guid personId)
         {
             using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
-            var dd = dbConnection.QuerySingleOrDefault("EXEC [CRM].[spAdminGetByPersonId] @personId", new { personId }, commandType: CommandType.StoredProcedure);
+            var dd = dbConnection.QuerySingleOrDefault("EXEC [CRM].[spAdminGetByPersonId] @personId", new { personId }, commandType: CommandType.Text);
             return await Task.FromResult(new DataResponse<AdminModel>(new List<string>() { dd.ToString() }));
 
             var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
