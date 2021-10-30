@@ -58,20 +58,20 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddCors(options =>
             {
 
+                ////options.AddPolicy(name: MyAllowSpecificOrigins,
+                ////    builder =>
+                ////    {
+                ////        builder.WithOrigins("*")
+                ////                            .AllowAnyHeader()
+                ////                            .AllowAnyMethod();
+                ////    });
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("*")
+                        builder.WithOrigins("http://localhost:8080")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });
-                //options.AddPolicy(name: MyAllowSpecificOrigins,
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://172.16.22.77:9011")
-                //                            .AllowAnyHeader()
-                //                            .AllowAnyMethod();
-                //    });
             });
         }
 
