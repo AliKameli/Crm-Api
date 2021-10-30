@@ -13,21 +13,31 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             _mailService = mailService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("{mail}")]
+        public async Task<IActionResult> Get(string mail)
         {
+            if (string.IsNullOrEmpty(mail))
+                return Content("ایمیل مقصد وارد شود");
             var mailRequest = new MailRequest
             {
-                ToEmail = "Mabdollahi@noornet.net",
+                ToEmail = mail,
                 Subject = "تست ارسال crm",
                 Body = "تست برنامه نویس"
             };
+            //var mailSettings = new MailSettings
+            //{
+            //    Mail = "support@inoor.ir",
+            //    Host = "mail.noornet.net",
+            //    Port = 25,
+            //    Password = "@*ldegF2**3MzVJHfsge"
+
+            //};
             var mailSettings = new MailSettings
             {
-                Mail = "support@inoor.ir",
+                Mail = "support@noormags.com",
                 Host = "mail.noornet.net",
                 Port = 25,
-                Password = "@*ldegF2**3MzVJHfsge"
+                Password = "aLBsZkFwf3sy#PrKICtS"
 
             };
 
