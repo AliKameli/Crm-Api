@@ -30,5 +30,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos
         public string ManualImportAdminName { get; set; }
         public string ManualImportAdminFamily { get; set; }
         public string Subjects { get; set; }
+        public string MoreData { get; set; }
     }
 }

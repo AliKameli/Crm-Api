@@ -14,7 +14,7 @@ namespace Noor.Text
         public static string CrmSampleText(this string input)
         {
             return input.Sample(
-                removeSpace: true,
+                removeSpace:false,
                 removeDigits: false,
                 removeEnglishAlpha: false,
                 removeEditingCharacters: true,
