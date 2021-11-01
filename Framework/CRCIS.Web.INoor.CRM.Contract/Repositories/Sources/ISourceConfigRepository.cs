@@ -8,6 +8,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Sources
     public interface ISourceConfigRepository
     {
         Task<DataResponse<SourceConfigModel>> GetByIdAsync(int id);
-        Task<DataResponse<IEnumerable<SourceConfigModel>>> GetBySourceTypesId(int sourceTypeId);
+        Task<DataResponse<IEnumerable<SourceConfigModel>>> GetBySourceTypesIdAsync(int sourceTypeId);
     }
 }

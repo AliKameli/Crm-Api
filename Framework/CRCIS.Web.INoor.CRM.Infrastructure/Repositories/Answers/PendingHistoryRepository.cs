@@ -25,7 +25,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
             _logger = loggerFactory.CreateLogger<PendingHistoryRepository>();
         }
 
-        public async Task<DataResponse<int>> CreateAsync(AnsweringCreateDto dto)
+        public async Task<DataResponse<string>> CreateAsync(AnsweringCreateDto dto)
         {
             try
             {
@@ -58,14 +58,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
 
                 transaction.Commit();
 
-                return new DataResponse<int>(true);
+                return new DataResponse<string>(true);
             }
             catch (Exception ex)
             {
                 //_logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<int>(errors);
+                var result = new DataResponse<string>(errors);
                 return result;
             }
         }

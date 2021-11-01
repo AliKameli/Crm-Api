@@ -59,32 +59,32 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
                 ISourceConfigRepository _sourceConfigRepository = scope.ServiceProvider.GetRequiredService<ISourceConfigRepository>();
-                var dataResponse = _sourceConfigRepository.GetBySourceTypesId(2).Result;
+                var dataResponse = _sourceConfigRepository.GetBySourceTypesIdAsync(2).Result;
                 if (dataResponse.Success == false)
                 {
-                    _logger.LogCritical("GetBySourceTypeId faild {mails}");
+                    _logger.LogCritical("GetBySourceTypeId faild reading mails");
                     return;
                 }
                 foreach (var item in dataResponse.Data)
                 {
-                    var mails = new List<EmailMessageDto>();
+                        var mails = new List<EmailMessageDto>();
                     try
                     {
                         if (string.IsNullOrEmpty(item.ConfigJson))
                         {
                             _logger.LogCritical("(string.IsNullOrEmpty(item.ConfigJson)  {item.ConfigJson} ", item.ConfigJson);
-                            break;
+                            continue;
                         }
                         var configJsonDto = System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(item.ConfigJson);
                         if (configJsonDto == null)
                         {
                             _logger.LogCritical("(configJsonDto == null  {configJsonDto} ", configJsonDto);
-                            break;
+                            continue;
                         }
                         var mailProcessDateTimeNow = DateTime.Now;
-                        mails.AddRange(
+                        mails =
                             readMails(mailProcessDateTimeNow, configJsonDto.MailBox, configJsonDto.MailAddress, configJsonDto.MailPassword, item.LastUpdateTime)
-                            );
+                            .ToList();
                         insertMails(mailProcessDateTimeNow, item, configJsonDto, mails);
                     }
                     catch (Exception ex)

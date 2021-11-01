@@ -51,7 +51,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
         }
 
-        public async Task<DataResponse<IEnumerable<SourceConfigModel>>> GetBySourceTypesId(int sourceTypeId)
+        public async Task<DataResponse<IEnumerable<SourceConfigModel>>> GetBySourceTypesIdAsync(int sourceTypeId)
         {
             try
             {

@@ -35,7 +35,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Email.Commands
             ImportDateTime = DateTime.Now;
             CreateDateTime = createDateTime;
 
-            var moreDataObject = new RabbitImportCaseMoreDataObject(toMailBox);
+            var moreDataObject = new ImportCaseMoreDataObject(toMailBox);
             MoreData = System.Text.Json.JsonSerializer.Serialize(moreDataObject);
         }
 

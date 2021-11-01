@@ -40,11 +40,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi
         {
             if (WebHostEnvironment.IsDevelopment() == false)
             {
-
                 services.AddHostedService<TimedMailReaderHostedService>();
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
             }
             services.AddSingleton<IMailService, MailService>();
+            services.AddScoped<ICrmNotifyManager, CrmNotifyProvider>();
             services.AddControllers();
 
             services.AddAutoMapper();

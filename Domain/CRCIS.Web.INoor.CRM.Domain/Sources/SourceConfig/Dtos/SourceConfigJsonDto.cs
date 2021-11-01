@@ -12,5 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig.Dtos
         public string MailAddress { get; set; }
         public string MailPassword { get; set; }
 
+        public bool AllowRead { get; set; }
+        public bool AllowSend { get; set; }
     }
 }
