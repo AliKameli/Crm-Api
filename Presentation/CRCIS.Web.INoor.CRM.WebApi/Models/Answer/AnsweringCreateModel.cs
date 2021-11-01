@@ -9,6 +9,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.Answer
     {
         public string AnswerText { get; set; }
         public int AnswerMethodId { get; set; }
+        public string AnswerSource { get; set; }
         public long CaseId { get; set; }
         public int AdminId { get; set; }
     }

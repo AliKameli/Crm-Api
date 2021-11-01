@@ -10,6 +10,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Answers
 {
     public interface IPendingHistoryRepository
     {
-        Task<DataResponse<int>> CreateAsync(AnsweringCreateDto dto);
+        Task<DataResponse<string>> CreateAsync(AnsweringCreateDto dto);
     }
 }
