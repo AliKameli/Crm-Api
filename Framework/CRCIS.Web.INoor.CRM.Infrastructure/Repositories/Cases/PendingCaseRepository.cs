@@ -8,6 +8,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using System;
@@ -67,7 +68,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetById");
                 var command = new { Id = id };
-                var subject =
+                var pendingCaseModel =
                      await dbConnection
                     .QueryFirstOrDefaultAsync<PendingCaseModel>(sql, command, commandType: CommandType.StoredProcedure, transaction: transaction);
 
@@ -87,9 +88,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 
                 transaction.Commit();
 
-                if (subject != null)
+                if (pendingCaseModel != null)
                 {
-                    var dto = _mapper.Map<PendingCaseFullDto>(subject);
+                    var dto = _mapper.Map<PendingCaseFullDto>(pendingCaseModel);
+                    dto = dto.PairSuggestionsForAnswer();
                     return new DataResponse<PendingCaseFullDto>(dto);
                 }
 

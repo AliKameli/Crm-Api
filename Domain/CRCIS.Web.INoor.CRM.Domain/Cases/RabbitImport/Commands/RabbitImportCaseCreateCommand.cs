@@ -50,6 +50,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
     {
         public string PageTitle { get; private set; }
         public string PageUrl { get; private set; }
+
+        [System.Text.Json.Serialization.JsonInclude]
         public string ToMailBox { get; private set; }
         public string FileUrl { get; private set; }
         public string FileType { get; private set; }
@@ -80,6 +82,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public ImportCaseMoreDataObject(string toMailBox)
         {
             ToMailBox = toMailBox;
+        }
+        public ImportCaseMoreDataObject()
+        {
+
         }
     }
 }
