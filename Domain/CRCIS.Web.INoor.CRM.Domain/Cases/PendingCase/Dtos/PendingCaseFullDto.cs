@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRCIS.Web.INoor.CRM.Utility.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,5 +32,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos
         public string ManualImportAdminFamily { get; set; }
         public string Subjects { get; set; }
         public string MoreData { get; set; }
+
+        public AnswerMethod? SuggestionAnswerMethod { get; set; }
+        public string SuggestionAnswerSource { get; set; }
     }
 }
