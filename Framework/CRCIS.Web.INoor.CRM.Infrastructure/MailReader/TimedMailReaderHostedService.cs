@@ -67,7 +67,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                 }
                 foreach (var item in dataResponse.Data)
                 {
-                        var mails = new List<EmailMessageDto>();
+                    var mails = new List<EmailMessageDto>();
                     try
                     {
                         if (string.IsNullOrEmpty(item.ConfigJson))
@@ -149,8 +149,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                 }
                 var message = mailClient.GetMessage(i);
                 dynamic from = message.From.FirstOrDefault();
-                var name = from.Name;
-                var address = from.Address;
+
+                string name = null, address = null;
+
+                try { name = from.Name as string; }
+                catch (Exception ex) { string s = ex.Message; };
+                try { address = from.Address as string; }
+                catch (Exception ex) { string s = ex.Message; }
 
                 var emailMessage = new EmailMessageDto
                 {

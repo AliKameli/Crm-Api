@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Notifications;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -9,6 +10,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 {
     public class MailService : IMailService
     {
+        private readonly ILogger _logger;
+        public MailService(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<MailService>();
+        }
         public async Task SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
         {
             var oMail =
@@ -37,6 +43,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             catch (Exception ex)
             {
                 var s = ex.Message;
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                _logger.LogError(ex.InnerException?.Message);
+                _logger.LogError(ex.InnerException?.StackTrace);
                 // ignoared
             }
             oMail.Dispose();
