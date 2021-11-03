@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\CaseSubjectController.cs" />
+    <Compile Remove="Controllers\NoormagsTestController.cs" />
   </ItemGroup>
 
   <ItemGroup>
