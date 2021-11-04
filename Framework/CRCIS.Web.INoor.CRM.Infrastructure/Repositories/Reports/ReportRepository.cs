@@ -1,4 +1,5 @@
-﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
+﻿using AutoMapper;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
@@ -9,6 +10,7 @@ using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Response;
+using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Reports;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -16,14 +18,20 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Principal;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
     public class ReportRepository : BaseRepository, IReportRepository
     {
         protected override string TableName => "Report";
-        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        private readonly IMapper _mapper;
+        private readonly IIdentity _identity;
+        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory,IMapper mapper ,IIdentity identity) : base(sqlConnectionFactory)
         {
+            _mapper = mapper;
+            _identity = identity;
         }
 
         public async Task<DataResponse<CaseHistoryChartDto>> GetCaseHistoryReportAsync()
@@ -85,7 +93,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
         }
 
-        public async Task<DataTableResponse<IEnumerable<PersonReportResponse>>> GetPersonReport(PersonReportQuery query)
+        public async Task<DataTableResponse<IEnumerable<PersonReportResponseFullDto>>> GetPersonReport(PersonReportQuery query)
         {
             try
             {
@@ -98,7 +106,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                     .QueryAsync<PersonReportResponse>(sql, query, commandType: CommandType.StoredProcedure);
 
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
-                var result = new DataTableResponse<IEnumerable<PersonReportResponse>>(list, totalCount);
+
+                var listFull = list
+                    .Select(r => (r == null) ? null :
+                        _mapper.Map<PersonReportResponseFullDto>(r)
+                    )
+                    .Select(r => (r == null) ? null :
+                            r.PairCommandAccess(_identity.GetAdminId())
+                    );
+
+                var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(listFull, totalCount);
                 return result;
 
             }
@@ -106,7 +123,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             {
                 //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataTableResponse<IEnumerable<PersonReportResponse>>(errors);
+                var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(errors);
                 return result;
             }
         }
