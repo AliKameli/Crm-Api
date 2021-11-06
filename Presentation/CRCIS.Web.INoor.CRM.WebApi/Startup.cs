@@ -44,6 +44,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
             }
             services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton<ISmsService, SmsService>();
             services.AddScoped<ICrmNotifyManager, CrmNotifyProvider>();
             services.AddControllers();
 
