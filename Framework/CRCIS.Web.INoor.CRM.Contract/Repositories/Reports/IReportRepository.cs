@@ -15,6 +15,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Reports
     public interface IReportRepository
     {
         Task<DataResponse<CaseHistoryChartDto>> GetCaseHistoryReportAsync();
-        Task<DataTableResponse<IEnumerable<PersonReportResponse>>> GetPersonReport(PersonReportQuery query);
+        Task<DataTableResponse<IEnumerable<PersonReportResponseFullDto>>> GetPersonReport(PersonReportQuery query);
     }
 }

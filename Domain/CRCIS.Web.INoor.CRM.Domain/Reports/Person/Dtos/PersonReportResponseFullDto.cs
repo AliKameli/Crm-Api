@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
 {
-    public class PersonReportResponse
+    public class PersonReportResponseFullDto
     {
         public long Id { get; set; }
         public string Title { get; set; }
@@ -19,5 +19,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
         public int? AdminId { get; set; }
         public string FirstSubject { get; set; }
         public long TotalCount { get; set; }
+
+        public bool AllowAssignToMe { get; set; }
+        public bool AllowAnswerByMe { get; set; }
+        public bool AllowAssignToOther { get; set; }
+        public bool AllowBackFromArchiveToMe { get; set; }
     }
 }
