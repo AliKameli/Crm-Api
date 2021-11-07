@@ -18,6 +18,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
     public class CrmNotifyProvider : ICrmNotifyManager
     {
         private readonly IMailService _mailService;
+        private readonly ISmsService _smsService;
         private readonly IPendingCaseRepository _pendingCaseRepository;
         private readonly ISourceConfigRepository _sourceConfigRepository;
         private readonly ILogger _logger;
@@ -25,12 +26,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
         public CrmNotifyProvider(ILoggerFactory loggerFactory,
             IMailService mailService,
             IPendingCaseRepository pendingCaseRepository,
-            ISourceConfigRepository sourceConfigRepository)
+            ISourceConfigRepository sourceConfigRepository,
+            ISmsService smsService)
         {
             _mailService = mailService;
             _pendingCaseRepository = pendingCaseRepository;
             _sourceConfigRepository = sourceConfigRepository;
             _logger = loggerFactory.CreateLogger<CrmNotifyProvider>();
+            _smsService = smsService;
         }
 
         public async Task<DataResponse<string>> SendEmailAsync(long caseId, string fromMailBox, string message)
@@ -39,29 +42,18 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             if (responsePendingCase.Success == false || responsePendingCase.Data == null)
                 return new DataResponse<string>(new List<string> { "خطا در واکشی اطلاعات" });
 
-            //var moreDataString = responsePendingCase?.Data?.MoreData;
-            //if (string.IsNullOrEmpty(moreDataString))
-            //    return new DataResponse<string>(new List<string> { "خطا در واکشی اطلاعات مورد" });
-
-            //var caseMoreDataObject = System.Text.Json.JsonSerializer.Deserialize<ImportCaseMoreDataObject>(moreDataString);
-            //if (string.IsNullOrEmpty(caseMoreDataObject?.ToMailBox))
-            //    return new DataResponse<string>(new List<string> { "ایمیل مخاطب یافت نشد" });
 
             if(string.IsNullOrEmpty(responsePendingCase?.Data?.Email))
                 return new DataResponse<string>(new List<string> { "ایمیل مخاطب یافت نشد" });
 
-            var dataResponseMails = _sourceConfigRepository.GetBySourceTypesIdAsync(2).Result;
+            var dataResponseMails = _sourceConfigRepository.GetByAnswerMethodIdAsync((int)AnswerMethod.Email).Result;
             if (dataResponseMails.Success == false || dataResponseMails.Data == null)
             {
                 _logger.LogCritical("GetBySourceTypeId faild reading mail settings {fromMailBox}", fromMailBox);
                 return new DataResponse<string>(new List<string> { "تنظیمات ایمیل باکس یافت نشد" });
             }
 
-            Func<string, SourceConfigJsonDto> func = (strConfigjson) =>
-                string.IsNullOrEmpty(strConfigjson) == true ? null :
-                System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(strConfigjson);
-
-            var mailSettings = dataResponseMails.Data.Select(m => func(m.ConfigJson)).ToList();
+            var mailSettings = dataResponseMails.Data.Select(m => funcSourceConfigJson(m.ConfigJson)).ToList();
             var mailSettingSelected = mailSettings.FirstOrDefault(config => config.MailAddress == fromMailBox);
             if (mailSettingSelected == null)
                 return new DataResponse<string>(new List<string> { "تنظیمات ایمیل باکس یافت نشد" });
@@ -87,6 +79,49 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             return new DataResponse<string>(true, null, "ایمیل ارسال شد");
         }
 
+        public async Task<DataResponse<string>>SendSmsAsync(long caseId,string fromSmsCenterId , string message)
+        {
+            var responsePendingCase = await _pendingCaseRepository.GetByIdAsync(caseId);
+            if (responsePendingCase.Success == false || responsePendingCase.Data == null)
+                return new DataResponse<string>(new List<string> { "خطا در واکشی اطلاعات" });
+
+            if (string.IsNullOrEmpty(responsePendingCase?.Data?.Mobile))
+                return new DataResponse<string>(new List<string> { "موبایل مخاطب یافت نشد" });
+
+            var dataResponseMails = _sourceConfigRepository.GetByAnswerMethodIdAsync((int)AnswerMethod.Sms).Result;
+            if (dataResponseMails.Success == false || dataResponseMails.Data == null)
+            {
+                _logger.LogCritical("GetBySourceTypeId faild reading mail settings {fromMailBox}", fromSmsCenterId);
+                return new DataResponse<string>(new List<string> { "تنظیمات مرکز پیامک یافت نشد" });
+            }
+
+            var mailSettings = dataResponseMails.Data
+                .Where(d=> d.Id.ToString() == fromSmsCenterId )//برای پیامک ایدی رو میگیریم
+                .Select(m => funcSourceConfigJson(m.ConfigJson)).ToList();
+            var smsSettingSelected = mailSettings.FirstOrDefault();
+            if (smsSettingSelected == null)
+                return new DataResponse<string>(new List<string> { "تنظیمات مرکز پیامک یافت نشد" });
+
+            if (smsSettingSelected.AllowSend == false)
+                return new DataResponse<string>(new List<string> { " مرکز پیامک دسترسی ارسال ندارد" });
+
+            var smsRequest = new SmsRequest
+            {
+                Destination = responsePendingCase?.Data?.Mobile,
+                Body = message,
+                SmsCenterPanelNumber = smsSettingSelected.SmsCenterPanelNumber,
+                SmsCenterUserName = smsSettingSelected.SmsCenterUserName,
+                SmsCenterPassword = smsSettingSelected.SmsCenterPassword,
+            };
+
+            await _smsService.SendSmsAsync(smsRequest);
+
+            return new DataResponse<string>(true, null, "پیامک ارسال شد");
+        }
+
+        private Func<string, SourceConfigJsonDto> funcSourceConfigJson = (strConfigjson) =>
+               string.IsNullOrEmpty(strConfigjson) == true ? null :
+               System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(strConfigjson);
 
         private void chooseWayDecorator(AnswerMethod answerMethod)
         {
@@ -94,6 +129,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             {
                 case AnswerMethod.Email:
 
+                    break;
+
+                case AnswerMethod.Sms:
                     break;
                 default:
                     break;

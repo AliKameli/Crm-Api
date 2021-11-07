@@ -16,9 +16,9 @@ namespace CRCIS.Web.INoor.CRM.Domain.Users.Admin.Commands
         public string Name { get; private set; }
         public string Family { get; private set; }
         public string Mobile { get; private set; }
-        public string NoorPersonId { get; private set; }
+        public Guid NoorPersonId { get; private set; }
 
-        public AdminCreateCommand(string username, string password, string name, string family, string mobile, string noorPersonId)
+        public AdminCreateCommand(string username, string password, string name, string family, string mobile, Guid noorPersonId)
         {
             Username = username;
             PasswordHash = password;

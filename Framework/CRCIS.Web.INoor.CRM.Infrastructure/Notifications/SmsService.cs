@@ -22,12 +22,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             try
             {
                 var url =
-                    "http://www.tsms.ir/url/tsmshttp.php?" +
-                    $"from={"3000144194"}" +
-                    $"&username={"noornet3"}" +
-                    $"&password={"tsms7665ef5"}" +
-                    $"&to={message.Destination}" +
-                    $"&message={message.Body}";
+                "http://www.tsms.ir/url/tsmshttp.php?" +
+                   $"from={message.SmsCenterPanelNumber}" +
+                   $"&username={message.SmsCenterUserName}" +
+                   $"&password={message.SmsCenterPassword}" +
+                   $"&to={message.Destination}" +
+                   $"&message={message.Body}";
+
 
                 //var ocRequest = System.Net.WebRequest.Create(url);
                 //ocRequest.Timeout = 30000;
