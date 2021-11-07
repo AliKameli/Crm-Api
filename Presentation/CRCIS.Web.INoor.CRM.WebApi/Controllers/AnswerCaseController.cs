@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Contract.Notifications;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Answer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         private readonly IIdentity _identity;
 
         public AnswerCaseController(IMapper mapper, IIdentity identity,
-            IPendingHistoryRepository pendingHistoryRepository, 
+            IPendingHistoryRepository pendingHistoryRepository,
             ICrmNotifyManager crmNotifyManager)
         {
             _mapper = mapper;
@@ -42,8 +43,21 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             if (responseSave.Success == false)
                 return Ok(responseSave);
 
-            var responseSend = await _crmNotifyManager.SendEmailAsync(model.CaseId, model.AnswerSource, model.AnswerText);
-            return Ok(responseSend);
+
+            if (model.AnswerMethodId == 1)
+            {
+                var responseSend = await _crmNotifyManager.SendSmsAsync(model.CaseId, model.AnswerSource, model.AnswerText);
+                return Ok(responseSend);
+
+            }
+            if (model.AnswerMethodId == 2)
+            {
+                var responseSend = await _crmNotifyManager.SendEmailAsync(model.CaseId, model.AnswerSource, model.AnswerText);
+                return Ok(responseSend);
+            }
+
+            var res = new DataResponse<string>(false, new List<string> { "روش پاسخ دهی معتبر  نیست" }, null);
+            return Ok(res);
         }
     }
 }

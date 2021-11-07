@@ -12,7 +12,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Models.Admin
         public string Name { get; set; }
         public string Family { get; set; }
         public string Mobile { get; set; }
-        public string NoorPersonId { get; set; }
+        public Guid NoorPersonId { get; set; }
 
     }
 }

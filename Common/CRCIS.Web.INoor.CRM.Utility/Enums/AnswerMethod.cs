@@ -8,7 +8,7 @@ namespace CRCIS.Web.INoor.CRM.Utility.Enums
 {
     public enum AnswerMethod
     {
-        Tell = 1,
+        Sms = 1,
         Email = 2,
     }
 }

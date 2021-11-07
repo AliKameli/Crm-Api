@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Notifications
 {
-  public  class SmsRequest
+    public class SmsRequest
     {
+        public string SmsCenterPanelNumber { get; set; }
+        public string SmsCenterUserName { get; set; }
+        public string SmsCenterPassword { get; set; }
+
         public string Destination { get; set; }
         public string Body { get; set; }
     }

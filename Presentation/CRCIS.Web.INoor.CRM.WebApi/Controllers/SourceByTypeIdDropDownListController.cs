@@ -12,10 +12,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SourceByTypeIdDropDownListController : ControllerBase
+    public class SourceByAnswerMethodIdDropDownListController : ControllerBase
     {
         private readonly ISourceConfigRepository _sourceConfigRepository;
-        public SourceByTypeIdDropDownListController(ISourceConfigRepository sourceConfigRepository)
+        public SourceByAnswerMethodIdDropDownListController(ISourceConfigRepository sourceConfigRepository)
         {
             _sourceConfigRepository = sourceConfigRepository;
         }
@@ -23,7 +23,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            var sourcesReponse = await _sourceConfigRepository.GetBySourceTypesIdAsync(id);
+            var sourcesReponse = await _sourceConfigRepository.GetByAnswerMethodIdAsync(id);
             if (sourcesReponse.Success == false ||sourcesReponse.Data ==null )
             {
                 var response = new DataResponse<string>(new List<string> { "خطا در واکشی اطلاعات " });
@@ -34,9 +34,15 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(strConfigjson);
 
             var list = sourcesReponse.Data.Select(s => new { s.Id, s.Title , Config = func(s.ConfigJson) });
-            var list2 = list.Where(s => s.Config?.MailAddress != null)//.Where(s => s.Config.AllowSend == true)
+
+            var list2 = list.Where(s => s.Config?.MailAddress != null).Where(s => s.Config.AllowSend == true)
                 .Select(s => new { Id = s.Config.MailAddress, Title=  s.Title } as dynamic).ToList();
-            return Ok(new DataResponse<List<dynamic>>(true,null,list2 ));
+
+            var list3 = list.Where(s => s.Config?.SmsCenterPanelNumber != null).Where(s => s.Config.AllowSend == true)
+                .Select(s => new { Id = s.Id.ToString(), Title=  s.Title } as dynamic).ToList();
+
+            var list4 = list2.Concat(list3);
+            return Ok(new DataResponse<IEnumerable<dynamic>>(true,null,list4 ));
         }
 
     }
