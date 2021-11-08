@@ -34,7 +34,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 //ocRequest.Timeout = 30000;
                 //var res = ocRequest.GetResponse();
 
-                using var httpClient = new HttpClient();
+                var handler = new HttpClientHandler
+                {
+                    Proxy = new WebProxy()
+                    {
+                        Address = new Uri("http://172.16.20.207:3128"),
+                        BypassProxyOnLocal = true,
+                        UseDefaultCredentials = false,
+                    }
+                };
+
+                using var httpClient = new HttpClient(handler);
 
                 var resposne = await httpClient.GetAsync(url);
                 var str = resposne.Content.ReadAsStringAsync();
