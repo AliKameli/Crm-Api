@@ -49,8 +49,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 Proxy = new WebProxy()
                 {
                     Address = new Uri("172.16.20.207:3128"),
-                    BypassProxyOnLocal = false,
-                    UseDefaultCredentials = true,
+                    BypassProxyOnLocal = true,
+                    UseDefaultCredentials = false,
                 }
             };
 
