@@ -46,8 +46,14 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             using var httpClient = new HttpClient();
 
             var resposne = await httpClient.GetAsync(url);
+          
             var str = resposne.Content.ReadAsStringAsync();
-            return Ok(str);
+            var r = new
+            {
+                resposne.StatusCode,
+                Content = str,
+            };
+            return Ok(r);
         }
     }
 }
