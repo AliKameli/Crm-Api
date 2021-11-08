@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -27,8 +28,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 Body = "تست ارسال پیامک",
                 SmsCenterPanelNumber = "3000144194",
                 SmsCenterUserName = "noornet3",
-            SmsCenterPassword = "tsms7665ef5",
-        };
+                SmsCenterPassword = "tsms7665ef5",
+            };
             var url =
                "http://www.tsms.ir/url/tsmshttp.php?" +
                   $"from={message.SmsCenterPanelNumber}" +
@@ -43,10 +44,20 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             //ocRequest.Timeout = 30000;
             //var res = ocRequest.GetResponse();
 
-            using var httpClient = new HttpClient();
+            var handler = new HttpClientHandler
+            {
+                Proxy = new WebProxy()
+                {
+                    Address = new Uri("172.16.20.207:3128"),
+                    BypassProxyOnLocal = false,
+                    UseDefaultCredentials = true,
+                }
+            };
+
+            using var httpClient = new HttpClient(handler);
 
             var resposne = await httpClient.GetAsync(url);
-          
+
             var str = resposne.Content.ReadAsStringAsync();
             var r = new
             {
