@@ -38,10 +38,16 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] int pageSize,
             [FromQuery] int pageIndex,
             [FromQuery] string sortField,
-            [FromQuery] SortOrder? sortOrder)
+            [FromQuery] SortOrder? sortOrder,
+            [FromQuery] string sourceTypeTitle = null,
+            [FromQuery] string productTitle = null,
+            [FromQuery] string title = null)
         {
             var adminId = _identity.GetAdminId();
-            var query = new AdminPendingCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, adminId);
+            var query = new AdminPendingCaseDataTableQuery(pageIndex, pageSize,
+                sortField, sortOrder,
+                adminId,
+                sourceTypeTitle,productTitle,title);
             var response = await _pendingCaseRepository.GetForAdminAsync(query);
 
             return Ok(response);

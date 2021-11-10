@@ -18,7 +18,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class CaseNewController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -35,9 +35,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] int pageSize,
           [FromQuery] int pageIndex,
           [FromQuery] string sortField,
-          [FromQuery] SortOrder? sortOrder)
+          [FromQuery] SortOrder? sortOrder,
+          [FromQuery] string sourceTypeTitle = null,
+          [FromQuery] string productTitle = null,
+          [FromQuery] string title = null)
         {
-            var query = new ImportCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder);
+            var query = new ImportCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeTitle,productTitle, title);
             var response = await _importCaseRepository.GetAsync(query);
 
             return Ok(response);
@@ -48,8 +51,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             model.ManualImportAdminId = _identity.GetAdminId();
             var command = _mapper.Map<ImportCaseCreateCommand>(model);
-            var response = await _importCaseRepository.CreateAsync(command,model.SubjectIds);
+            var response = await _importCaseRepository.CreateAsync(command, model.SubjectIds);
             return Ok(response);
         }
     }
-}   
+}
