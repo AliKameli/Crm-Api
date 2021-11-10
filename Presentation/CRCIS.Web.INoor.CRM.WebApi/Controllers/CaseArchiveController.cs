@@ -23,9 +23,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] int pageSize,
         [FromQuery] int pageIndex,
         [FromQuery] string sortField,
-        [FromQuery] SortOrder? sortOrder)
+        [FromQuery] SortOrder? sortOrder,
+        [FromQuery] string sourceTypeTitle = null,
+        [FromQuery] string productTitle = null,
+        [FromQuery] string title = null)
         {
-            var query = new ArchiveCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder);
+            var query = new ArchiveCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeTitle,productTitle, title);
             var response = await _archiveCaseRepository.GetAsync(query);
 
             return Ok(response);

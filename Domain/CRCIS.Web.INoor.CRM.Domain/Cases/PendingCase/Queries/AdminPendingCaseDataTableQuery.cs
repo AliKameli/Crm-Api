@@ -12,9 +12,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries
 
         public int AdminId { get;private set; }
         public string Order { get; private set; }
-        public AdminPendingCaseDataTableQuery(int pageIndex, int pageSize, 
+
+        public string SourceTypeTitle { get; private set; }
+        public string ProductTitle { get; private set; }
+        public string Title { get; private set; }
+
+        public AdminPendingCaseDataTableQuery(int pageIndex, int pageSize,
             string sortField, SortOrder? sortOrder,
-            int adminId)
+            int adminId, string sourceTypeTitle,string productTitle, string title)
             : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
@@ -23,6 +28,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries
                 Order = $"{sortField} {sortOrder.ToString()}";
             }
             AdminId = adminId;
+
+            SourceTypeTitle = sourceTypeTitle?.Trim();
+            ProductTitle = productTitle?.Trim();
+            Title = title?.Trim();
         }
 
     }
