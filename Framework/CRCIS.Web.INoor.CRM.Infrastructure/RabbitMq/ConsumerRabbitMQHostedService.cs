@@ -119,6 +119,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                         return;
                     }
                     var productId = productResponse.Data.Id;
+                    var mobile = string.IsNullOrEmpty(dto?.MessageInfo?.Mobile) ? "" : dto?.MessageInfo?.Mobile;
+
                     var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
                         dto.MessageInfo.NameFamily,
                         dto.MessageInfo.Email,
@@ -127,7 +129,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                         noorUserId,
                         productId,
                         null,
-                        "",
+                        mobile,
                         dto.MessageInfo.CreateDateTime,
                         dto.Client.PageTitle,
                         dto.Client.PageUrl,
@@ -158,6 +160,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
             }
         }
 

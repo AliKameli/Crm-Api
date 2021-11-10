@@ -26,6 +26,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos
     {
         public string NameFamily { get; set; }
         public string Email { get; set; }
+        public string Mobile { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string CreateDateTime { get; set; }
