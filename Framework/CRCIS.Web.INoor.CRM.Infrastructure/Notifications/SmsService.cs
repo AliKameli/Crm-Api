@@ -48,7 +48,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 using var httpClient = new HttpClient(handler);
 
                 var resposne = await httpClient.GetAsync(url);
-                var str = resposne.Content.ReadAsStringAsync();
+                var str =await resposne.Content.ReadAsStringAsync();
 
                 return true;
                 //result.SetData(true);
