@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.Product.Dtos
         public string Title { get; set; }
         public int RowNumber { get; set; }
         public int ProductTypeId { get; set; }
+        public bool IsActive { get; set; }
         public string ProductTypeTitle { get; set; }
         public int? Code { get; set; }
         public int CaseNewCount { get; set; }

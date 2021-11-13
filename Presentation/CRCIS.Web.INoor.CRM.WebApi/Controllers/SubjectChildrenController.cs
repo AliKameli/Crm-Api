@@ -21,9 +21,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
-            [FromQuery] int pageIndex, [FromQuery] int? parentId)
+            [FromQuery] int pageIndex, [FromQuery] int? parentId,
+            [FromQuery] string title = null, [FromQuery] string code = null)
         {
-            var query = new SubjectChildrenDataTableQuery(pageIndex, pageSize, parentId);
+            var query = new SubjectChildrenDataTableQuery(pageIndex, pageSize, parentId, title, code);
             var response = await _subjectRepository.GetChildrenAsync(query);
             return Ok(response);
         }

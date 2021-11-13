@@ -13,8 +13,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries
 
         public Guid NoorUserId { get; private set; }
         public string Order { get; private set; }
+
+        public string SourceTypeIds { get; private set; }
+        public string ProductIds { get; private set; }
+        //public string FirstSubject { get; set; }
+        public string Title { get; private set; }
         public PersonReportQuery(int pageIndex, int pageSize, string userId,
-            string sortField, SortOrder? sortOrder)
+            string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title)
             : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
@@ -23,6 +28,9 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries
                 Order = $"{sortField} {sortOrder.ToString()}";
             }
             NoorUserId = Guid.Parse(userId);
+            SourceTypeIds = sourceTypeIds?.Trim();
+            ProductIds = productIds?.Trim();
+            Title = title?.Trim();
         }
 
     }

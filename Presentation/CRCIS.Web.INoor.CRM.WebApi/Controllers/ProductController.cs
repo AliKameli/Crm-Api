@@ -37,9 +37,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] int pageSize,
             [FromQuery] int pageIndex,
             [FromQuery] string sortField,
-            [FromQuery] SortOrder? sortOrder)
+            [FromQuery] SortOrder? sortOrder,
+            [FromQuery] string title = null, [FromQuery] string code = null)
         {
-            var query = new ProductDataTableQuery(pageIndex, pageSize, sortField, sortOrder);
+            var query = new ProductDataTableQuery(pageIndex, pageSize, sortField, sortOrder, title, code);
             var response = await _productRepository.GetAsync(query);
 
             return Ok(response);
