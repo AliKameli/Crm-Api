@@ -26,10 +26,15 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
           [FromQuery] int pageIndex,
           [FromQuery] string sortField,
           [FromQuery] string userId,
-          [FromQuery] SortOrder? sortOrder)
+          [FromQuery] SortOrder? sortOrder,
+          [FromQuery] string sourceTypeIds = null,
+          [FromQuery] string productIds = null,
+          [FromQuery] string title = null)
         {
-            
-            var query = new PersonReportQuery(pageIndex, pageSize,userId ,sortField, sortOrder);
+
+            var query = new PersonReportQuery(pageIndex, pageSize, userId,
+                sortField, sortOrder,
+                sourceTypeIds, productIds, title);
             var response = await _reportRepository.GetPersonReport(query);
 
             return Ok(response);

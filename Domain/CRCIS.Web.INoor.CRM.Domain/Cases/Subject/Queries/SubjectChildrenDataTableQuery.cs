@@ -10,11 +10,15 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Queries
     public class SubjectChildrenDataTableQuery : AbstractDataTableQuery
     {
         public int? ParentId { get; private set; }
+        public string Title { get; private set; }
+        public string Code { get; private set; }
 
-        public SubjectChildrenDataTableQuery(int pageIndex, int pageSize, int? parentId)
+        public SubjectChildrenDataTableQuery(int pageIndex, int pageSize, int? parentId, string title, string code)
             : base(pageIndex, pageSize)
         {
             ParentId = parentId;
+            Title = title?.Trim();
+            Code = code?.Trim();
         }
     }
 }

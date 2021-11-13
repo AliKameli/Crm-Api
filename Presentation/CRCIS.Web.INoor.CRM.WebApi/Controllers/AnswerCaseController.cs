@@ -56,7 +56,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 return Ok(responseSend);
             }
 
-            var res = new DataResponse<string>(false, new List<string> { "روش پاسخ دهی معتبر  نیست" }, null);
+            var res = new DataResponse<string>(true, null, "پاسخ در تاریخچه کاربر ثبت شد");
             return Ok(res);
         }
     }

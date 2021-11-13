@@ -86,7 +86,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             catch (Exception ex)
             {
                 //_logger.LogError(ex.Message);
-                throw ex;
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<CaseHistoryChartDto>(errors);
                 return result;
@@ -99,7 +98,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Person");
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "PersonFiltered");
 
                 var list =
                      await dbConnection
