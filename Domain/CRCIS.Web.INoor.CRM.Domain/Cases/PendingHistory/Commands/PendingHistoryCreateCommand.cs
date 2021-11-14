@@ -11,12 +11,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingHistory.Commands
         public long CaseHistoryId { get; private set; }
         public int AnswerMethodId { get; private set; }
         public string AnswerText { get; private set; }
+        public string AnswerSource { get;private set; }
 
-        public PendingHistoryCreateCommand(long caseHistoryId, int answerMethodId, string answerText)
+        public PendingHistoryCreateCommand(long caseHistoryId, int answerMethodId, string answerText, string answerSource)
         {
             CaseHistoryId = caseHistoryId;
             AnswerMethodId = answerMethodId;
             AnswerText = answerText;
+            AnswerSource = answerSource;
         }
     }
 }

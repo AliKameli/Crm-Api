@@ -12,16 +12,17 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.Product.Queries
         public string Order { get; private set; }
 
         public string Title { get; private set; }
-        public string ProductIds { get; private set; }
+        public string ProductTypeId { get; private set; }
         public string Code { get; private set; }
         public ProductDataTableQuery(int pageIndex, int pageSize,
             string sortField, SortOrder? sortOrder,
-            string title, string code)
+            string title, string code, string productTypeId)
             : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
             Title = title?.Trim();
             Code = code?.Trim();
+            ProductTypeId = productTypeId?.Trim();
             if (!string.IsNullOrEmpty(sortField) && sortField != null)
             {
                 Order = $"{sortField} {sortOrder.ToString()}";
