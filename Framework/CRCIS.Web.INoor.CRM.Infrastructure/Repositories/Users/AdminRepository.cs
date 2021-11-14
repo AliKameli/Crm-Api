@@ -54,7 +54,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 return result;
             }
         }
-        public async Task<DataResponse<AdminModel>> GetProfileByIdAsync(int id)
+        public async Task<DataResponse<AdminGetDto>> GetProfileByIdAsync(int id)
         {
             try
             {
@@ -64,13 +64,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 var command = new { Id = id };
                 var adminModel =
                      await dbConnection
-                    .QueryFirstOrDefaultAsync<AdminModel>(sql, command, commandType: CommandType.StoredProcedure);
+                    .QueryFirstOrDefaultAsync<AdminGetDto>(sql, command, commandType: CommandType.StoredProcedure);
 
                 if (adminModel != null)
-                    return new DataResponse<AdminModel>(adminModel);
+                    return new DataResponse<AdminGetDto>(adminModel);
 
                 var errors = new List<string> { "ادمین یافت نشد" };
-                var result = new DataResponse<AdminModel>(errors);
+                var result = new DataResponse<AdminGetDto>(errors);
                 return result;
 
             }
@@ -79,7 +79,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 _logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<AdminModel>(errors);
+                var result = new DataResponse<AdminGetDto>(errors);
                 return result;
             }
         }

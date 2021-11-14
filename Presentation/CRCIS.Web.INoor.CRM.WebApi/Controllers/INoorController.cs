@@ -21,21 +21,17 @@
 //        [HttpGet]
 //        public async Task<IActionResult> Get()
 //        {
-//            var cns = "data source=172.16.25.30;initial catalog=CRCIS.Web.INoor.Sales;persist security info=True;User ID=inoor.ir;Password=NoorL0gin@123;";
+//            var cns = "data source=172.16.25.30;initial catalog=CRCIS.Web.INoor.Sales;persist security info=True;User ID=inoor.ir;Password=*******;";
 //            var date = DateTime.Now.AddDays(-1);
 //            try
 //            {
 //                using (var cn = new SqlConnection(cns))
 //                {
 //                    cn.Open();
-//                    var data = cn.Query<int>("dbo.spReportDashboardSalesOnDay", new { date },
+//                    var data = cn.Query<int>("sp", new {  },
 //                        commandType: CommandType.StoredProcedure).FirstOrDefault();
 
-//                    return Ok(new
-//                    {
-//                        Date = date,
-//                        SaleDayRail = data
-//                    });
+//                    return Ok();
 //                }
 //            }
 //            catch (Exception ex)

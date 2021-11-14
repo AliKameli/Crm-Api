@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,6 +23,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _identity = identity;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Get()
         {

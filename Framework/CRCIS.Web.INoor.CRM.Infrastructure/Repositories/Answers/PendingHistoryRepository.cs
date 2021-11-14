@@ -45,7 +45,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
 
                 var commandPendingHistory = new PendingHistoryCreateCommand(caseHistoryId,
                     dto.AnswerMethodId,
-                    dto.AnswerText);
+                    dto.AnswerText,
+                    dto.AnswerSource);
 
                 var sqlPendingHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "PendingHistory", "Create");
                 await dbConnection

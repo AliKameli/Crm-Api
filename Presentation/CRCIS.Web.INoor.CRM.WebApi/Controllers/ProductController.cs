@@ -38,9 +38,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             [FromQuery] int pageIndex,
             [FromQuery] string sortField,
             [FromQuery] SortOrder? sortOrder,
-            [FromQuery] string title = null, [FromQuery] string code = null)
+            [FromQuery] string title = null, [FromQuery] string code = null,[FromQuery] string productTypeId = null)
         {
-            var query = new ProductDataTableQuery(pageIndex, pageSize, sortField, sortOrder, title, code);
+            var query = new ProductDataTableQuery(pageIndex, pageSize, sortField, sortOrder, title, code,productTypeId);
             var response = await _productRepository.GetAsync(query);
 
             return Ok(response);
