@@ -28,18 +28,19 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
         public async Task<DataResponse<Guid>> GetVerifyTokenForNoorAdmin(string username, string name, string family, Guid personId, string action, Dictionary<string, string> queryString = null)
         {
             var admin = await _adminRepository.FindAdminAsync(personId);
+
             if (admin == null || admin.Success == false)
+            {
+                return new DataResponse<Guid>(admin.ApiErrors);
+            }
+
+            if (admin.Data ==null)
             {
                 //return new DataResponse<Guid>(new List<string> { "Admin not found" });
                 var command = new Domain.Users.Admin.Commands.AdminCreateCommand(username, username + username, name, family, "", personId);
                 await _adminRepository.CreateAsync(command);
                 admin = await _adminRepository.FindAdminAsync(personId);
             }
-            if (admin.Success == false)
-            {
-                return new DataResponse<Guid>(admin.ApiErrors);
-            }
-
             var token = await _adminVerifyTokenRepository.CreateTokenAsync(admin.Data.Id, queryString, action);
 
             return token;
