@@ -15,16 +15,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
 {
     public class AdminService : IAdminService
     {
-        private readonly IIdentity _identity;
-        private readonly ISecurityService _securityService;
         private readonly IAdminRepository _adminRepository;
         private readonly IAdminVerifyTokenRepository _adminVerifyTokenRepository;
-        public AdminService(IIdentity identity, ISecurityService securityService,
+        public AdminService(
             IAdminRepository adminRepository,
             IAdminVerifyTokenRepository adminVerifyTokenRepository)
         {
-            _identity = identity;
-            _securityService = securityService;
             _adminRepository = adminRepository;
             _adminVerifyTokenRepository = adminVerifyTokenRepository;
         }
