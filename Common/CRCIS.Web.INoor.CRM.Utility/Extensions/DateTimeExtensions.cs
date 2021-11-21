@@ -16,16 +16,18 @@ namespace CRCIS.Web.INoor.CRM.Utility.Extensions
             stringBuilder
                 .Append(persianCalendar.GetYear(dateTime))
                 .Append('/')
-                .Append(persianCalendar.GetMonth(dateTime))
+                .Append(persianCalendar.GetMonth(dateTime).ToString("00"))
                 .Append('/')
-                .Append(persianCalendar.GetDayOfMonth(dateTime));
+                .Append(persianCalendar.GetDayOfMonth(dateTime).ToString("00"));
             if (includeHoursMinutes)
             {
-                stringBuilder.Append(' ').Append(dateTime.Hour).Append(':').Append(dateTime.Minute);
+                stringBuilder.Append(' ').Append(dateTime.Hour.ToString("00"))
+                    .Append(':')
+                    .Append(dateTime.Minute.ToString("00"));
             }
             if (includeSeconds)
             {
-                stringBuilder.Append(' ').Append(dateTime.Second);
+                stringBuilder.Append(':').Append(dateTime.Second.ToString("00"));
             }
             var persianDate = stringBuilder.ToString();
             return persianDate;
