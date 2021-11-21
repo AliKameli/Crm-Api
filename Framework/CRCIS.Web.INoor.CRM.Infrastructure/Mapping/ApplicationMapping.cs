@@ -18,7 +18,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
         public ApplicationMapping()
         {
             CreateMap<PendingCaseModel, PendingCaseFullDto>()
-                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(false, false)))
+                .ForMember(dest => dest.CreateTimePersian, opt => opt.MapFrom(src => $"{src.CreateDateTime.Hour.ToString("00")}:{src.CreateDateTime.Minute.ToString("00")}"))
                 .ForMember(dest => dest.ImportDateTimePersian, opt => opt.MapFrom(src => src.ImportDateTime.ToPersinDateString(true, false)))
                 .ForMember(dest => dest.SuggestionAnswerMethod, opt => opt.Ignore())
                 .ForMember(dest => dest.SuggestionAnswerSource, opt => opt.Ignore())
