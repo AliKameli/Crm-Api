@@ -102,7 +102,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
                 var list =
                      await dbConnection
-                    .QueryAsync<PersonReportResponse>(sql, query, commandType: CommandType.StoredProcedure);
+                    .QueryAsync<PersonReportDto>(sql, query, commandType: CommandType.StoredProcedure);
 
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
 

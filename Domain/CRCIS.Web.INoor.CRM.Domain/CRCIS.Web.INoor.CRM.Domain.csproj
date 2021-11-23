@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Reports\NoorLock\NewFolder\**" />
+    <EmbeddedResource Remove="Reports\NoorLock\NewFolder\**" />
+    <None Remove="Reports\NoorLock\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Common\CRCIS.Web.INoor.CRM.Utility\CRCIS.Web.INoor.CRM.Utility.csproj" />
   </ItemGroup>
 

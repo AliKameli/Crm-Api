@@ -5,6 +5,7 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseStatus.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.OperationType.Commands;
+using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.ProductType.Commands;
@@ -24,6 +25,7 @@ using CRCIS.Web.INoor.CRM.WebApi.Models.ProductType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.SourceType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Subject;
 using System;
+using System.Linq;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 {
@@ -77,8 +79,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #endregion
 
             #region CaseNew
-            CreateMap<CaseNewCreateModel, ImportCaseCreateCommand>()
+            CreateMap<CaseCreateModel, ImportCaseCreateCommand>()
                 .ConvertUsing(src => mapImportCaseCreateModelToImportCaseCreateCommand(src));
+            #endregion
+
+            #region CasePending
+            CreateMap<CaseUpdateModel, PendingCaseUpdateCommand>()
+                 .ConvertUsing(src => mapImportCaseUpdateModelToImportCaseUpdateCommand(src));
             #endregion
 
             #region Admin
@@ -94,8 +101,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 
         }
 
-
-        private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseNewCreateModel model)
+        private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseCreateModel model)
         {
             Guid noorUserId;
             Guid.TryParse(model.NoorUserId, out noorUserId);
@@ -109,6 +115,27 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
                 model.ProductId,
                 model.ManualImportAdminId,
                 model.Mobile
+                );
+        }
+
+        private PendingCaseUpdateCommand mapImportCaseUpdateModelToImportCaseUpdateCommand(CaseUpdateModel model)
+        {
+            string subjectIds = "";
+            if (model.SubjectIds != null && model.SubjectIds.Any())
+            {
+                subjectIds = string.Join(',', model.SubjectIds.ToArray());
+            }
+
+            return new PendingCaseUpdateCommand(
+                model.Id,
+                model.Title,
+                model.NameFamily,
+                model.Email,
+                model.Description,
+                model.Mobile,
+                model.SourceTypeId,
+                model.ProductId,
+                subjectIds
                 );
         }
 

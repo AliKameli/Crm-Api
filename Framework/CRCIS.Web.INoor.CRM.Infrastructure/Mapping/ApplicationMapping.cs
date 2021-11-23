@@ -29,7 +29,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.OperationDateTimePersian, opt => opt.MapFrom(src => src.OperationDateTime.ToPersinDateString(true, false)));
 
 
-            CreateMap<PersonReportResponse, PersonReportResponseFullDto>()
+            CreateMap<PersonReportDto, PersonReportResponseFullDto>()
                 .ForMember(dest => dest.AllowAssignToMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
