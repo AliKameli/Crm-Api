@@ -199,5 +199,44 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
+
+        public async Task<DataResponse<int>> UpdateCaseAsync(PendingCaseUpdateCommand command)
+        {
+            var adminId = _identity.GetAdminId();
+
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                dbConnection.Open();
+
+                using var transaction = dbConnection.BeginTransaction();
+
+                var sqlUpdate = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Update");
+
+                await dbConnection
+                    .ExecuteAsync(sqlUpdate, command, commandType: CommandType.StoredProcedure, transaction: transaction);
+
+                var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+                var commandCaseHistory = new CaseHistoryCreateCommand(
+                    adminId, command.Id, DateTime.Now,
+                    13//ویرایش مورد
+                    );
+                var caseHistoryId =
+                            await dbConnection
+                           .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
+
+                transaction.Commit();
+                return new DataResponse<int>(true);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<int>(errors);
+                return result;
+
+            }
+        }
     }
 }

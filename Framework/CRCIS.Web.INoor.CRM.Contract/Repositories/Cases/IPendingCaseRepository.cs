@@ -17,5 +17,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
         Task<DataTableResponse<IEnumerable<PendingCaseGetDto>>> GetForAdminAsync(AdminPendingCaseDataTableQuery query);
         Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardCommand command);
         Task<DataResponse<int>> MoveCaseToArchive(MoveCaseToArchiveCommand command);
+        Task<DataResponse<int>> UpdateCaseAsync(PendingCaseUpdateCommand command);
     }
 }

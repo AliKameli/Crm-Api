@@ -47,7 +47,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CaseNewCreateModel model)
+        public async Task<IActionResult> Post(CaseCreateModel model)
         {
             model.ManualImportAdminId = _identity.GetAdminId();
             var command = _mapper.Map<ImportCaseCreateCommand>(model);
