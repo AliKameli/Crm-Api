@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Notifications;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Notify.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Answer;
@@ -44,20 +45,28 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 return Ok(responseSave);
 
 
-            if (model.AnswerMethodId == 1)
-            {
-                var responseSend = await _crmNotifyManager.SendSmsAsync(model.CaseId, model.AnswerSource, model.AnswerText);
-                return Ok(responseSend);
+          var command =   new SendNotifiyCommand(model.AnswerMethodId,
+                model.CaseId,
+                model.AnswerSource,
+                model.AnswerText,
+                responseSave.Data
+                );
+            var response = await _crmNotifyManager.SendNotifyAsync(command);
 
-            }
-            if (model.AnswerMethodId == 2)
-            {
-                var responseSend = await _crmNotifyManager.SendEmailAsync(model.CaseId, model.AnswerSource, model.AnswerText);
-                return Ok(responseSend);
-            }
+            //if (model.AnswerMethodId == 1)
+            //{
+            //    var responseSend = await _crmNotifyManager.SendSmsAsync(model.CaseId, model.AnswerSource, model.AnswerText,responseSave.Data);
+            //    return Ok(responseSend);
 
-            var res = new DataResponse<string>(true, null, "پاسخ در تاریخچه کاربر ثبت شد");
-            return Ok(res);
+            //}
+            //if (model.AnswerMethodId == 2)
+            //{
+            //    var responseSend = await _crmNotifyManager.SendEmailAsync(model.CaseId, model.AnswerSource, model.AnswerText,responseSave.Data);
+            //    return Ok(responseSend);
+            //}
+
+            //var res = new DataResponse<string>(true, null, "پاسخ در تاریخچه کاربر ثبت شد");
+            return Ok(response);
         }
     }
 }

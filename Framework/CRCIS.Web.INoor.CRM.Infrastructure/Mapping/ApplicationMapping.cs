@@ -26,7 +26,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 ;
 
             CreateMap<CaseHistoriesQuery, CaseHistoriesDto>()
-                .ForMember(dest => dest.OperationDateTimePersian, opt => opt.MapFrom(src => src.OperationDateTime.ToPersinDateString(true, false)));
+                .ForMember(dest => dest.IsAnswering, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault() <3))
+                .ForMember(dest => dest.OnlySaving, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault()> 2))
+                .ForMember(dest => dest.AdminFullName, opt => opt.MapFrom(src => $"{src.AdminName } { src.AdminFamily}".Trim()))
+                .ForMember(dest => dest.OperationDatePersian, opt => opt.MapFrom(src => src.OperationDateTime.ToPersinDateString(false, false)))
+                .ForMember(dest => dest.OperationTimePersian, opt => opt.MapFrom(src => $"{src.OperationDateTime.Hour.ToString("00")}:{src.OperationDateTime.Minute.ToString("00")}"));
 
 
             CreateMap<PersonReportDto, PersonReportResponseFullDto>()
@@ -34,7 +38,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowBackFromArchiveToMe, opt => opt.Ignore());
-                            
+
         }
     }
 }

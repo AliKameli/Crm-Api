@@ -48,10 +48,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 using var httpClient = new HttpClient(handler);
 
                 var resposne = await httpClient.GetAsync(url);
+                if (resposne.StatusCode != HttpStatusCode.OK)
+                {
+                    _logger.LogWarning(resposne.Content.ToString());
+                    return false;
+                }
                 var str =await resposne.Content.ReadAsStringAsync();
 
                 return true;
-                //result.SetData(true);
             }
             catch (Exception ex)
             {
@@ -60,10 +64,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 _logger.LogError(ex?.InnerException.Message);
                 _logger.LogError(ex?.InnerException.StackTrace);
                 return false;
-                //result.SetException(ex);
             }
-            // Plug in your SMS service here to send a text message.
-            //return Task.FromResult(true);
+          
         }
     }
 }

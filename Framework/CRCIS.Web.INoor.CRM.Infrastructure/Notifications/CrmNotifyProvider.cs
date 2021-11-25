@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
+using CRCIS.Web.INoor.CRM.Domain.Notify.Commands;
+using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
+using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Commands;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 {
@@ -21,29 +25,55 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
         private readonly ISmsService _smsService;
         private readonly IPendingCaseRepository _pendingCaseRepository;
         private readonly ISourceConfigRepository _sourceConfigRepository;
+        private readonly IPendingHistoryRepository _pendingHistoryRepository;
         private readonly ILogger _logger;
 
         public CrmNotifyProvider(ILoggerFactory loggerFactory,
             IMailService mailService,
             IPendingCaseRepository pendingCaseRepository,
             ISourceConfigRepository sourceConfigRepository,
-            ISmsService smsService)
+            ISmsService smsService,
+            IPendingHistoryRepository pendingHistoryRepository)
         {
             _mailService = mailService;
             _pendingCaseRepository = pendingCaseRepository;
             _sourceConfigRepository = sourceConfigRepository;
             _logger = loggerFactory.CreateLogger<CrmNotifyProvider>();
             _smsService = smsService;
+            _pendingHistoryRepository = pendingHistoryRepository;
         }
 
-        public async Task<DataResponse<string>> SendEmailAsync(long caseId, string fromMailBox, string message)
+
+        public async Task<DataResponse<string>> SendNotifyAsync(SendNotifiyCommand command)
+        {
+            DataResponse<string> responseSend = null;
+
+            if (command.AnswerMethodId == 1)
+            {
+                responseSend = await this.SendSmsAsync(command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
+            }
+            if (command.AnswerMethodId == 2)
+            {
+                responseSend = await this.SendEmailAsync(command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
+            }
+
+            if (responseSend == null)
+            {
+                responseSend = new DataResponse<string>(true, null, "پاسخ در تاریخچه کاربر ثبت شد");
+            }
+
+            return responseSend;
+        }
+
+
+        private async Task<DataResponse<string>> SendEmailAsync(long caseId, string fromMailBox, string message, long pendingHistoryId)
         {
             var responsePendingCase = await _pendingCaseRepository.GetByIdAsync(caseId);
             if (responsePendingCase.Success == false || responsePendingCase.Data == null)
                 return new DataResponse<string>(new List<string> { "خطا در واکشی اطلاعات" });
 
 
-            if(string.IsNullOrEmpty(responsePendingCase?.Data?.Email))
+            if (string.IsNullOrEmpty(responsePendingCase?.Data?.Email))
                 return new DataResponse<string>(new List<string> { "ایمیل مخاطب یافت نشد" });
 
             var dataResponseMails = _sourceConfigRepository.GetByAnswerMethodIdAsync((int)AnswerMethod.Email).Result;
@@ -53,10 +83,22 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 return new DataResponse<string>(new List<string> { "تنظیمات ایمیل باکس یافت نشد" });
             }
 
-            var mailSettings = dataResponseMails.Data.Select(m => funcSourceConfigJson(m.ConfigJson)).ToList();
-            var mailSettingSelected = mailSettings.FirstOrDefault(config => config.MailAddress == fromMailBox);
-            if (mailSettingSelected == null)
+            var mailSettings = dataResponseMails.Data.Select(m =>
+                new
+                {
+                    SourceConfigId = m.Id,
+                    ConfigJson = funcSourceConfigJson(m.ConfigJson)
+                }
+            ).ToList();
+
+            var mailSettingObjectSelected = mailSettings
+                .Where(settings => settings?.ConfigJson != null)
+                .FirstOrDefault(settings => settings.ConfigJson.MailAddress == fromMailBox);
+
+            if (mailSettingObjectSelected == null)
                 return new DataResponse<string>(new List<string> { "تنظیمات ایمیل باکس یافت نشد" });
+
+            var mailSettingSelected = mailSettingObjectSelected.ConfigJson;
             if (mailSettingSelected.AllowSend == false)
                 return new DataResponse<string>(new List<string> { " ایمیل باکس دسترسی ارسال ندارد" });
 
@@ -74,12 +116,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 Port = 25,
             };
 
-            await _mailService.SendEmailAsync(request, mailSetting);
-
+            var result = await _mailService.SendEmailAsync(request, mailSetting);
+            await this.UpdateResultAsync(pendingHistoryId, result, mailSettingObjectSelected.SourceConfigId);
             return new DataResponse<string>(true, null, "ایمیل ارسال شد");
         }
 
-        public async Task<DataResponse<string>>SendSmsAsync(long caseId,string fromSmsCenterId , string message)
+        private async Task<DataResponse<string>> SendSmsAsync(long caseId, string fromSmsCenterId, string message, long pendingHistoryId)
         {
             var responsePendingCase = await _pendingCaseRepository.GetByIdAsync(caseId);
             if (responsePendingCase.Success == false || responsePendingCase.Data == null)
@@ -96,7 +138,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             }
 
             var mailSettings = dataResponseMails.Data
-                .Where(d=> d.Id.ToString() == fromSmsCenterId )//برای پیامک ایدی رو میگیریم
+                .Where(d => d.Id.ToString() == fromSmsCenterId)//برای پیامک ایدی رو میگیریم
                 .Select(m => funcSourceConfigJson(m.ConfigJson)).ToList();
             var smsSettingSelected = mailSettings.FirstOrDefault();
             if (smsSettingSelected == null)
@@ -114,14 +156,34 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 SmsCenterPassword = smsSettingSelected.SmsCenterPassword,
             };
 
-            await _smsService.SendSmsAsync(smsRequest);
+            var result = await _smsService.SendSmsAsync(smsRequest);
+            await this.UpdateResultAsync(pendingHistoryId, result, Convert.ToInt32(fromSmsCenterId));
 
+            if (result == false)
+            {
+                return new DataResponse<string>(true, null, "متاسفانه سرویس ارسال پیامک با خطا مواجه شد");
+            }
             return new DataResponse<string>(true, null, "پیامک ارسال شد");
+        }
+
+        private Task UpdateResultAsync(long pendingHistoryId, bool result, int sourceConfigId)
+        {
+            var command =
+            new AnsweringUpdateResultCommand
+            {
+                PendingHistoryId = pendingHistoryId,
+                SourceConfigId = sourceConfigId,
+                Result = result
+            };
+            return _pendingHistoryRepository.UpdateResulAsync(command);
         }
 
         private Func<string, SourceConfigJsonDto> funcSourceConfigJson = (strConfigjson) =>
                string.IsNullOrEmpty(strConfigjson) == true ? null :
                System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(strConfigjson);
+
+
+
 
         private void chooseWayDecorator(AnswerMethod answerMethod)
         {

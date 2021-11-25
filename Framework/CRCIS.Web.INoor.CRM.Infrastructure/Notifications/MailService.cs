@@ -15,7 +15,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
         {
             _logger = loggerFactory.CreateLogger<MailService>();
         }
-        public async Task SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
+        public async Task<bool> SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
         {
             var oMail =
                 new MailMessage(new MailAddress(mailSettings.Mail),
@@ -36,20 +36,25 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 Port = mailSettings.Port,// 25
             };
 
+            bool result = false;
             try
             {
                 smtpClient.Send(oMail);
+                result = true;
             }
             catch (Exception ex)
             {
+                result = false;
                 var s = ex.Message;
                 _logger.LogError(ex.Message);
                 _logger.LogError(ex.StackTrace);
                 _logger.LogError(ex.InnerException?.Message);
                 _logger.LogError(ex.InnerException?.StackTrace);
                 // ignoared
+
             }
             oMail.Dispose();
+            return result;
 
         }
     }
