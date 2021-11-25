@@ -4,6 +4,7 @@ using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using System;
@@ -23,14 +24,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
         {
             _mapper = mapper;
         }
-        public async Task<DataResponse<IEnumerable<CaseHistoriesDto>>> GetReportForCaseAsync(long id)
+        public async Task<DataResponse<CaseHistoriesFullDto>> GetReportForCaseAsync(long id)
         {
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
                 dbConnection.Open();
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "ReportByCaseId");
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", "", "CasePendingHistoryReportByCaseId");
                 var query = new { CaseId = id };
                 var historiesQuery =
                      await dbConnection
@@ -39,7 +40,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 var dto = historiesQuery.AsQueryable()
                     .ProjectTo<CaseHistoriesDto>(_mapper.ConfigurationProvider).AsEnumerable();
 
-                var result = new DataResponse<IEnumerable<CaseHistoriesDto>>(dto);
+                var dtoFull = dto.PairCaseHistoriesFullDto();
+
+                var result = new DataResponse<CaseHistoriesFullDto>(dtoFull);
 
                 return result;
             }
@@ -48,7 +51,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 //_logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در دریافت تاریخچه از بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<IEnumerable<CaseHistoriesDto>>(errors);
+                var result = new DataResponse<CaseHistoriesFullDto>(errors);
                 return result;
             }
         }

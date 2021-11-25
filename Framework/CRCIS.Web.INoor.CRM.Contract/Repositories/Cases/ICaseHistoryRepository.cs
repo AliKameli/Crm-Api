@@ -10,6 +10,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
     public interface ICaseHistoryRepository
     {
-        Task<DataResponse<IEnumerable<CaseHistoriesDto>>> GetReportForCaseAsync(long id);
+        Task<DataResponse<CaseHistoriesFullDto>> GetReportForCaseAsync(long id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Data.Database;
+using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingHistory.Commands;
@@ -25,7 +26,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
             _logger = loggerFactory.CreateLogger<PendingHistoryRepository>();
         }
 
-        public async Task<DataResponse<string>> CreateAsync(AnsweringCreateDto dto)
+        public async Task<DataResponse<long>> CreateAsync(AnsweringCreateDto dto)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                     dto.AnswerSource);
 
                 var sqlPendingHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "PendingHistory", "Create");
-                await dbConnection
+                var pendingHistoryId = await dbConnection
                   .QueryFirstOrDefaultAsync<long>(sqlPendingHistory, commandPendingHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
 
                 var commandCaseAnswer = new { CaseId = dto.CaseId };
@@ -59,14 +60,37 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
 
                 transaction.Commit();
 
-                return new DataResponse<string>(true);
+                return new DataResponse<long>(pendingHistoryId);
             }
             catch (Exception ex)
             {
                 //_logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<string>(errors);
+                var result = new DataResponse<long>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataResponse<int>> UpdateResulAsync(AnsweringUpdateResultCommand command)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                dbConnection.Open();
+
+                var sqlPendingHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "PendingHistory", "UpdateResult");
+                await dbConnection
+                           .QueryFirstOrDefaultAsync<long>(sqlPendingHistory, command, commandType: CommandType.StoredProcedure);
+
+                return new DataResponse<int>(true);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<int>(errors);
                 return result;
             }
         }

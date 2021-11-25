@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Answers\Answering\Commands\" />
     <Folder Include="Answers\Answering\Queries\" />
     <Folder Include="Cases\ArchiveCase\Commands\" />
     <Folder Include="Sources\SourceConfig\Queries\" />

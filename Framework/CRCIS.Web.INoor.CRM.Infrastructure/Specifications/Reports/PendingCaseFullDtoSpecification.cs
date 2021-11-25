@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Reports
 {
-    public static class PendingCaseFullDtoS
+    public static class PendingCaseFullDtoSpecification
     {
         public static PersonReportResponseFullDto PairCommandAccess(this PersonReportResponseFullDto dto, int currentAdminId)
         {
