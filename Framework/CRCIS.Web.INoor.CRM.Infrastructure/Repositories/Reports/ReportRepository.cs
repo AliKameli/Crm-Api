@@ -20,6 +20,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Principal;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Queries;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -28,7 +30,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
         protected override string TableName => "Report";
         private readonly IMapper _mapper;
         private readonly IIdentity _identity;
-        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory,IMapper mapper ,IIdentity identity) : base(sqlConnectionFactory)
+        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory, IMapper mapper, IIdentity identity) : base(sqlConnectionFactory)
         {
             _mapper = mapper;
             _identity = identity;
@@ -123,6 +125,121 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppPagingReport(NoorLockReportPagingQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "NoorAppPaging");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<NoorLockCaseReportDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(list, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(errors);
+                return result;
+            }
+
+        }
+
+        public async Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppReportByCaseId(NoorAppReportCaseIdQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "NoorAppGetByCaseId");
+
+                var data =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<NoorLockCaseReportDto>(sql, query, commandType: CommandType.StoredProcedure);
+                if (data != null)
+                {
+                    return new DataResponse<NoorLockCaseReportDto>(data);
+                }
+
+                var errors = new List<string> { " مورد یافت نشد" };
+                var result = new DataResponse<NoorLockCaseReportDto>(errors);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<NoorLockCaseReportDto>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorLockPagingReportAsync(NoorLockReportPagingQuery query)
+        {
+
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "NoorlockPaging");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<NoorLockCaseReportDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(list, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(errors);
+                return result;
+            }
+
+        }
+
+        public async Task<DataResponse<NoorLockCaseReportDto>> GetNoorLockReportByRowNumberAsync(NoorLockReportRowNumberQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "NoorlockGetByRowNumber");
+
+                var data =
+                     await dbConnection
+                    .QueryFirstOrDefaultAsync<NoorLockCaseReportDto>(sql, query, commandType: CommandType.StoredProcedure);
+                if (data != null)
+                {
+                    return new DataResponse<NoorLockCaseReportDto>(data);
+                }
+
+                var errors = new List<string> { " مورد یافت نشد" };
+                var result = new DataResponse<NoorLockCaseReportDto>(errors);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex.Message);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<NoorLockCaseReportDto>(errors);
                 return result;
             }
         }

@@ -20,5 +20,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos
         public string OperationTimePersian { get; set; }
         public string OperationTypeTitle { get; set; }
         public string AdminFullName { get; set; }
+        public bool UnknowAdmin { get; set; }
     }
 }

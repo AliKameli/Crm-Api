@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Queries
 {
-    public class NoorLockReportCaseIdQuery
+    public class NoorAppReportCaseIdQuery
     {
         public long CaseId { get;private set; }
 
-        public NoorLockReportCaseIdQuery(long caseId)
+        public NoorAppReportCaseIdQuery(long caseId)
         {
             CaseId = caseId;
         }

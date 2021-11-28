@@ -24,9 +24,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
 
         public string MoreData { get; private set; }
 
+        public string AppKeyHash { get;private set; }
+
         public RabbitImportCaseCreateCommand(string title, string nameFamily, string email, string description,
             int sourceTypeId, Guid? noorUserId, int? productId, int? manualImportAdminId, string mobile,
-            string createDateTime, string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType, string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize)
+            string createDateTime, string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
+            string userLanguage, string ip, string browser, string userAgent, string platform,
+            string os, string deviceScreenSize,
+            string appKeyHash)
         {
             Title = title;
             NameFamily = nameFamily;
@@ -39,6 +44,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             ImportDateTime = DateTime.Now;
             CreateDateTime = DateTime.ParseExact(createDateTime, "yyyymmddHHMMss", CultureInfo.InvariantCulture);
             Mobile = mobile;
+            AppKeyHash = appKeyHash;
 
             var moreDataObject = new ImportCaseMoreDataObject(pageTitle, pageUrl, toMailBox, fileUrl, fileType,
                 userLanguage, ip, browser, userAgent, platform, os, deviceScreenSize);
