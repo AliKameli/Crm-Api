@@ -19,9 +19,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(long caseId)
+        public async Task<IActionResult> Get(
+            [FromQuery]long caseId ,
+            [FromQuery]Guid inoorId, 
+            [FromQuery]string productSecret)
         {
-            var respose = await _noorlockCommentService.GetNoorAppGetByCaseId(caseId);
+            var respose = await _noorlockCommentService.GetNoorAppGetByCaseId(caseId, inoorId, productSecret);
             return Ok(respose);
         }
     }

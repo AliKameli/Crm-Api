@@ -13,6 +13,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Service
         Task<DataResponse<NoorLockCaseReportDto>> GetNoorlockGetByRowNumber(long rowNumber, Guid? inoorId = null, string typeOfComment = null, long? snId = null, string sk = null, string activationCode = null, string productSecret = null);
         Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorlockPaging(int pageSize, int pageIndex, string typeOfComment = null, long? snId = null, string sk = null, string activationCode = null, string productSecret = null);
         Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppReportPaging(int pageSize, int pageIndex, Guid inoorId, string productSecret = null);
-        Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppGetByCaseId(long caseId);
+        Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppGetByCaseId(long caseId, Guid noorUserId, string productSecret);
     }
 }

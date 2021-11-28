@@ -32,9 +32,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             return _reportRepository.GetNoorAppPagingReport(query);
         }
 
-        public  Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppGetByCaseId(long caseId)
+        public  Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppGetByCaseId(long caseId, Guid noorUserId, string productSecret)
         {
-            var query = new NoorAppReportCaseIdQuery(caseId);
+            var query = new NoorAppReportCaseIdQuery(caseId,noorUserId,productSecret);
             return _reportRepository.GetNoorAppReportByCaseId(query);
         }
         public Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorlockPaging(int pageSize,
