@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
+using CRCIS.Web.INoor.CRM.Contract.Security;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,11 +21,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
     public class ConsumerRabbitMQHostedService : BackgroundService
     {
         private readonly ILogger _logger;
+
+        private readonly ISecurityService _securityService;
         private readonly IServiceProvider _serviceProvider;
         private IConnection _connection;
         private IModel _channel;
-        public ConsumerRabbitMQHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public ConsumerRabbitMQHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider,
+            ISecurityService securityService)
         {
+
+            _securityService = securityService;
             _logger = loggerFactory.CreateLogger<ConsumerRabbitMQHostedService>();
             _serviceProvider = serviceProvider;
             InitRabbitMQ();
@@ -121,28 +127,35 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                     var productId = productResponse.Data.Id;
                     var mobile = string.IsNullOrEmpty(dto?.MessageInfo?.Mobile) ? "" : dto?.MessageInfo?.Mobile;
 
+                    var appKeyHash = dto?.AppKey == null ?
+                        null :
+                        _securityService.GetSha256Hash(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
+
+
+
                     var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
-                        dto.MessageInfo.NameFamily,
-                        dto.MessageInfo.Email,
-                        dto.MessageInfo.Description,
+                        dto.MessageInfo?.NameFamily,
+                        dto.MessageInfo?.Email,
+                        dto.MessageInfo?.Description,
                         1,
                         noorUserId,
                         productId,
                         null,
                         mobile,
-                        dto.MessageInfo.CreateDateTime,
-                        dto.Client.PageTitle,
-                        dto.Client.PageUrl,
-                        dto.Client.ToMailBox,
-                        dto.MessageInfo.FileUrl,
-                        dto.MessageInfo.FileType,
-                        dto.User.UserLanguage,
-                        dto.User.Ip,
-                        dto.Device.Browser,
-                        dto.Device.UserAgent,
-                        dto.Device.Platform,
-                        dto.Device.Os,
-                        dto.Device.DeviceScreenSize
+                        dto.MessageInfo?.CreateDateTime,
+                        dto.Client?.PageTitle,
+                        dto.Client?.PageUrl,
+                        dto.Client?.ToMailBox,
+                        dto.MessageInfo?.FileUrl,
+                        dto.MessageInfo?.FileType,
+                        dto.User?.UserLanguage,
+                        dto.User?.Ip,
+                        dto.Device?.Browser,
+                        dto.Device?.UserAgent,
+                        dto.Device?.Platform,
+                        dto.Device?.Os,
+                        dto.Device?.DeviceScreenSize,
+                        appKeyHash
                           );
 
 

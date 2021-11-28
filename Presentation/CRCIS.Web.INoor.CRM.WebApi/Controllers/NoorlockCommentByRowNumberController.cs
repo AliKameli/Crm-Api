@@ -1,5 +1,4 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Service;
-using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,33 +10,28 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NoorlockCommentsController : ControllerBase
+    public class NoorlockCommentByRowNumberController : ControllerBase
     {
         private readonly INoorlockCommentService _noorlockCommentService;
-        public NoorlockCommentsController(INoorlockCommentService noorlockCommentService)
+        public NoorlockCommentByRowNumberController(INoorlockCommentService noorlockCommentService)
         {
             _noorlockCommentService = noorlockCommentService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(
-            [FromQuery] int pageSize,
-            [FromQuery] int pageIndex,
-            [FromQuery] Guid? inoorId = null,
-            [FromQuery] string commentNo = null,
+            [FromQuery] long rowNumber,
+            //[FromQuery] Guid? inoorId = null,
             [FromQuery] string typeOfComment = null,
-            [FromQuery] string snId = null,
+            [FromQuery] long? snId = null,
             [FromQuery] string sk = null,
             [FromQuery] string activationCode = null,
-            [FromQuery] string secret = null)
+            [FromQuery] string productSecret = null)
         {
+            var response =await _noorlockCommentService.GetNoorlockGetByRowNumber(rowNumber,
+                null, typeOfComment, snId, sk, activationCode, productSecret);
 
-            var query = 
-                new NoorLockReportPagingQuery(
-                    inoorId, commentNo, typeOfComment, snId, sk, activationCode, secret,
-                    pageIndex, pageSize);
-
-            return Ok();
+            return Ok(response);
         }
     }
 }

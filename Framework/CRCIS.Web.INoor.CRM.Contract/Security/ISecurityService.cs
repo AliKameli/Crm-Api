@@ -11,5 +11,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Security
         string GetSha256Hash(string input);
         Guid CreateCryptographicallySecureGuid();
         bool IsEquals(string planText, string hashed);
+        byte[] GetBytSha256(string input);
     }
 }

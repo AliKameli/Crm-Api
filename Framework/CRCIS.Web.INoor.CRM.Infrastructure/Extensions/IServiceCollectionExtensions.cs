@@ -43,7 +43,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddSingleton<IJwtSettings>(sp =>
                 configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>());
 
-            services.AddScoped<ISecurityService, SecurityService>();
+            services.AddSingleton<ISecurityService, SecurityService>();
             services.AddScoped<IJwtProvider, JwtProvider>();
             services.AddScoped<ITokenValidator, TokenValidator>();
             services.AddScoped<ITokenStoreService, TokenStoreService>();

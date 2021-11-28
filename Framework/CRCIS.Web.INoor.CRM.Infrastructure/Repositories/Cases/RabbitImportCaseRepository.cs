@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
+using CRCIS.Web.INoor.CRM.Contract.Security;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
@@ -20,8 +21,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
         protected override string TableName => "ImportCase";
 
         private readonly ILogger<RabbitImportCaseRepository> _logger;
-
-        public RabbitImportCaseRepository(ISqlConnectionFactory sqlConnectionFactory, ILogger<RabbitImportCaseRepository> logger) : base(sqlConnectionFactory)
+        public RabbitImportCaseRepository(
+            ISqlConnectionFactory sqlConnectionFactory,
+            ILogger<RabbitImportCaseRepository> logger) 
+            : base(sqlConnectionFactory)
         {
             _logger = logger;
         }
