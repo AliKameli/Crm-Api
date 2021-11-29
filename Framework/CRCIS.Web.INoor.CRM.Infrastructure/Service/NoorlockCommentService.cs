@@ -53,7 +53,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
                 NoorLockActivationCode = activationCode,
             };
             var json = System.Text.Json.JsonSerializer.Serialize(noorlockKey);
-            var apphashKey = _securityService.GetSha256Hash(json);
+            var apphashKey = _securityService.GetSha256HashHex(json);
             var query = new NoorLockReportPagingQuery(apphashKey, productSecret, pageIndex, pageSize);
 
             return _reportRepository.GetNoorLockPagingReportAsync(query);
@@ -77,7 +77,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
                 NoorLockActivationCode = activationCode,
             };
             var json = System.Text.Json.JsonSerializer.Serialize(noorlockKey);
-            var apphashKey = _securityService.GetSha256Hash(json);
+            var apphashKey = _securityService.GetSha256HashHex(json);
             var query = new NoorLockReportRowNumberQuery(inoorId, apphashKey, productSecret, rowNumber);
 
             return _reportRepository.GetNoorLockReportByRowNumberAsync(query);
