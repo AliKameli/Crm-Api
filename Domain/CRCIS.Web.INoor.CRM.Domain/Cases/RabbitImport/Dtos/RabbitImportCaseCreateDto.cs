@@ -53,11 +53,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos
         public string DeviceScreenSize { get; set; }
     }
 
-
     public class AppKey
     {
         public string NoorLockSk { get; set; }
-        public long NoorLockSnId { get; set; }
+        public long? NoorLockSnId { get; set; }
         public string NoorLockActivationCode { get; set; }
         public string NoorLockTypeOfComment { get; set; }
     }
