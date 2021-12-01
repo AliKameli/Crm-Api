@@ -91,7 +91,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
         }
         private void HandleMessage(string content)
         {
-            // we just print this message   
+             try
+            {// we just print this message   
             _logger.LogInformation($"crm received {content}");
 
             var dto = System.Text.Json.JsonSerializer.Deserialize<RabbitImportCaseCreateDto>(content);
@@ -107,8 +108,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                 return;
             }
 
-            try
-            {
+           
                 using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
                     IProductRepository _productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
@@ -129,7 +129,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
 
                     var appKeyHash = dto?.AppKey == null ?
                         null :
-                        _securityService.GetSha256Hash(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
+                        _securityService.GetSha256HashHex(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
 
 
 

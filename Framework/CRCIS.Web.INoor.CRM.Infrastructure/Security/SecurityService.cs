@@ -20,6 +20,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Security
             return Convert.ToBase64String(byteHash);
         }
 
+        public string GetSha256HashHex(string input)
+        {
+            using var hashAlgorithm = new SHA256CryptoServiceProvider();
+            var byteValue = Encoding.UTF8.GetBytes(input);
+            var byteHash = hashAlgorithm.ComputeHash(byteValue);
+            var hex = Convert.ToHexString(byteHash);
+            return hex;
+        }
+
         public byte[] GetBytSha256(string input)
         {
             using var hashAlgorithm = new SHA256CryptoServiceProvider();
