@@ -22,7 +22,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Get(
             [FromQuery] long rowNumber,
             //[FromQuery] Guid? inoorId = null,
-            [FromQuery] string typeOfComment = null,
+            [FromQuery] bool? typeOfComment = null,
             [FromQuery] long? snId = null,
             [FromQuery] string sk = null,
             [FromQuery] string activationCode = null,

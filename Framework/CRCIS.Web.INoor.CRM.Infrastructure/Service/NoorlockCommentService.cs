@@ -39,7 +39,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
         }
         public Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorlockPaging(int pageSize,
            int pageIndex,
-           string typeOfComment = null,
+           bool? typeOfComment = null,
            long? snId = null,
            string sk = null,
            string activationCode = null,
@@ -63,7 +63,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
         public Task<DataResponse<NoorLockCaseReportDto>> GetNoorlockGetByRowNumber(
            long rowNumber,
            Guid? inoorId = null,
-           string typeOfComment = null,
+           bool? typeOfComment = null,
            long? snId = null,
            string sk = null,
            string activationCode = null,
