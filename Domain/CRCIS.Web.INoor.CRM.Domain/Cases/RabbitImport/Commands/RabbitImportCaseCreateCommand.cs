@@ -71,7 +71,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public string Os { get; private set; }
         public string DeviceScreenSize { get; private set; }
 
-        //norlock data
+        //noorlock data
         public string NoorLockSk { get;private set; }
         public long? NoorLockSnId { get;private set; }
         public string NoorLockActivationCode { get;private set; }
