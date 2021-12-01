@@ -41,7 +41,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             if (WebHostEnvironment.IsDevelopment() == false)
             {
                 services.AddHostedService<TimedMailReaderHostedService>();
-                services.AddHostedService<ConsumerRabbitMQHostedService>();
+                //services.AddHostedService<ConsumerRabbitMQHostedService>();
             }
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<ISmsService, SmsService>();
