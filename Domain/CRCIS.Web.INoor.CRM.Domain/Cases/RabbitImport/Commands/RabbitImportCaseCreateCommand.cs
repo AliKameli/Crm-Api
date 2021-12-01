@@ -31,7 +31,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             string createDateTime, string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
             string userLanguage, string ip, string browser, string userAgent, string platform,
             string os, string deviceScreenSize,
-            string appKeyHash)
+            string appKeyHash, string noorLockSk, long? noorLockSnId, string noorLockActivationCode, bool? noorLockTypeOfComment)
         {
             Title = title;
             NameFamily = nameFamily;
@@ -47,7 +47,9 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             AppKeyHash = appKeyHash;
 
             var moreDataObject = new ImportCaseMoreDataObject(pageTitle, pageUrl, toMailBox, fileUrl, fileType,
-                userLanguage, ip, browser, userAgent, platform, os, deviceScreenSize);
+                userLanguage, ip, browser, userAgent, platform, os, deviceScreenSize,
+                noorLockSk,noorLockSnId,noorLockActivationCode,noorLockTypeOfComment
+                );
             MoreData = System.Text.Json.JsonSerializer.Serialize(moreDataObject);
         }
     }
@@ -69,8 +71,16 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public string Os { get; private set; }
         public string DeviceScreenSize { get; private set; }
 
+        //norlock data
+        public string NoorLockSk { get;private set; }
+        public long? NoorLockSnId { get;private set; }
+        public string NoorLockActivationCode { get;private set; }
+        public bool? NoorLockTypeOfComment { get;private set; }
+
+
         public ImportCaseMoreDataObject(string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
-            string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize)
+            string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize, 
+            string noorLockSk, long? noorLockSnId, string noorLockActivationCode, bool? noorLockTypeOfComment)
         {
             PageTitle = pageTitle;
             PageUrl = pageUrl;
@@ -84,6 +94,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             Platform = platform;
             Os = os;
             DeviceScreenSize = deviceScreenSize;
+            NoorLockSk = noorLockSk;
+            NoorLockSnId = noorLockSnId;
+            NoorLockActivationCode = noorLockActivationCode;
+            NoorLockTypeOfComment = noorLockTypeOfComment;
         }
         public ImportCaseMoreDataObject(string toMailBox)
         {
