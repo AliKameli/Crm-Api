@@ -22,6 +22,7 @@ using System.Security.Principal;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Queries;
+using Microsoft.Extensions.Logging;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -30,10 +31,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
         protected override string TableName => "Report";
         private readonly IMapper _mapper;
         private readonly IIdentity _identity;
-        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory, IMapper mapper, IIdentity identity) : base(sqlConnectionFactory)
+        private readonly ILogger _logger;
+        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory,ILoggerFactory loggerFactory,
+            IMapper mapper, IIdentity identity) : base(sqlConnectionFactory)
         {
             _mapper = mapper;
             _identity = identity;
+            _logger = loggerFactory.CreateLogger<ReportRepository>();
         }
 
         public async Task<DataResponse<CaseHistoryChartDto>> GetCaseHistoryReportAsync()
@@ -87,7 +91,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<CaseHistoryChartDto>(errors);
                 return result;
@@ -122,7 +127,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(errors);
                 return result;
@@ -149,7 +155,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(errors);
                 return result;
@@ -179,7 +186,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<NoorLockCaseReportDto>(errors);
                 return result;
@@ -207,7 +215,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(errors);
                 return result;
@@ -237,7 +246,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<NoorLockCaseReportDto>(errors);
                 return result;

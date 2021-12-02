@@ -53,19 +53,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 );
             var response = await _crmNotifyManager.SendNotifyAsync(command);
 
-            //if (model.AnswerMethodId == 1)
-            //{
-            //    var responseSend = await _crmNotifyManager.SendSmsAsync(model.CaseId, model.AnswerSource, model.AnswerText,responseSave.Data);
-            //    return Ok(responseSend);
-
-            //}
-            //if (model.AnswerMethodId == 2)
-            //{
-            //    var responseSend = await _crmNotifyManager.SendEmailAsync(model.CaseId, model.AnswerSource, model.AnswerText,responseSave.Data);
-            //    return Ok(responseSend);
-            //}
-
-            //var res = new DataResponse<string>(true, null, "پاسخ در تاریخچه کاربر ثبت شد");
+         
             return Ok(response);
         }
     }

@@ -17,30 +17,32 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
         }
         public async Task<bool> SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
         {
-            var oMail =
-                new MailMessage(new MailAddress(mailSettings.Mail),
-                new MailAddress(mailRequest.ToEmail))
-                {
-                    Subject = mailRequest.Subject,
-                    SubjectEncoding = new UTF8Encoding(),
-                    Body = mailRequest.Body,
-                    BodyEncoding = new UTF8Encoding(),
-                    IsBodyHtml = true
-                };
-
-            using var smtpClient = new SmtpClient
-            {
-                Host = mailSettings.Host,
-                Credentials = new NetworkCredential(mailSettings.Mail, mailSettings.Password),
-                //EnableSsl = false,
-                Port = mailSettings.Port,// 25
-            };
-
             bool result = false;
             try
             {
+                var oMail =
+                   new MailMessage(new MailAddress(mailSettings.Mail),
+                   new MailAddress(mailRequest.ToEmail))
+                   {
+                       Subject = mailRequest.Subject,
+                       SubjectEncoding = new UTF8Encoding(),
+                       Body = mailRequest.Body,
+                       BodyEncoding = new UTF8Encoding(),
+                       IsBodyHtml = true
+                   };
+
+                using var smtpClient = new SmtpClient
+                {
+                    Host = mailSettings.Host,
+                    Credentials = new NetworkCredential(mailSettings.Mail, mailSettings.Password),
+                    //EnableSsl = false,
+                    Port = mailSettings.Port,// 25
+                };
+
+
                 smtpClient.Send(oMail);
-                result = true;
+                result = true; 
+                oMail.Dispose();
             }
             catch (Exception ex)
             {
@@ -53,7 +55,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 // ignoared
 
             }
-            oMail.Dispose();
+          
             return result;
 
         }

@@ -13,6 +13,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos
         public User User { get; set; }
         public Device Device { get; set; }
         public AppKey AppKey { get; set; }
+        public AppData AppData { get; set; }
     }
 
     public class Client
@@ -54,6 +55,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos
     }
 
     public class AppKey
+    {
+        public string NoorLockSk { get; set; }
+        public long? NoorLockSnId { get; set; }
+        public string NoorLockActivationCode { get; set; }
+        public bool NoorLockTypeOfComment { get; set; }
+    }
+
+    public class AppData
     {
         public string NoorLockSk { get; set; }
         public long? NoorLockSnId { get; set; }
