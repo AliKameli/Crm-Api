@@ -156,10 +156,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                         dto.Device?.Os,
                         dto.Device?.DeviceScreenSize,
                         appKeyHash,
-                        dto?.AppKey?.NoorLockSk,
-                        dto?.AppKey?.NoorLockSnId,
-                        dto?.AppKey?.NoorLockActivationCode,
-                        dto?.AppKey?.NoorLockTypeOfComment
+                        dto?.AppData?.NoorLockSk,
+                        dto?.AppData?.NoorLockSnId,
+                        dto?.AppData?.NoorLockActivationCode,
+                        dto?.AppData?.NoorLockTypeOfComment
                           );
 
 

@@ -118,7 +118,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
             var result = await _mailService.SendEmailAsync(request, mailSetting);
             await this.UpdateResultAsync(pendingHistoryId, result, mailSettingObjectSelected.SourceConfigId);
-            return new DataResponse<string>(true, null, "ایمیل ارسال شد");
+            if (result)
+            {
+                return new DataResponse<string>(true, null, "ایمیل ارسال شد");
+
+            }
+            else
+            {
+                return new DataResponse<string>(true, null, "ایمیل ارسال نشد");
+
+            }
         }
 
         private async Task<DataResponse<string>> SendSmsAsync(long caseId, string fromSmsCenterId, string message, long pendingHistoryId)
