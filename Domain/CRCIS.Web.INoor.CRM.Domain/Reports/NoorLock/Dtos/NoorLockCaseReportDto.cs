@@ -13,6 +13,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Dtos
         public string Description { get; set; }
         public DateTime CreateDateTime { get; set; }
         public string AnswerText { get; set; }
+        public string AnswerTextNoHtml { get; set; }
         public DateTime? AnswerDate { get; set; }
         public Guid? InoorId { get; set; }
         public long RowNumber { get; set; }

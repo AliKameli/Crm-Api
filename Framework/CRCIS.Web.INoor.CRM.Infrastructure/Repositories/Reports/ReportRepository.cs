@@ -207,6 +207,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                      await dbConnection
                     .QueryAsync<NoorLockCaseReportDto>(sql, query, commandType: CommandType.StoredProcedure);
 
+                list = list.Select(d => d.PairNoorLockCaseReportNotHtmlAnswer());
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
 
                 var result = new DataTableResponse<IEnumerable<NoorLockCaseReportDto>>(list, totalCount);
@@ -237,6 +238,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                     .QueryFirstOrDefaultAsync<NoorLockCaseReportDto>(sql, query, commandType: CommandType.StoredProcedure);
                 if (data != null)
                 {
+                    data = data.PairNoorLockCaseReportNotHtmlAnswer();
                     return new DataResponse<NoorLockCaseReportDto>(data);
                 }
 
