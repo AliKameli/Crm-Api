@@ -12,7 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Notifications
         public string SmsCenterUserName { get; set; }
         public string SmsCenterPassword { get; set; }
 
-        public string Destination { get; set; }
+        public string ToMobile { get; set; }
         public string Body { get; set; }
     }
 }

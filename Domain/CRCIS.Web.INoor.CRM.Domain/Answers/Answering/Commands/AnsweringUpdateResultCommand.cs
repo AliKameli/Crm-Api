@@ -11,5 +11,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Commands
         public long PendingHistoryId { get; set; }
         public int SourceConfigId { get; set; }
         public bool Result { get; set; }
+        public string AnswerTarget { get; set; }
     }
 }
