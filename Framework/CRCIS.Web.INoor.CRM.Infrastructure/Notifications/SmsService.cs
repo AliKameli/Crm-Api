@@ -27,7 +27,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                    $"from={message.SmsCenterPanelNumber}" +
                    $"&username={message.SmsCenterUserName}" +
                    $"&password={message.SmsCenterPassword}" +
-                   $"&to={message.Destination}" +
+                   $"&to={message.ToMobile}" +
                    $"&message={message.Body}";
 
 

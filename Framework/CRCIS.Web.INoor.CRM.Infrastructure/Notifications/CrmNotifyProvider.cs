@@ -50,11 +50,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
             if (command.AnswerMethodId == 1)
             {
-                responseSend = await this.SendSmsAsync(command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
+                responseSend = await this.SendSmsAsync(
+                    command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
             }
             if (command.AnswerMethodId == 2)
             {
-                responseSend = await this.SendEmailAsync(command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
+                responseSend = await this.SendEmailAsync(
+                    command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
             }
 
             if (responseSend == null)
@@ -117,7 +119,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             };
 
             var result = await _mailService.SendEmailAsync(request, mailSetting);
-            await this.UpdateResultAsync(pendingHistoryId, result, mailSettingObjectSelected.SourceConfigId);
+            await this.UpdateResultAsync(pendingHistoryId, result, mailSettingObjectSelected.SourceConfigId, request.ToEmail);
             if (result)
             {
                 return new DataResponse<string>(true, null, "ایمیل ارسال شد");
@@ -158,7 +160,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
             var smsRequest = new SmsRequest
             {
-                Destination = responsePendingCase?.Data?.Mobile,
+                ToMobile = responsePendingCase?.Data?.Mobile,
                 Body = message,
                 SmsCenterPanelNumber = smsSettingSelected.SmsCenterPanelNumber,
                 SmsCenterUserName = smsSettingSelected.SmsCenterUserName,
@@ -166,7 +168,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             };
 
             var result = await _smsService.SendSmsAsync(smsRequest);
-            await this.UpdateResultAsync(pendingHistoryId, result, Convert.ToInt32(fromSmsCenterId));
+            await this.UpdateResultAsync(pendingHistoryId, result, Convert.ToInt32(fromSmsCenterId), smsRequest.ToMobile);
 
             if (result == false)
             {
@@ -175,14 +177,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             return new DataResponse<string>(true, null, "پیامک ارسال شد");
         }
 
-        private Task UpdateResultAsync(long pendingHistoryId, bool result, int sourceConfigId)
+        private Task UpdateResultAsync(long pendingHistoryId, bool result, int sourceConfigId, string answerTarget)
         {
             var command =
             new AnsweringUpdateResultCommand
             {
                 PendingHistoryId = pendingHistoryId,
                 SourceConfigId = sourceConfigId,
-                Result = result
+                Result = result,
+                AnswerTarget = answerTarget
             };
             return _pendingHistoryRepository.UpdateResulAsync(command);
         }
