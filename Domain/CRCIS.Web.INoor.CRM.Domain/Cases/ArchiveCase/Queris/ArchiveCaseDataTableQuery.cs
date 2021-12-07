@@ -10,8 +10,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris
     public class ArchiveCaseDataTableQuery : AbstractDataTableQuery
     {
         public string Order { get; private set; }
-        public string SourceTypeTitle { get; private set; }
-        public string ProductTitle { get;private set; }
+        public string SourceTypeIds { get; private set; }
+        public string ProductIds { get;private set; }
         //public string FirstSubject { get; set; }
         public string Title { get; private set; }
 
@@ -24,8 +24,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris
                 Order = $"{sortField} {sortOrder.ToString()}";
             }
 
-            SourceTypeTitle = sourceTypeTitle?.Trim();
-            ProductTitle = productTitle?.Trim();
+            SourceTypeIds = sourceTypeTitle?.Trim();
+            ProductIds = productTitle?.Trim();
             Title = title?.Trim();
         }
     }

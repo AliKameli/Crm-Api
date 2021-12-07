@@ -51,9 +51,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 model.AnswerText,
                 responseSave.Data
                 );
-            var response = await _crmNotifyManager.SendNotifyAsync(command);
-
-         
+            var response = await _crmNotifyManager.SendNotifyAsync(command);         
             return Ok(response);
         }
     }
