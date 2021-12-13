@@ -24,7 +24,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
 
         public string MoreData { get; private set; }
 
-        public string AppKeyHash { get;private set; }
+        public string AppKeyHash { get; private set; }
 
         public RabbitImportCaseCreateCommand(string title, string nameFamily, string email, string description,
             int sourceTypeId, Guid? noorUserId, int? productId, int? manualImportAdminId, string mobile,
@@ -33,6 +33,17 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             string os, string deviceScreenSize,
             string appKeyHash, string noorLockSk, long? noorLockSnId, string noorLockActivationCode, bool? noorLockTypeOfComment)
         {
+            var now = DateTime.Now;
+            DateTime? createdDateTime = null;
+            try
+            {
+                createdDateTime = DateTime.ParseExact(createDateTime, "yyyymmddHHMMss", CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                createdDateTime = now;
+            }
+
             Title = title;
             NameFamily = nameFamily;
             Email = email;
@@ -41,14 +52,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             NoorUserId = noorUserId;
             ProductId = productId;
             ManualImportAdminId = manualImportAdminId;
-            ImportDateTime = DateTime.Now;
-            CreateDateTime = DateTime.ParseExact(createDateTime, "yyyymmddHHMMss", CultureInfo.InvariantCulture);
+            ImportDateTime = now;
+            CreateDateTime = createdDateTime.GetValueOrDefault();
             Mobile = mobile;
             AppKeyHash = appKeyHash;
 
             var moreDataObject = new ImportCaseMoreDataObject(pageTitle, pageUrl, toMailBox, fileUrl, fileType,
                 userLanguage, ip, browser, userAgent, platform, os, deviceScreenSize,
-                noorLockSk,noorLockSnId,noorLockActivationCode,noorLockTypeOfComment
+                noorLockSk, noorLockSnId, noorLockActivationCode, noorLockTypeOfComment
                 );
             MoreData = System.Text.Json.JsonSerializer.Serialize(moreDataObject);
         }
@@ -72,14 +83,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public string DeviceScreenSize { get; private set; }
 
         //noorlock data
-        public string NoorLockSk { get;private set; }
-        public long? NoorLockSnId { get;private set; }
-        public string NoorLockActivationCode { get;private set; }
-        public bool? NoorLockTypeOfComment { get;private set; }
+        public string NoorLockSk { get; private set; }
+        public long? NoorLockSnId { get; private set; }
+        public string NoorLockActivationCode { get; private set; }
+        public bool? NoorLockTypeOfComment { get; private set; }
 
 
         public ImportCaseMoreDataObject(string pageTitle, string pageUrl, string toMailBox, string fileUrl, string fileType,
-            string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize, 
+            string userLanguage, string ip, string browser, string userAgent, string platform, string os, string deviceScreenSize,
             string noorLockSk, long? noorLockSnId, string noorLockActivationCode, bool? noorLockTypeOfComment)
         {
             PageTitle = pageTitle;
