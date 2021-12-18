@@ -1,4 +1,6 @@
-﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris;
@@ -17,11 +19,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 {
     public class ArchiveCaseRepository : BaseRepository, IArchiveCaseRepository
     {
+        private readonly IMapper _mapper;
         protected override string TableName => "ArchiveCase";
-        public ArchiveCaseRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        public ArchiveCaseRepository(ISqlConnectionFactory sqlConnectionFactory, IMapper mapper) : base(sqlConnectionFactory)
         {
+            _mapper = mapper;
         }
-        public async Task<DataTableResponse<IEnumerable<ArchiveCaseGetDto>>> GetAsync(ArchiveCaseDataTableQuery query)
+
+        public async Task<DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>> GetAsync(ArchiveCaseDataTableQuery query)
         {
             try
             {
@@ -34,7 +39,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                     .QueryAsync<ArchiveCaseGetDto>(sql, query, commandType: CommandType.StoredProcedure);
 
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
-                var result = new DataTableResponse<IEnumerable<ArchiveCaseGetDto>>(list, totalCount);
+
+                var listFull = list.AsQueryable().ProjectTo<ArchiveCaseGetFullDto>(_mapper.ConfigurationProvider).ToList();
+
+                var result = new DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>(listFull, totalCount);
                 return result;
 
             }
@@ -42,7 +50,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             {
                 //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataTableResponse<IEnumerable<ArchiveCaseGetDto>>(errors);
+                var result = new DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>(errors);
                 return result;
             }
         }

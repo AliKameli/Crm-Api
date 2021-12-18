@@ -38,9 +38,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
           [FromQuery] SortOrder? sortOrder,
           [FromQuery] string sourceTypeIds = null,
           [FromQuery] string productIds = null,
-          [FromQuery] string title = null)
+          [FromQuery] string title = null,
+          [FromQuery] string range = null
+            )
         {
-            var query = new ImportCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeIds,productIds, title);
+            var query = new ImportCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeIds,productIds, title,range);
             var response = await _importCaseRepository.GetAsync(query);
 
             return Ok(response);

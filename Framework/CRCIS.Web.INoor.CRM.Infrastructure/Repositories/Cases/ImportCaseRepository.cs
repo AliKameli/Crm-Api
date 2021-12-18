@@ -6,6 +6,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using System;
@@ -15,18 +16,22 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 {
     public class ImportCaseRepository : BaseRepository, IImportCaseRepository
     {
         private readonly IIdentity _identity;
+        private readonly IMapper _mapper;
         protected override string TableName => "ImportCase";
-        public ImportCaseRepository(ISqlConnectionFactory sqlConnectionFactory, IIdentity identity) : base(sqlConnectionFactory)
+        public ImportCaseRepository(ISqlConnectionFactory sqlConnectionFactory, IIdentity identity, IMapper mapper) : base(sqlConnectionFactory)
         {
             _identity = identity;
+            _mapper = mapper;
         }
-        public async Task<DataTableResponse<IEnumerable<ImportCaseGetDto>>> GetAsync(ImportCaseDataTableQuery query)
+        public async Task<DataTableResponse<IEnumerable<ImportCaseGetFullDto>>> GetAsync(ImportCaseDataTableQuery query)
         {
             try
             {
@@ -39,7 +44,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                     .QueryAsync<ImportCaseGetDto>(sql, query, commandType: CommandType.StoredProcedure);
 
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
-                var result = new DataTableResponse<IEnumerable<ImportCaseGetDto>>(list, totalCount);
+
+                var listFull = list.AsQueryable().ProjectTo<ImportCaseGetFullDto>(_mapper.ConfigurationProvider).ToList();
+
+                var result = new DataTableResponse<IEnumerable<ImportCaseGetFullDto>>(listFull, totalCount);
                 return result;
 
             }
@@ -47,7 +55,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             {
                 //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataTableResponse<IEnumerable<ImportCaseGetDto>>(errors);
+                var result = new DataTableResponse<IEnumerable<ImportCaseGetFullDto>>(errors);
                 return result;
             }
         }
@@ -289,6 +297,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
         }
 
-     
+
     }
 }

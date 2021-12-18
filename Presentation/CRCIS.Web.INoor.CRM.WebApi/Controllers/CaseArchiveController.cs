@@ -26,9 +26,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [FromQuery] SortOrder? sortOrder,
         [FromQuery] string sourceTypeIds = null,
         [FromQuery] string productIds = null,
-        [FromQuery] string title = null)
+        [FromQuery] string title = null,
+        [FromQuery] string range = null)
         {
-            var query = new ArchiveCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeIds, productIds, title);
+            var query = new ArchiveCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeIds, productIds, title,range);
             var response = await _archiveCaseRepository.GetAsync(query);
 
             return Ok(response);

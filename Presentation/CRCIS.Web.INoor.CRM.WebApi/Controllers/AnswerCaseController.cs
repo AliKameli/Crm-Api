@@ -6,6 +6,7 @@ using CRCIS.Web.INoor.CRM.Domain.Notify.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Answer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,6 +37,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(AnsweringCreateModel model)
         {
             model.AdminId = _identity.GetAdminId();
@@ -45,13 +47,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 return Ok(responseSave);
 
 
-          var command =   new SendNotifiyCommand(model.AnswerMethodId,
-                model.CaseId,
-                model.AnswerSource,
-                model.AnswerText,
-                responseSave.Data
-                );
-            var response = await _crmNotifyManager.SendNotifyAsync(command);         
+            var command = new SendNotifiyCommand(model.AnswerMethodId,
+                  model.CaseId,
+                  model.AnswerSource,
+                  model.AnswerText,
+                  responseSave.Data
+                  );
+            var response = await _crmNotifyManager.SendNotifyAsync(command);
             return Ok(response);
         }
     }

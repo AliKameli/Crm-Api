@@ -12,10 +12,14 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris
         public string Order { get; private set; }
         public string SourceTypeIds { get; private set; }
         public string ProductIds { get;private set; }
-        //public string FirstSubject { get; set; }
         public string Title { get; private set; }
+        public DateTime? FromDate { get; private set; }
+        public DateTime? ToDate { get; private set; }
 
-        public ArchiveCaseDataTableQuery(int pageIndex, int pageSize, string sortField, SortOrder? sortOrder, string sourceTypeTitle,string productTitle, string title)
+        public ArchiveCaseDataTableQuery(int pageIndex, int pageSize,
+            string sortField, SortOrder? sortOrder,
+            string sourceTypeTitle,string productTitle, string title,
+            string range)
             : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
@@ -27,6 +31,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris
             SourceTypeIds = sourceTypeTitle?.Trim();
             ProductIds = productTitle?.Trim();
             Title = title?.Trim();
+
+            if (!string.IsNullOrEmpty(range))
+            {
+                var sDates = range.Split(',');
+                FromDate = DateTime.Parse(sDates[0]);
+                ToDate = DateTime.Parse(sDates[1]);
+            }
         }
     }
 }
