@@ -12,7 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
     public interface IArchiveCaseRepository 
     {
-        Task<DataTableResponse<IEnumerable<ArchiveCaseGetDto>>> GetAsync(ArchiveCaseDataTableQuery query);
+        Task<DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>> GetAsync(ArchiveCaseDataTableQuery query);
         Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
@@ -30,7 +31,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             _mapper = mapper;
             _identity = identity;
         }
-        public async Task<DataTableResponse<IEnumerable<PendingCaseGetDto>>> GetForAdminAsync(AdminPendingCaseDataTableQuery query)
+        public async Task<DataTableResponse<IEnumerable<PendingCaseGetFullDto>>> GetForAdminAsync(AdminPendingCaseDataTableQuery query)
         {
             try
             {
@@ -43,7 +44,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                     .QueryAsync<PendingCaseGetDto>(sql, query, commandType: CommandType.StoredProcedure);
 
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
-                var result = new DataTableResponse<IEnumerable<PendingCaseGetDto>>(list, totalCount);
+
+                var listFull = list.AsQueryable().ProjectTo<PendingCaseGetFullDto>(_mapper.ConfigurationProvider).ToList();
+                var result = new DataTableResponse<IEnumerable<PendingCaseGetFullDto>>(listFull, totalCount);
                 return result;
 
             }
@@ -51,7 +54,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             {
                 //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataTableResponse<IEnumerable<PendingCaseGetDto>>(errors);
+                var result = new DataTableResponse<IEnumerable<PendingCaseGetFullDto>>(errors);
                 return result;
             }
         }

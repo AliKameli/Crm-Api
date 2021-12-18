@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos;
@@ -26,8 +28,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 ;
 
             CreateMap<CaseHistoriesQuery, CaseHistoriesDto>()
-                .ForMember(dest => dest.IsAnswering, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault() <3))
-                .ForMember(dest => dest.OnlySaving, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault()> 2))
+                .ForMember(dest => dest.IsAnswering, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault() < 3))
+                .ForMember(dest => dest.OnlySaving, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault() > 2))
                 .ForMember(dest => dest.AdminFullName, opt => opt.MapFrom(src => $"{src.AdminName } { src.AdminFamily}".Trim()))
                 .ForMember(dest => dest.UnknowAdmin, opt => opt.MapFrom(src => string.IsNullOrEmpty($"{src.AdminName } { src.AdminFamily}".Trim())))
                 .ForMember(dest => dest.OperationDatePersian, opt => opt.MapFrom(src => src.OperationDateTime.ToPersinDateString(false, false)))
@@ -39,6 +41,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowBackFromArchiveToMe, opt => opt.Ignore());
+
+
+            CreateMap<ImportCaseGetDto, ImportCaseGetFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)));
+
+            CreateMap<PendingCaseGetDto, PendingCaseGetFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)));
+
+            CreateMap<ArchiveCaseGetDto, ArchiveCaseGetFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)));
 
         }
     }
