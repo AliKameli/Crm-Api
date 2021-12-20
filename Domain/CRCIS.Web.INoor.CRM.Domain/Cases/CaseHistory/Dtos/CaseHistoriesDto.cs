@@ -15,6 +15,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos
         public bool IsAnswering { get; set; }
         public bool OnlySaving { get; set; }
         public bool AnswerResult { get; set; }
+        public string PendingResultMessage { get; set; }
         public DateTime OperationDateTime { get; set; }
         public string OperationDatePersian { get; set; }
         public string OperationTimePersian { get; set; }

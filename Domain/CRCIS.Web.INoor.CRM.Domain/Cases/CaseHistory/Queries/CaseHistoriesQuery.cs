@@ -18,5 +18,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries
         public string AdminName { get; set; }
         public string AdminFamily { get; set; }
         public bool AnswerResult { get; set; }
+        public string PendingResultMessage { get; set; }
     }
 }
