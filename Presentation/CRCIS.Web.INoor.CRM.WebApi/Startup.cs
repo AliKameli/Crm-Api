@@ -1,9 +1,11 @@
 using CRCIS.Web.INoor.CRM.Contract.Notifications;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Logs;
+using CRCIS.Web.INoor.CRM.Contract.Settings;
 using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
 using CRCIS.Web.INoor.CRM.Infrastructure.MailReader;
 using CRCIS.Web.INoor.CRM.Infrastructure.Notifications;
 using CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq;
+using CRCIS.Web.INoor.CRM.Infrastructure.Settings;
 using CRCIS.Web.INoor.CRM.WebApi.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +45,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 services.AddHostedService<TimedMailReaderHostedService>();
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
             }
+            services.AddSingleton<IRabbitmqSettings>(sp =>
+             Configuration.GetSection(nameof(RabbitmqSettings)).Get<RabbitmqSettings>());
+
+
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<ISmsService, SmsService>();
             services.AddScoped<ICrmNotifyManager, CrmNotifyProvider>();
@@ -50,6 +56,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 
             services.AddAutoMapper();
             services.AddDatabaseServices(Configuration);
+            services.AddMasstransitServices(Configuration);
             services.AddDatabaseRepositoris();
             services.AddJwtAuthentication(Configuration);
             services.AddSwaggerGen(c =>

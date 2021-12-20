@@ -16,13 +16,14 @@ using CRCIS.Web.INoor.CRM.Domain.Notify.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Commands;
+using MassTransit;
+using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 {
     public class CrmNotifyProvider : ICrmNotifyManager
     {
-        private readonly IMailService _mailService;
-        private readonly ISmsService _smsService;
+        private readonly IBus _bus;
         private readonly IPendingCaseRepository _pendingCaseRepository;
         private readonly ISourceConfigRepository _sourceConfigRepository;
         private readonly IPendingHistoryRepository _pendingHistoryRepository;
@@ -33,14 +34,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             IPendingCaseRepository pendingCaseRepository,
             ISourceConfigRepository sourceConfigRepository,
             ISmsService smsService,
-            IPendingHistoryRepository pendingHistoryRepository)
+            IPendingHistoryRepository pendingHistoryRepository,
+            IBus bus)
         {
-            _mailService = mailService;
             _pendingCaseRepository = pendingCaseRepository;
             _sourceConfigRepository = sourceConfigRepository;
             _logger = loggerFactory.CreateLogger<CrmNotifyProvider>();
-            _smsService = smsService;
             _pendingHistoryRepository = pendingHistoryRepository;
+            _bus = bus;
         }
 
 
@@ -118,18 +119,24 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 Port = 25,
             };
 
-            var result = await _mailService.SendEmailAsync(request, mailSetting);
-            await this.UpdateResultAsync(pendingHistoryId, result, mailSettingObjectSelected.SourceConfigId, request.ToEmail);
-            if (result)
-            {
-                return new DataResponse<string>(true, null, "ایمیل ارسال شد");
+            //var result = await _mailService.SendEmailAsync(request, mailSetting);
+            //await this.UpdateResultAsync(pendingHistoryId, result, mailSettingObjectSelected.SourceConfigId, request.ToEmail);
+            //if (result)
+            //{
+            //    return new DataResponse<string>(true, null, "در صف ارسال قرار گرفت");
 
-            }
-            else
-            {
-                return new DataResponse<string>(true, null, "ایمیل ارسال نشد");
+            //}
+            //else
+            //{
+            //    return new DataResponse<string>(true, null, "ایمیل ارسال نشد");
 
-            }
+            //}
+
+            await this.SendNotifyToQuequeAsync(caseId, 
+                mailSettingObjectSelected.SourceConfigId,
+                pendingHistoryId, AnswerMethod.Email, request, mailSetting, null);
+
+            return new DataResponse<string>(true, null, "در صف ارسال قرار گرفت");
         }
 
         private async Task<DataResponse<string>> SendSmsAsync(long caseId, string fromSmsCenterId, string message, long pendingHistoryId)
@@ -167,28 +174,28 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 SmsCenterPassword = smsSettingSelected.SmsCenterPassword,
             };
 
-            var result = await _smsService.SendSmsAsync(smsRequest);
-            await this.UpdateResultAsync(pendingHistoryId, result, Convert.ToInt32(fromSmsCenterId), smsRequest.ToMobile);
+            //var result = await _smsService.SendSmsAsync(smsRequest);
+            //await this.UpdateResultAsync(pendingHistoryId, result, Convert.ToInt32(fromSmsCenterId), smsRequest.ToMobile);
 
-            if (result == false)
-            {
-                return new DataResponse<string>(true, null, "متاسفانه سرویس ارسال پیامک با خطا مواجه شد");
-            }
-            return new DataResponse<string>(true, null, "پیامک ارسال شد");
+            //if (result == false)
+            //{
+            //    return new DataResponse<string>(true, null, "متاسفانه سرویس ارسال پیامک با خطا مواجه شد");
+            //}
+            return new DataResponse<string>(true, null, "در صف ارسال قرار گرفت");
         }
 
-        private Task UpdateResultAsync(long pendingHistoryId, bool result, int sourceConfigId, string answerTarget)
+
+        private async Task SendNotifyToQuequeAsync(long caseId, int sourceConfigId, long pendingHistoryId,
+            AnswerMethod answerMethod, MailRequest mailRequest, MailSettings mailSettings, SmsRequest smsRequest
+            )
         {
-            var command =
-            new AnsweringUpdateResultCommand
-            {
-                PendingHistoryId = pendingHistoryId,
-                SourceConfigId = sourceConfigId,
-                Result = result,
-                AnswerTarget = answerTarget
-            };
-            return _pendingHistoryRepository.UpdateResulAsync(command);
+            var command = new NotificationValueDataEntered(caseId, sourceConfigId, pendingHistoryId, answerMethod,
+                mailRequest, mailSettings, smsRequest);
+            await _bus.Publish(command);
+
         }
+
+   
 
         private Func<string, SourceConfigJsonDto> funcSourceConfigJson = (strConfigjson) =>
                string.IsNullOrEmpty(strConfigjson) == true ? null :

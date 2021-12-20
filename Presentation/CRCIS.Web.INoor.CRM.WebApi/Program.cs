@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CRCIS.Web.INoor.CRM.Infrastructure.LoggerProvider;
 using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Settings;
 
 namespace CRCIS.Web.INoor.CRM.WebApi
 {
@@ -16,19 +17,25 @@ namespace CRCIS.Web.INoor.CRM.WebApi
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false)
+            .Build();
+
+            CreateHostBuilder(args, config).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args, IConfigurationRoot config) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging =>
                 {
                     //logging.ClearProviders();
                     logging.AddConsole();
                     logging.AddInDbLogger();
+                    logging.AddSentry(dsn: config.GetSection("Sentry").Get<SentrySettings>().Dsn);
                 })
             .ConfigureWebHostDefaults(webBuilder =>
             {
+                webBuilder.UseSentry();
                 webBuilder.UseStartup<Startup>();
             });
     }
