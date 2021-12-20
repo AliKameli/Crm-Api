@@ -132,7 +132,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
             //}
 
-            await this.SendNotifyToQuequeAsync(caseId, 
+            await this.SendNotifyToQuequeAsync(caseId,
                 mailSettingObjectSelected.SourceConfigId,
                 pendingHistoryId, AnswerMethod.Email, request, mailSetting, null);
 
@@ -181,6 +181,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             //{
             //    return new DataResponse<string>(true, null, "متاسفانه سرویس ارسال پیامک با خطا مواجه شد");
             //}
+
+
+            await this.SendNotifyToQuequeAsync(caseId,
+                Convert.ToInt32(fromSmsCenterId),
+                pendingHistoryId, AnswerMethod.Sms, null, null, smsRequest);
             return new DataResponse<string>(true, null, "در صف ارسال قرار گرفت");
         }
 
@@ -195,7 +200,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
         }
 
-   
+
 
         private Func<string, SourceConfigJsonDto> funcSourceConfigJson = (strConfigjson) =>
                string.IsNullOrEmpty(strConfigjson) == true ? null :
