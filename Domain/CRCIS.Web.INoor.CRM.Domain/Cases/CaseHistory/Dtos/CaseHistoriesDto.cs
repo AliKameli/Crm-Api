@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos
         public long?PendingHistoryId { get; set; }
         public string AnswerMethodTitle { get; set; }
         public string AnswerText { get; set; }
+        public string AnswerTarget { get; set; }
         public bool IsAnswering { get; set; }
         public bool OnlySaving { get; set; }
         public bool AnswerResult { get; set; }
