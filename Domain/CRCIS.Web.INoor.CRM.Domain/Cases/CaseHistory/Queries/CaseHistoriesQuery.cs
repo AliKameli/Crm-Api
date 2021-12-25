@@ -13,6 +13,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries
         public int? AnswerMethodId { get; set; }
         public string AnswerMethodTitle { get; set; }
         public string AnswerText { get; set; }
+        public string AnswerTarget { get; set; }
         public DateTime OperationDateTime { get; set; }
         public string OperationTypeTitle { get; set; }
         public string AdminName { get; set; }
