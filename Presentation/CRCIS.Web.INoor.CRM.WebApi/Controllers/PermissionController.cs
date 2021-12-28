@@ -34,7 +34,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             {
                 return BadRequest();
             }
-            var permission = (responseUser.Data.Id == 1 || responseUser.Data.Id == 2) ? "crmAdministrator" : "admin";//hard code permission
+            var permission = (responseUser.Data.Id == 1 || responseUser.Data.Id == 2||responseUser.Data.Id == 8) ? "crmAdministrator" : "admin";//hard code permission
             var response = new DataResponse<string>(permission);
             return Ok(response);
         }
