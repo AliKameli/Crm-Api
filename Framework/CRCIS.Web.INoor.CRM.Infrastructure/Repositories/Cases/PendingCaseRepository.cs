@@ -10,6 +10,8 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
+using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using System;
@@ -52,7 +54,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<PendingCaseGetFullDto>>(errors);
                 return result;
@@ -114,20 +115,44 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
         }
 
-        public async Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardCommand command)
+        public async Task MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardCommand command)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToAdmin");
+            var execute =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+        }
+        public async Task AddCaseHistoryMoveCaseToAdminAsync(int fromAdminId, int toAdminId, long caseId)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+            var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+            var commandCaseHistory = new CaseHistoryCreateCommand(
+                fromAdminId, caseId, DateTime.Now,
+                OperationType.MoveToPartnerAdmiCartable.ToInt32()// 6//	انتقال به کارتابل همکار
+                );
+            var caseHistoryId =
+                      await dbConnection
+                     .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
+
+            sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+            commandCaseHistory = new CaseHistoryCreateCommand(
+               toAdminId, caseId, DateTime.Now,
+                OperationType.AssignAdminAsAsnswerResponsible.ToInt32() //10 = انتصاب همکار پاسخگو
+               );
+            caseHistoryId =
+                    await dbConnection
+                   .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
+
+        }
+        public async Task<DataResponse<int>> _MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardCommand command)
         {
             var adminId = _identity.GetAdminId();
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
-                dbConnection.Open();
-
-                using var transaction = dbConnection.BeginTransaction();
-
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToAdmin");
-                var execute =
-                     await dbConnection
-                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure, transaction: transaction);
 
                 var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
                 var commandCaseHistory = new CaseHistoryCreateCommand(
@@ -136,7 +161,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                     );
                 var caseHistoryId =
                           await dbConnection
-                         .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
+                         .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
 
                 sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
                 commandCaseHistory = new CaseHistoryCreateCommand(
@@ -145,9 +170,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                    );
                 caseHistoryId =
                         await dbConnection
-                       .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
+                       .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
 
-                transaction.Commit();
+
                 return new DataResponse<int>(true);
             }
             catch (Exception ex)
@@ -159,48 +184,41 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
-        public async Task<DataResponse<int>> MoveCaseToArchive(MoveCaseToArchiveCommand command)
+
+        public async Task MoveCaseToArchiveAsync(long caseId)
         {
-            var adminId = _identity.GetAdminId();
-            try
-            {
-                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
-                dbConnection.Open();
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToArchive");
+            var command = new MoveCaseToArchiveCommand(caseId);
+            var execute =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+        }
+        public async Task DeleteCaseAsync(long caseId)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                using var transaction = dbConnection.BeginTransaction();
+            var sqlDelete = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Delete");
+            var commandDelete = new { Id = caseId };
+            await dbConnection
+                .ExecuteAsync(sqlDelete, commandDelete, commandType: CommandType.StoredProcedure);
+        }
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToArchive");
-                var execute =
-                     await dbConnection
-                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure, transaction: transaction);
+        public async Task<DataResponse<int>> AddCaseHistoryMoveCaseToArchive(int adminId, long caseId)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var sqlDelete = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Delete");
-                var commandDelete = new { Id = command.CaseId };
+            var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+            var commandCaseHistory = new CaseHistoryCreateCommand(
+                adminId, caseId, DateTime.Now,
+                OperationType.ArchiveFromCartable.ToInt32()// 9//آرشیو از کارتابل
+                );
+            var caseHistoryId =
+                        await dbConnection
+                       .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
 
-                await dbConnection
-                    .QueryFirstOrDefaultAsync(sqlDelete, commandDelete, commandType: CommandType.StoredProcedure, transaction: transaction);
+            return new DataResponse<int>(true);
 
-                var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
-                var commandCaseHistory = new CaseHistoryCreateCommand(
-                    adminId, command.CaseId, DateTime.Now,
-                    9//آرشیو از کارتابل
-                    );
-                var caseHistoryId =
-                            await dbConnection
-                           .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
-
-                transaction.Commit();
-
-                return new DataResponse<int>(true);
-            }
-            catch (Exception ex)
-            {
-                //_logger.LogError(ex.Message);
-
-                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<int>(errors);
-                return result;
-            }
         }
 
         public async Task<DataResponse<int>> UpdateCaseAsync(PendingCaseUpdateCommand command)

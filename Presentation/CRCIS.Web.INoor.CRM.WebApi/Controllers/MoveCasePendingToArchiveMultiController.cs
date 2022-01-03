@@ -1,8 +1,8 @@
-﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
-using CRCIS.Web.INoor.CRM.Contract.Service;
+﻿using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,21 +15,23 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MoveCaseNewToCurrentAdminCardboardController : ControllerBase
+    public class MoveCasePendingToArchiveMultiController : ControllerBase
     {
-        private readonly ICaseNewService _caseNewService;
+        private readonly IPendingCaseService _pendingService;
         private readonly IIdentity _identity;
-        public MoveCaseNewToCurrentAdminCardboardController(ICaseNewService  caseNewService, IIdentity identity)
+        public MoveCasePendingToArchiveMultiController(IPendingCaseService pendingService, IIdentity identity)
         {
-            _caseNewService = caseNewService;
+            _pendingService = pendingService;
             _identity = identity;
         }
+
+        [Authorize]
         [HttpPut]
-        public async Task<IActionResult> Put(MoveCaseToCurrentAdminCardboardModel model)
+        public async Task <IActionResult>Put(MoveMultiCaseToArchiveModel model)
         {
             var adminId = _identity.GetAdminId();
-            var command = new MoveCaseToCurrentAdminCardboardCommand(adminId, model.Id);
-            var response = await _caseNewService.MoveCaseToAdminAsync(command);
+            var command = new MoveCaseToArchiveMultiCommand(adminId, model.CaseIds);
+            var response = await _pendingService.MoveCaseToArchiveAsync(command);
             return Ok(response);
         }
     }

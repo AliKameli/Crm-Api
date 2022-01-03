@@ -60,7 +60,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs
             catch (Exception ex)
             {
                 //_logger.LogError(ex.Message);
-
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;

@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
+using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
 using Microsoft.AspNetCore.Http;
@@ -14,11 +15,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     [ApiController]
     public class MoveCaseNewToArchiveController : ControllerBase
     {
-        private readonly IImportCaseRepository _importCaseRepository;
-
-        public MoveCaseNewToArchiveController(IImportCaseRepository importCaseRepository)
+        private readonly ICaseNewService _caseNewService;
+        public MoveCaseNewToArchiveController(ICaseNewService caseNewService)
         {
-            _importCaseRepository = importCaseRepository;
+            _caseNewService = caseNewService;
         }
 
         [HttpPut]
@@ -26,7 +26,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             var command = new MoveCaseToArchiveCommand(model.Id);
 
-            var response = await _importCaseRepository.MoveCaseToArchive(command);
+            var response = await _caseNewService.MoveCaseToArchive(command);
             return Ok(response);
         }
     }

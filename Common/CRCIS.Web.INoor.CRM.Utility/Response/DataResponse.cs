@@ -23,6 +23,7 @@ namespace CRCIS.Web.INoor.CRM.Utility.Response
             }
         }
         public TData Data { get; private set; }
+        public Exception Exception { get; private set; }
         public DataResponse(bool success)
         {
             this.Success = success;
@@ -38,6 +39,17 @@ namespace CRCIS.Web.INoor.CRM.Utility.Response
             this.Success = false;
             this.ApiErrors = errors;
         }
+        public DataResponse(Exception ex, string error)
+        {
+            this.Success = false;
+            this.Exception = ex;
+            var errors = new List<string> { error };
+            this.ApiErrors = errors;
+        }
+        public DataResponse(Exception ex) : this(ex, "خطایی رخ داده است")
+        {
+
+        }
 
         public DataResponse(bool success, IList<string> errors, TData data) : this(success)
         {
@@ -47,6 +59,10 @@ namespace CRCIS.Web.INoor.CRM.Utility.Response
 
         public void AddError(string error)
         {
+            if (this.ApiErrors is null)
+            {
+                this.ApiErrors = new List<string>();
+            }
             this.ApiErrors.Add(error);
         }
 

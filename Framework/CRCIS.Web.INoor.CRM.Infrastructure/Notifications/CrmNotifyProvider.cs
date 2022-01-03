@@ -182,7 +182,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             //    return new DataResponse<string>(true, null, "متاسفانه سرویس ارسال پیامک با خطا مواجه شد");
             //}
 
-
             await this.SendNotifyToQuequeAsync(caseId,
                 Convert.ToInt32(fromSmsCenterId),
                 pendingHistoryId, AnswerMethod.Sms, null, null, smsRequest);
@@ -197,17 +196,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             var command = new NotificationValueDataEntered(caseId, sourceConfigId, pendingHistoryId, answerMethod,
                 mailRequest, mailSettings, smsRequest);
             await _bus.Publish(command);
-
         }
-
-
 
         private Func<string, SourceConfigJsonDto> funcSourceConfigJson = (strConfigjson) =>
                string.IsNullOrEmpty(strConfigjson) == true ? null :
                System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(strConfigjson);
-
-
-
 
         private void chooseWayDecorator(AnswerMethod answerMethod)
         {

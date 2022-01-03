@@ -91,24 +91,23 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
         }
         private void HandleMessage(string content)
         {
-             try
-            {// we just print this message   
-            _logger.LogInformation($"crm received {content}");
-
-            var dto = System.Text.Json.JsonSerializer.Deserialize<RabbitImportCaseCreateDto>(content);
-
-            if (dto == null)
+            try
             {
-                _logger.LogWarning($"json convert not worked: {content}");
-                return;
-            }
-            if (string.IsNullOrEmpty(dto?.Client?.ClientSecret))
-            {
-                _logger.LogWarning($"client in json not founded: {content}");
-                return;
-            }
+                _logger.LogInformation($"crm received {content}");
 
-           
+                var dto = System.Text.Json.JsonSerializer.Deserialize<RabbitImportCaseCreateDto>(content);
+
+                if (dto == null)
+                {
+                    _logger.LogWarning($"json convert not worked: {content}");
+                    return;
+                }
+                if (string.IsNullOrEmpty(dto?.Client?.ClientSecret))
+                {
+                    _logger.LogWarning($"client in json not founded: {content}");
+                    return;
+                }
+
                 using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
                     IProductRepository _productRepository = scope.ServiceProvider.GetRequiredService<IProductRepository>();
@@ -130,8 +129,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                     var appKeyHash = dto?.AppKey == null ?
                         null :
                         _securityService.GetSha256HashHex(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
-
-
 
                     var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
                         dto.MessageInfo?.NameFamily,

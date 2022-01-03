@@ -18,6 +18,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
+using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 {
@@ -205,98 +207,73 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
         }
 
-        public async Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command)
+        public async Task MoveCaseToAdminAsync(long caseId)
         {
-            var AdminId = _identity.GetAdminId();
-            try
-            {
-                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
-                dbConnection.Open();
+            var adminId = _identity.GetAdminId();
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+            var sqlMove = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToAdmin");
+            var commandMove = new MoveCaseToCurrentAdminCardboardCommand(adminId, caseId);
+            var executeMove =
+                 await dbConnection
+                .ExecuteAsync(sqlMove, commandMove, commandType: CommandType.StoredProcedure);
+        }
+        public async Task DeleteCaseAsync(long caseId)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                using var transaction = dbConnection.BeginTransaction();
-
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToAdmin");
-                var execute =
-                     await dbConnection
-                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure, transaction: transaction);
-
-                var sqlDelete = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Delete");
-                var commandDelete = new { Id = command.CaseId };
-
-                await dbConnection
-                    .QueryFirstOrDefaultAsync(sqlDelete, commandDelete, commandType: CommandType.StoredProcedure, transaction: transaction);
-
-                var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
-                var commandCaseHistory = new CaseHistoryCreateCommand(
-                    AdminId, command.CaseId, DateTime.Now,
-                        5//	انتقال به کارتابل خودم
-                    );
-                var caseHistoryId =
-                   await dbConnection
-                  .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
-
-                transaction.Commit();
-
-                return new DataResponse<int>(true);
-            }
-            catch (Exception ex)
-            {
-                //_logger.LogError(ex.Message);
-
-                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<int>(errors);
-                return result;
-            }
+            var sqlDelete = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Delete");
+            var commandDelete = new { Id = caseId };
+            await dbConnection
+                .ExecuteAsync(sqlDelete, commandDelete, commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<DataResponse<int>> MoveCaseToArchive(MoveCaseToArchiveCommand command)
+        public async Task<DataResponse<int>> AddCaseHistoryMoveCaseToCurrentAdminAsync(MoveCaseToCurrentAdminCardboardCommand command)
         {
             var AdminId = _identity.GetAdminId();
-            try
-            {
-                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
-                dbConnection.Open();
 
-                using var transaction = dbConnection.BeginTransaction();
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToArchive");
-                var execute =
-                     await dbConnection
-                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure, transaction: transaction);
+            var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+            var commandCaseHistory = new CaseHistoryCreateCommand(
+                AdminId, command.CaseId, DateTime.Now,
+                    OperationType.MoveToMyCartable.ToInt32()//	5 = انتقال به کارتابل خودم
+                );
+            var caseHistoryId =
+               await dbConnection
+              .ExecuteScalarAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
 
-
-
-                var sqlDelete = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Delete");
-                var commandDelete = new { Id = command.CaseId };
-
-                await dbConnection
-                    .QueryFirstOrDefaultAsync(sqlDelete, commandDelete, commandType: CommandType.StoredProcedure, transaction: transaction);
-
-
-                var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
-                var commandCaseHistory = new CaseHistoryCreateCommand(
-                    AdminId, command.CaseId, DateTime.Now,
-                        8//	آرشیو مستقیم
-                    );
-                var caseHistoryId =
-                   await dbConnection
-                  .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
-
-                transaction.Commit();
-
-
-                return new DataResponse<int>(true);
-            }
-            catch (Exception ex)
-            {
-                //_logger.LogError(ex.Message);
-
-                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<int>(errors);
-                return result;
-            }
+            return new DataResponse<int>(true);
         }
 
 
+        public async Task MoveCaseToArchiveAsync(long caseId)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "MoveToArchive");
+            var command = new MoveCaseToArchiveCommand(caseId);
+            var execute =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+        }
+
+        public async Task<DataResponse<int>> AddCaseHistoryMoveCaseToArchiveAsync(MoveCaseToArchiveCommand command)
+        {
+            var AdminId = _identity.GetAdminId();
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+            dbConnection.Open();
+
+            var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
+            var commandCaseHistory = new CaseHistoryCreateCommand(
+                AdminId, command.CaseId, DateTime.Now,
+                   OperationType.DirectArchive.ToInt32()//	8 = آرشیو مستقیم
+                );
+            var caseHistoryId =
+               await dbConnection
+              .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure);
+
+            return new DataResponse<int>(true);
+
+        }
     }
 }

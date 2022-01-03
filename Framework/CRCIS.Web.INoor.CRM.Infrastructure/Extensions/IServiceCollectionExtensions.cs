@@ -38,6 +38,7 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit;
 using GreenPipes;
 using RabbitMQ.Client;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications;
+using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.UserReportSupports;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 {
@@ -149,12 +150,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
 
-
+            //BL Databases
+            services.AddScoped<ICaseNewService, CaseNewService>();
+            services.AddScoped<IPendingCaseService, PendingCaeService>();
+            services.AddScoped<IArchiveCaseService, ArchiveCaseService>();
 
             //BL Admin
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<INoorlockCommentService, NoorlockCommentService>();
             services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
+
+
 
 
             return services;
@@ -170,7 +176,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             return services;
         }
 
-
         public static ILoggingBuilder AddInDbLogger(this ILoggingBuilder builder)
         {
             builder.Services.AddSingleton<ILoggerProvider, InDbLoggerProvider>();
@@ -180,19 +185,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             return builder;
         }
 
-
         public static IServiceCollection AddMasstransitServices(this IServiceCollection services, IConfiguration configuration)
         {
 
             IRabbitmqSettings rabbitmqSettings = configuration.GetSection("RabbitmqSettings").Get<RabbitmqSettings>();
 
-
-
             services.AddScoped<NotificationConsumer>();
             services.AddMassTransit(x =>
             {
-
                 x.AddConsumer<NotificationConsumer>();
+                x.AddConsumer<UserReportSupportConsumer>();
+
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
                     config.UseHealthCheck(provider);
@@ -205,19 +208,48 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
                      });
 
                     config.ReceiveEndpoint(rabbitmqSettings.QueueNotification, oq =>
-                   {
-                       oq.Bind(rabbitmqSettings.ExchangeNotification, x =>
-                       {
-                           x.Durable = true;
-                           x.AutoDelete = false;
-                           x.ExchangeType = ExchangeType.Fanout;// "fanout"
-                                                                //x.RoutingKey = "8675309";
-                       });
-                       oq.PrefetchCount = 2;
-                       oq.UseMessageRetry(r => r.Interval(2, 100));
-                       oq.ConfigureConsumer<NotificationConsumer>(provider);
-                   });
+                    {
+                        oq.Bind(rabbitmqSettings.ExchangeNotification, x =>
+                        {
+                            x.Durable = true;
+                            x.AutoDelete = false;
+                            x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                                                                 //x.RoutingKey = "8675309";
+                        });
+                        oq.UseMessageRetry(r => r.Interval(2, 100));
+                        oq.ConfigureConsumer<NotificationConsumer>(provider);
+                    });
 
+                    config.Publish<NotificationValueDataEntered>(x =>
+                    {
+                        x.Exclude = true; // do not create an exchange for this type
+                    });
+
+                    //config.ReceiveEndpoint(rabbitmqSettings.QueueFeedback, oq =>
+                    //{
+                    //    oq.Bind(rabbitmqSettings.ExchangeFeedback, x =>
+                    //    {
+                    //        x.Durable = true;
+                    //        x.AutoDelete = false;
+                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                    //                                             //x.RoutingKey = "8675309";
+                    //    });
+                    //    oq.ConfigureConsumer<UserReportSupportConsumer>(provider);
+                    //});
+
+
+                    //config.ReceiveEndpoint($"{rabbitmqSettings.QueueFeedback}-logs", oq =>
+                    //{
+                    //    oq.Lazy = true;
+                    //    oq.Bind(rabbitmqSettings.ExchangeFeedback, x =>
+                    //    {
+                    //        x.Durable = true;
+                    //        x.AutoDelete = false;
+                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                    //    });
+                    //    //oq.Bind<UserReportSupportConsumer>();
+                    //    //oq.ConfigureConsumer<UserReportSupportConsumer>(provider);
+                    //});
                 }));
             });
 

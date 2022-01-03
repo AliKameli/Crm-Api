@@ -13,10 +13,13 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
     public interface IPendingCaseRepository
     {
+        Task AddCaseHistoryMoveCaseToAdminAsync(int fromAdminId, int toAdminId, long caseId);
+        Task<DataResponse<int>> AddCaseHistoryMoveCaseToArchive(int adminId, long caseId);
+        Task DeleteCaseAsync(long caseId);
         Task<DataResponse<PendingCaseFullDto>> GetByIdAsync(long id);
         Task<DataTableResponse<IEnumerable<PendingCaseGetFullDto>>> GetForAdminAsync(AdminPendingCaseDataTableQuery query);
-        Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardCommand command);
-        Task<DataResponse<int>> MoveCaseToArchive(MoveCaseToArchiveCommand command);
+        Task MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardCommand command);
+        Task MoveCaseToArchiveAsync(long caseId);
         Task<DataResponse<int>> UpdateCaseAsync(PendingCaseUpdateCommand command);
     }
 }
