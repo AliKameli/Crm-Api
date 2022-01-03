@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Models.Case
 {
-    public class MoveCaseToPartnerAdminCardboardModel
+    public class MoveCaseToCurrentAdminCardboardMultiModel
     {
-        public int AdminId { get; set; }
-        public int Id { get; set; }
+        public List<long> CaseIds { get; set; }
     }
 }

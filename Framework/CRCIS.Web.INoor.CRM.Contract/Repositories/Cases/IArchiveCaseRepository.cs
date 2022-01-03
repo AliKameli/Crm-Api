@@ -1,6 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris;
-using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
+using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,9 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
     public interface IArchiveCaseRepository 
     {
+        Task AddCaseHistoryMoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);
+        Task DeleteAsync(long caseId);
         Task<DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>> GetAsync(ArchiveCaseDataTableQuery query);
-        Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);
+        Task MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command);
     }
 }

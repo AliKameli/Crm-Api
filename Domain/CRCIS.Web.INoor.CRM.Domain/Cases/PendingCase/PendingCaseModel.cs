@@ -29,5 +29,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase
         public string ManualImportAdminFamily { get; set; }
         public string Subjects { get; set; }
         public string MoreData { get; set; }
+        public bool HasHashKey { get; set; }
     }
 }
