@@ -40,7 +40,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (WebHostEnvironment.IsDevelopment() == false)
+            if (WebHostEnvironment.IsProduction())
             {
                 services.AddHostedService<TimedMailReaderHostedService>();
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
@@ -53,7 +53,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddSingleton<ISmsService, SmsService>();
 
             services.AddScoped<ICrmNotifyManager, CrmNotifyProvider>();
-
 
             services.AddControllers();
 

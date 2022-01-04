@@ -25,7 +25,7 @@ crm-api-prod:
 crm-api-dev:
   stage: development
   before_script:
-    - export ASONETCORE_ENVIRONMENT=Stage
+    - export ASONETCORE_ENVIRONMENT=stage
 
   script:
     - docker-compose up -d --build

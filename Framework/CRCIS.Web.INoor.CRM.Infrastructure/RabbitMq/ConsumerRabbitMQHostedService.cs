@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
 using CRCIS.Web.INoor.CRM.Contract.Security;
+using CRCIS.Web.INoor.CRM.Contract.Settings;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,13 +25,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
 
         private readonly ISecurityService _securityService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IRabbitmqSettings _rabbitmqSettings;
         private IConnection _connection;
         private IModel _channel;
         public ConsumerRabbitMQHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider,
-            ISecurityService securityService)
+            ISecurityService securityService, IRabbitmqSettings rabbitmqSettings)
         {
 
             _securityService = securityService;
+            _rabbitmqSettings = rabbitmqSettings;
             _logger = loggerFactory.CreateLogger<ConsumerRabbitMQHostedService>();
             _serviceProvider = serviceProvider;
             InitRabbitMQ();
@@ -40,12 +43,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
         {
             var factory = new ConnectionFactory
             {
-                HostName = "webrabbit.pars.local",
-                VirtualHost = "crm",
-                UserName = "crm",
-                Password = "jxeF5#e7Fp",
+                HostName = _rabbitmqSettings.HostName,//"webrabbit.pars.local",
+                VirtualHost =_rabbitmqSettings.VirtualHost,// "crm",
+                UserName =_rabbitmqSettings.Username ,//"crm",
+                Password = _rabbitmqSettings.Password,//"jxeF5#e7Fp",
                 Port = 5672
             };
+
             // create connection  
             _connection = factory.CreateConnection();
 
@@ -54,11 +58,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             // create channel  
             _channel = _connection.CreateModel();
 
-            _channel.ExchangeDeclare("main", ExchangeType.Fanout, true, false);
-            _channel.QueueDeclare("user-report-support", true, false, false, null);
+            _channel.ExchangeDeclare(_rabbitmqSettings.ExchangeFeedback/*"main"*/, ExchangeType.Fanout, true, false);
+            _channel.QueueDeclare(_rabbitmqSettings.QueueFeedback/*"user-report-support"*/, true, false, false, null);
             _channel.QueueDeclare("logs", true, false, false, config);
-            _channel.QueueBind("user-report-support", "main", "", null);
-            _channel.QueueBind("logs", "main", "", null);
+            _channel.QueueBind(_rabbitmqSettings.QueueFeedback/*"user-report-support"*/, _rabbitmqSettings.ExchangeFeedback/*"main"*/, "", null);
+            _channel.QueueBind("logs", _rabbitmqSettings.ExchangeFeedback/*"main"*/, "", null);
             _channel.BasicQos(0, 1, false);
 
             _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
