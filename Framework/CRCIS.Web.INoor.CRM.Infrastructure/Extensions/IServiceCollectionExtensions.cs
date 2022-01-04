@@ -187,8 +187,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 
         public static IServiceCollection AddMasstransitServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IRabbitmqSettings>(sp =>
+             configuration.GetSection(nameof(RabbitmqSettings)).Get<RabbitmqSettings>());
 
-            IRabbitmqSettings rabbitmqSettings = configuration.GetSection("RabbitmqSettings").Get<RabbitmqSettings>();
+            IRabbitmqSettings rabbitmqSettings = configuration.GetSection(nameof(RabbitmqSettings)).Get<RabbitmqSettings>();
 
             services.AddScoped<NotificationConsumer>();
             services.AddMassTransit(x =>
