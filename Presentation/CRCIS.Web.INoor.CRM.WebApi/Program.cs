@@ -35,7 +35,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 })
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseSentry(options=> options.Environment = "production");
+                webBuilder.UseSentry((context,options) => options.Environment = context.HostingEnvironment.EnvironmentName);
                 webBuilder.UseStartup<Startup>();
             });
     }
