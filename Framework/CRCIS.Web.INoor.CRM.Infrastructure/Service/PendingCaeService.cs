@@ -119,6 +119,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
                     }
 
                     transaction.Complete();
+                    return new DataResponse<int>(true);
                 }
                 catch (Exception ex)
                 {
