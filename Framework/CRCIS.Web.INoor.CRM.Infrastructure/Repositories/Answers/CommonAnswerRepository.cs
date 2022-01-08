@@ -43,7 +43,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<IEnumerable<CommonAnswerGetDto>>(errors);
                 return result;
