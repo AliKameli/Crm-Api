@@ -116,6 +116,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
                         await _pendingCaseRepository.MoveCaseToAdminAsync(command);
                         await _pendingCaseRepository.AddCaseHistoryMoveCaseToAdminAsync(fromAdminId: adminId, command.AdminId, command.CaseId);
                     }
+
+                    transaction.Complete();
                 }
                 catch (Exception ex)
                 {
