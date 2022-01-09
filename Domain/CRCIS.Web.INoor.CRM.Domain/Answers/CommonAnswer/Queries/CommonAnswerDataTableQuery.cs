@@ -11,11 +11,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries
     {
         public string SearchWord { get; private set; }
         public string Order { get; private set; }
-        public CommonAnswerDataTableQuery(int pageIndex, int pageSize, string searchWord, string sortField, SortOrder? sortOrder)
+        public string Title { get;private set; }
+        public CommonAnswerDataTableQuery(int pageIndex, int pageSize, string searchWord, string sortField, SortOrder? sortOrder, string title)
             : base(pageIndex, pageSize)
         {
-            SearchWord = (searchWord is null) ? string.Empty : searchWord;
-
+            SearchWord = (searchWord is null) ? string.Empty : searchWord?.Trim();
+            Title = title?.Trim();
+            
             sortField = sortField?.Trim();
             if (!string.IsNullOrEmpty(sortField) && sortField != null)
             {
@@ -25,6 +27,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries
             {
                 Order = "Priority Asc";
             }
+            Title = title;
         }
     }
 }

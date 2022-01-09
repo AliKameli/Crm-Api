@@ -160,9 +160,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddTransient<INoorlockCommentService, NoorlockCommentService>();
             services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
 
-
-
-
             return services;
         }
 
