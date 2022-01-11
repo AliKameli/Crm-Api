@@ -146,22 +146,21 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<IArchiveCaseRepository, ArchiveCaseRepository>();
             services.AddScoped<ICaseHistoryRepository, CaseHistoryRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<ICaseSubjectRepository, CaseSubjectRepository>();
             //Users:
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
 
             //BL Databases
             services.AddScoped<ICaseNewService, CaseNewService>();
-            services.AddScoped<IPendingCaseService, PendingCaeService>();
+            services.AddScoped<IPendingCaseService, PendingCaseService>();
             services.AddScoped<IArchiveCaseService, ArchiveCaseService>();
+            services.AddScoped<ICaseSubjectService, CaseSubjectService>();
 
             //BL Admin
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<INoorlockCommentService, NoorlockCommentService>();
             services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
-
-
-
 
             return services;
         }

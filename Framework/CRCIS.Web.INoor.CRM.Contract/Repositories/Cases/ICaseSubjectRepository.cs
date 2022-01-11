@@ -16,6 +16,9 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
         Task<DataResponse<int>> CreateAsync(CaseSubjectCreateCommand command);
         Task<DataTableResponse<IEnumerable<CaseSubjectGetDto>>> GetAsync(CaseSubjectDataTableQuery query);
         Task<DataResponse<CaseSubjectModel>> GetByIdAsync(int id);
+        Task<IEnumerable<CaseSubjectFullDto>> GetCaseSubjectsByCaseIdAsync(long caseId);
         Task<DataResponse<int>> UpdateAsync(CaseSubjectUpdateCommand command);
+        Task UpdateCaseAddSubjectAsync(UpdateCaseAddSubjectCommand command);
+        Task UpdateCaseRemoveSubjectAsync(UpdateCaseRemoveSubjectCommand command);
     }
 }

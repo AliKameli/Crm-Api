@@ -37,11 +37,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
             [FromQuery] int pageIndex,
-            [FromQuery] string searchWord,
             [FromQuery] string sortField,
-            [FromQuery] SortOrder? sortOrder)
+            [FromQuery] SortOrder? sortOrder,
+            [FromQuery] string title = null)
         {
-            var query = new CommonAnswerDataTableQuery(pageIndex, pageSize, searchWord, sortField, sortOrder);
+            var query = new CommonAnswerDataTableQuery(pageIndex, pageSize, "", sortField, sortOrder,title);
             var response = await _commonAnswerRepository.GetAsync(query);
 
             return Ok(response);

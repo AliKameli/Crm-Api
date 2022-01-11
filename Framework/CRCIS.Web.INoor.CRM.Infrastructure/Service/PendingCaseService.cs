@@ -16,14 +16,14 @@ using System.Transactions;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
 {
-    public class PendingCaeService : IPendingCaseService
+    public class PendingCaseService : IPendingCaseService
     {
         private readonly IIdentity _identity;
-        private readonly ILogger<PendingCaeService> _logger;
+        private readonly ILogger<PendingCaseService> _logger;
         private readonly IPendingCaseRepository _pendingCaseRepository;
-        public PendingCaeService(IPendingCaseRepository pendingCaseRepository, ILoggerFactory loggerFactory, IIdentity identity)
+        public PendingCaseService(IPendingCaseRepository pendingCaseRepository, ILoggerFactory loggerFactory, IIdentity identity)
         {
-            _logger = loggerFactory.CreateLogger<PendingCaeService>();
+            _logger = loggerFactory.CreateLogger<PendingCaseService>();
             _pendingCaseRepository = pendingCaseRepository;
             _identity = identity;
         }
