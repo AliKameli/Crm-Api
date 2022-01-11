@@ -10,6 +10,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos
     {
         public long Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
         public DateTime CreateDateTime { get; set; }
         public string ProductTitle { get; set; }
         public long RowNumber { get; set; }
