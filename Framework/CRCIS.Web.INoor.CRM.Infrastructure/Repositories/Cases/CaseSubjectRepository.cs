@@ -122,5 +122,39 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
+
+
+        public async Task<IEnumerable<CaseSubjectFullDto>> GetCaseSubjectsByCaseIdAsync(long caseId)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByCaseId");
+            var command = new { CaseId = caseId };
+            var caseSubjects =
+                   await dbConnection
+                  .QueryAsync<CaseSubjectFullDto>(sql, command, commandType: CommandType.StoredProcedure);
+            return caseSubjects;
+
+        }
+        public async Task UpdateCaseAddSubjectAsync(UpdateCaseAddSubjectCommand command)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "AddSubject");
+
+            var execute =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+        }
+        public async Task UpdateCaseRemoveSubjectAsync(UpdateCaseRemoveSubjectCommand command)
+        {
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "RemoveSubject");
+
+            var execute =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+        }
     }
 }

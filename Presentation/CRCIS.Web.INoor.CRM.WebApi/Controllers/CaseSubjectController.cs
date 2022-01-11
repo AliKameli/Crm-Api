@@ -33,17 +33,17 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int pageSize,
-          [FromQuery] int pageIndex,
-          [FromQuery] string sortField,
-          [FromQuery] SortOrder? sortOrder)
-        {
-            var query = new CaseSubjectDataTableQuery(pageIndex, pageSize);
-            var response = await _caseSubjectRepository.GetAsync(query);
+        //[HttpGet]
+        //public async Task<IActionResult> Get([FromQuery] int pageSize,
+        //  [FromQuery] int pageIndex,
+        //  [FromQuery] string sortField,
+        //  [FromQuery] SortOrder? sortOrder)
+        //{
+        //    var query = new CaseSubjectDataTableQuery(pageIndex, pageSize);
+        //    var response = await _caseSubjectRepository.GetAsync(query);
 
-            return Ok(response);
-        }
+        //    return Ok(response);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Post(CaseSubjectCreateModel model)

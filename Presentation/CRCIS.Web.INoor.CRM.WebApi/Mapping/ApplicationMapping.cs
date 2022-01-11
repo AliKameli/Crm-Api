@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Answers.AnswerMethod.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseStatus.Commands;
+using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.OperationType.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
@@ -24,6 +25,7 @@ using CRCIS.Web.INoor.CRM.WebApi.Models.Product;
 using CRCIS.Web.INoor.CRM.WebApi.Models.ProductType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.SourceType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Subject;
+using CRCIS.Web.INoor.CRM.WebApi.Models.UpdateCaseSubject;
 using System;
 using System.Linq;
 
@@ -56,6 +58,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
                 .ConvertUsing(src => mapSubjectCreateModelToSubjectCreateCommand(src));
             CreateMap<SubjectUpdateModel, SubjectUpdateCommand>()
                 .ConvertUsing(src => mapSubjectUpdateModelToSubjectUpateCommand(src));
+            #endregion
+
+            #region CaseSubject
+            CreateMap<UpdateCaseAddSubjectModel, UpdateCaseAddSubjectCommand>();
+            CreateMap<UpdateCaseRemoveSubjectModel, UpdateCaseRemoveSubjectCommand>();
             #endregion
 
             #region ProductType
