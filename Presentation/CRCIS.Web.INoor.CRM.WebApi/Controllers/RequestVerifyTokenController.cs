@@ -25,12 +25,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(RequestVerifyTokenModel model)
         {
-            _logger.LogCritical($"RequestVerifyTokenModel start : {DateTime.Now} PersonId : {model?.PersonId}");
-            _logger.LogCritical($"RequestVerifyTokenModel model : {DateTime.Now} model : {System.Text.Json.JsonSerializer.Serialize(model)}");
+            _logger.LogInformation($"RequestVerifyTokenModel start : {DateTime.Now} PersonId : {model?.PersonId}");
+            _logger.LogInformation($"RequestVerifyTokenModel model : {DateTime.Now} model : {System.Text.Json.JsonSerializer.Serialize(model)}");
 
             var dataResponse = await _adminService.GetVerifyTokenForNoorAdmin(model.Username, model.Name, model.Family, model.PersonId, model.Action, model.QueryString);
 
-            _logger.LogCritical($"RequestVerifyTokenModel responsed : {DateTime.Now} PersonId : {model?.PersonId}");
+            _logger.LogInformation($"RequestVerifyTokenModel responsed : {DateTime.Now} PersonId : {model?.PersonId}");
             return Ok(dataResponse);
         }
     }

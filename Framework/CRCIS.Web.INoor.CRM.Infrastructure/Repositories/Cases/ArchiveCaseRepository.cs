@@ -16,16 +16,22 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 {
     public class ArchiveCaseRepository : BaseRepository, IArchiveCaseRepository
     {
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         protected override string TableName => "ArchiveCase";
-        public ArchiveCaseRepository(ISqlConnectionFactory sqlConnectionFactory, IMapper mapper) : base(sqlConnectionFactory)
+        public ArchiveCaseRepository(ISqlConnectionFactory sqlConnectionFactory, 
+            ILoggerFactory loggerFactory,
+            IMapper mapper) : base(sqlConnectionFactory)
         {
             _mapper = mapper;
+            _logger = loggerFactory.CreateLogger<ArchiveCaseRepository>();
         }
 
         public async Task<DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>> GetAsync(ArchiveCaseDataTableQuery query)
@@ -50,7 +56,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
+
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<ArchiveCaseGetFullDto>>(errors);
                 return result;
