@@ -40,11 +40,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (WebHostEnvironment.IsProduction())
+            if (WebHostEnvironment.IsDevelopment() == false)
             {
                 services.AddHostedService<ConsumerRabbitMQHostedService>();
-            }
                 services.AddHostedService<TimedMailReaderHostedService>();
+            }
             services.AddSingleton<IRabbitmqSettings>(sp =>
              Configuration.GetSection(nameof(RabbitmqSettings)).Get<RabbitmqSettings>());
 
