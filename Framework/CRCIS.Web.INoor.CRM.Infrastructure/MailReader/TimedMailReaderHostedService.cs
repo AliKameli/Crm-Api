@@ -6,6 +6,7 @@ using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using MailKit.Net.Pop3;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -26,8 +27,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
         private int executionCount = 0;
         private Timer _timer;
         private readonly ILogger _logger;
-        private readonly IHostEnvironment _hostEnvironment;
-        public TimedMailReaderHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IHostEnvironment hostEnvironment)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public TimedMailReaderHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IWebHostEnvironment hostEnvironment)
         {
             _logger = loggerFactory.CreateLogger<TimedMailReaderHostedService>();
             _serviceProvider = serviceProvider;
@@ -179,13 +180,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     foreach (var attachment in message.Attachments)
                     {
                         var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
-                        fileName = $"{Guid.NewGuid()}.{Path.GetExtension(fileName)}";
+                        fileName = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}";
                         emailMessage.AttachemntFiles.Add(fileName);
-
                         
+                        Directory.CreateDirectory(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails"));
 
-
-                        using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath, fileName) ))
+                        using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath,"wwwroot","mails", fileName) ))
                         {
                             if (attachment is MessagePart)
                             {
