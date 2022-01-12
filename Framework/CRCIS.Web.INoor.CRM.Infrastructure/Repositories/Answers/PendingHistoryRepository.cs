@@ -4,6 +4,7 @@ using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingHistory.Commands;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -64,7 +65,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<long>(errors);
@@ -87,7 +88,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
