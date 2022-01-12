@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,10 +26,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
         private int executionCount = 0;
         private Timer _timer;
         private readonly ILogger _logger;
-        public TimedMailReaderHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        private readonly IHostEnvironment _hostEnvironment;
+        public TimedMailReaderHostedService(ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IHostEnvironment hostEnvironment)
         {
             _logger = loggerFactory.CreateLogger<TimedMailReaderHostedService>();
             _serviceProvider = serviceProvider;
+            _hostEnvironment = hostEnvironment;
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -104,7 +107,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                2,
                sourceConfig.ProductId,
                mail.CreateDate,
-               configJsonDto.MailAddress
+               configJsonDto.MailAddress,
+               mail.AttachemntFiles
                  ));
 
             try
@@ -166,11 +170,41 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     FromEmail = address,
                     CreateDate = messageDateTime,
                     ToMailBox = mailAddress,
-                };
-                //emailMessage.ToAddresses.AddRange(message.To.Select(x => (MailboxAddress)x).Select(x => new EmailAddressDto { Address = x.Address, Name = x.Name }));
-                //emailMessage.FromAddresses.AddRange(message.From.Select(x => (MailboxAddress)x).Select(x => new EmailAddressDto { Address = x.Address, Name = x.Name }));
-                //emails.Add(emailMessage);
 
+                };
+
+                if (message.Attachments is not null && message.Attachments.Any())
+                {
+                    emailMessage.AttachemntFiles = new List<string>();
+                    foreach (var attachment in message.Attachments)
+                    {
+                        var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
+                        fileName = $"{Guid.NewGuid()}.{Path.GetExtension(fileName)}";
+                        emailMessage.AttachemntFiles.Add(fileName);
+
+                        
+
+
+                        using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath, fileName) ))
+                        {
+                            if (attachment is MessagePart)
+                            {
+                                var rfc822 = (MessagePart)attachment;
+
+                                rfc822.Message.WriteTo(stream);
+                            }
+                            else
+                            {
+                                var part = (MimePart)attachment;
+
+                                part.Content.DecodeTo(stream);
+                            }
+                        }
+                    }
+                    //emailMessage.ToAddresses.AddRange(message.To.Select(x => (MailboxAddress)x).Select(x => new EmailAddressDto { Address = x.Address, Name = x.Name }));
+                    //emailMessage.FromAddresses.AddRange(message.From.Select(x => (MailboxAddress)x).Select(x => new EmailAddressDto { Address = x.Address, Name = x.Name }));
+                    //emails.Add(emailMessage);
+                }
                 result.Add(emailMessage);
             }
 
@@ -179,5 +213,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
         }
 
     }
+
 }
 

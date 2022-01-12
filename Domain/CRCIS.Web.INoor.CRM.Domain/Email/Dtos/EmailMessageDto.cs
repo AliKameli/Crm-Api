@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Email.Dtos
 		public string Content { get; set; }
         public DateTime CreateDate { get; set; }
         public string ToMailBox { get; set; }
+
+        public List<string> AttachemntFiles { get; set; }
     }
 
 	//public class EmailAddressDto
