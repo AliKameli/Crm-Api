@@ -176,16 +176,23 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
 
                 if (message.Attachments is not null && message.Attachments.Any())
                 {
-                    emailMessage.AttachemntFiles = new List<string>();
+
+                    emailMessage.AttachemntFiles = new List<EmailAttachmentDto>();
                     foreach (var attachment in message.Attachments)
                     {
                         var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
-                        fileName = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}";
-                        emailMessage.AttachemntFiles.Add(fileName);
-                        
+                        var dto = new EmailAttachmentDto
+                        {
+                            Name = fileName,
+                            Address = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}"
+                        };
+
+                        emailMessage.AttachemntFiles.Add(dto);
+                        fileName = dto.Address;
+
                         Directory.CreateDirectory(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails"));
 
-                        using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath,"wwwroot","mails", fileName) ))
+                        using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails", fileName)))
                         {
                             if (attachment is MessagePart)
                             {

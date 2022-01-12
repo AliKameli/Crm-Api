@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
+using CRCIS.Web.INoor.CRM.Domain.Email.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,11 @@ namespace CRCIS.Web.INoor.CRM.Domain.Email.Commands
 
         public string MoreData { get; private set; }
         public MailboxImportCommand(string title, string nameFamily, string email, string description,
-            int sourceTypeId, int? productId, DateTime createDateTime, string toMailBox, List<string> attachments)
+            int sourceTypeId, int? productId, DateTime createDateTime, string toMailBox, List<EmailAttachmentDto> attachments)
         {
             if (attachments is null )
             {
-                attachments = new List<string>();
+                attachments = new List<EmailAttachmentDto>();
             }
 
             Title = title;
