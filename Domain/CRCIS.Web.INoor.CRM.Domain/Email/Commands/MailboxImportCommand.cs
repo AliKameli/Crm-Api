@@ -24,8 +24,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Email.Commands
 
         public string MoreData { get; private set; }
         public MailboxImportCommand(string title, string nameFamily, string email, string description,
-            int sourceTypeId, int? productId, DateTime createDateTime, string toMailBox)
+            int sourceTypeId, int? productId, DateTime createDateTime, string toMailBox, List<string> attachments)
         {
+            if (attachments is null )
+            {
+                attachments = new List<string>();
+            }
+
             Title = title;
             NameFamily = nameFamily;
             Email = email;
@@ -35,7 +40,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Email.Commands
             ImportDateTime = DateTime.Now;
             CreateDateTime = createDateTime;
 
-            var moreDataObject = new ImportCaseMoreDataObject(toMailBox);
+            var moreDataObject = new ImportCaseMoreDataObject(toMailBox ,attachments);
             MoreData = System.Text.Json.JsonSerializer.Serialize(moreDataObject);
         }
 

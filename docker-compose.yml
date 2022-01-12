@@ -10,4 +10,7 @@ services:
       #- '8012:5001'
     environment:
        ASPNETCORE_ENVIRONMENT: ${ASONETCORE_ENVIRONMENT}
-                    
+    volumes:
+      - crmapi: /app/Presentation/wwwroot
+volumes:
+  crmapi:
