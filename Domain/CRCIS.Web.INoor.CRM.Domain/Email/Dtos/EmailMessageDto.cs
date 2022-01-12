@@ -23,12 +23,12 @@ namespace CRCIS.Web.INoor.CRM.Domain.Email.Dtos
         public DateTime CreateDate { get; set; }
         public string ToMailBox { get; set; }
 
-        public List<string> AttachemntFiles { get; set; }
+        public List<EmailAttachmentDto> AttachemntFiles { get; set; }
     }
 
-	//public class EmailAddressDto
-	//{
-	//	public string Name { get; set; }
-	//	public string Address { get; set; }
-	//}
+    public class EmailAttachmentDto
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+    }
 }

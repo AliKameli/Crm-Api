@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRCIS.Web.INoor.CRM.Domain.Email.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -82,7 +83,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
         public string Os { get; private set; }
         public string DeviceScreenSize { get; private set; }
 
-        public List <string> MailsAttachments { get; set; }
+        public List <EmailAttachmentDto> MailsAttachments { get; set; }
         //noorlock data
         public string NoorLockSk { get; private set; }
         public long? NoorLockSnId { get; private set; }
@@ -111,7 +112,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands
             NoorLockActivationCode = noorLockActivationCode;
             NoorLockTypeOfComment = noorLockTypeOfComment;
         }
-        public ImportCaseMoreDataObject(string toMailBox ,List<string> attachments)
+        public ImportCaseMoreDataObject(string toMailBox ,List<EmailAttachmentDto> attachments)
         {
             ToMailBox = toMailBox;
             MailsAttachments = attachments;
