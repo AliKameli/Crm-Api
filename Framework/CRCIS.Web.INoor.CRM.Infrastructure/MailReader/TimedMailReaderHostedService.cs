@@ -148,19 +148,26 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             _logger.LogInformation($"{mailAddress} >total count: {mailClient.Count} > now value: {now}");
 
             var ids = mailClient.GetMessageUids();
+
             _logger.LogInformation($"{mailAddress} > start {DateTime.Now}");
-            _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
+            var seleced = ids.Select(a => new { UId = a, Date = a.GetMailDate() })
+                .Where(a => a.Date >= lastUpdateDate);
+
+            _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(seleced));
+
+            var selecedIds = seleced.Select(a => a.UId).ToList();
 
             var index = mailClient.Count == 0 ? 0 : mailClient.Count - 1;
-            for (int i = index; i >= 0/* && i < maxCount*/; i++)
+            for (int i = 0; i < mailClient.Count/* && i < maxCount*/; i++)
             {
 
                 var uid = mailClient.GetMessageUid(i);
-                var messageDateTime = uid.GetMailDate();
-                if (messageDateTime < lastUpdateDate)
+                if (selecedIds.Contains(uid) == false)
                 {
-                    break;
+                    continue;
                 }
+
+                var messageDateTime = uid.GetMailDate();
                 var message = mailClient.GetMessage(i);
                 dynamic from = message.From.FirstOrDefault();
 
@@ -234,7 +241,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             result = result.OrderBy(a => a.CreateDate).ToList();
             return result;
         }
-
     }
 
 }
