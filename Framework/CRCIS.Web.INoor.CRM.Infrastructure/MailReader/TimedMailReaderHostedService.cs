@@ -95,7 +95,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogCritical("Exception {ex}", ex.Message);
+                        _logger.LogException(ex);
                     }
                 }
             }
