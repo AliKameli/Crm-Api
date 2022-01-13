@@ -4,6 +4,7 @@ using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Email.Commands;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -23,10 +24,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
         private readonly ILogger<RabbitImportCaseRepository> _logger;
         public RabbitImportCaseRepository(
             ISqlConnectionFactory sqlConnectionFactory,
-            ILogger<RabbitImportCaseRepository> logger)
+            ILoggerFactory  loggerFactory)
             : base(sqlConnectionFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<RabbitImportCaseRepository>();
         }
 
 
@@ -122,8 +123,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 transaction.Commit();
                 return new DataResponse<int>(true);
             }
-            catch (Exception e)
-            {   //_logger.LogError(ex.Message);
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
