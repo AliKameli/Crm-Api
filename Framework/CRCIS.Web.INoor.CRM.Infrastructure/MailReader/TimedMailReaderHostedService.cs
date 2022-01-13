@@ -143,7 +143,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             mailClient.AuthenticationMechanisms.Remove("XAUTH2");
             mailClient.Authenticate(mailAddress, mailPassword);
 
+            _logger.LogInformation($"{mailAddress} >total count: {mailClient.Count} > now value: {now}");
+
             var ids = mailClient.GetMessageUids();
+            _logger.LogInformation($"{mailAddress} > start {DateTime.Now}");
+            _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
             for (int i = 0; i < mailClient.Count/* && i < maxCount*/; i++)
             {
                 var uid = mailClient.GetMessageUid(i);
@@ -214,6 +218,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                 }
                 result.Add(emailMessage);
             }
+            _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
+
+
 
             return result;
 
