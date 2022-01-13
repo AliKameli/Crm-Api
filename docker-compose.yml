@@ -11,6 +11,6 @@ services:
     environment:
        ASPNETCORE_ENVIRONMENT: ${ASONETCORE_ENVIRONMENT}
     volumes:
-      - crmapi:/app/wwwroot
+      - crmapi:/app/Presentation/CRCIS.Web.INoor.CRM.WebApi/wwwroot
 volumes:
   crmapi:
