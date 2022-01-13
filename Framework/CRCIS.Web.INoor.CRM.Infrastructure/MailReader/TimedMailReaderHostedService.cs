@@ -69,7 +69,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     _logger.LogCritical("GetBySourceTypeId faild reading mails");
                     return;
                 }
-                foreach (var item in dataResponse.Data)
+                var resoures = dataResponse.Data.ToList();
+                foreach (var item in resoures)
                 {
                     var mails = new List<EmailMessageDto>();
                     try
@@ -79,6 +80,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                             _logger.LogCritical("(string.IsNullOrEmpty(item.ConfigJson)  {item.ConfigJson} ", item.ConfigJson);
                             continue;
                         }
+                        _logger.LogInformation(item.ConfigJson);
                         var configJsonDto = System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(item.ConfigJson);
                         if (configJsonDto == null)
                         {
@@ -148,13 +150,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             var ids = mailClient.GetMessageUids();
             _logger.LogInformation($"{mailAddress} > start {DateTime.Now}");
             _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
-            for (int i = 0; i < mailClient.Count/* && i < maxCount*/; i++)
+
+            var index = mailClient.Count == 0 ? 0 : mailClient.Count - 1;
+            for (int i = index; i >= 0/* && i < maxCount*/; i++)
             {
+
                 var uid = mailClient.GetMessageUid(i);
                 var messageDateTime = uid.GetMailDate();
                 if (messageDateTime < lastUpdateDate)
                 {
-                    continue;
+                    break;
                 }
                 var message = mailClient.GetMessage(i);
                 dynamic from = message.From.FirstOrDefault();
@@ -220,8 +225,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             }
             _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
 
-
-
+            result = result.OrderBy(a => a.CreateDate).ToList();
             return result;
 
         }
