@@ -80,13 +80,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                             _logger.LogCritical("(string.IsNullOrEmpty(item.ConfigJson)  {item.ConfigJson} ", item.ConfigJson);
                             continue;
                         }
-                        _logger.LogInformation(item.ConfigJson);
                         var configJsonDto = System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(item.ConfigJson);
                         if (configJsonDto == null)
                         {
                             _logger.LogCritical("(configJsonDto == null  {configJsonDto} ", configJsonDto);
                             continue;
                         }
+                        _logger.LogInformation(configJsonDto.MailAddress);
                         var mailProcessDateTimeNow = DateTime.Now;
                         mails =
                             readMails(mailProcessDateTimeNow, configJsonDto.MailBox, configJsonDto.MailAddress, configJsonDto.MailPassword, item.LastUpdateTime)
