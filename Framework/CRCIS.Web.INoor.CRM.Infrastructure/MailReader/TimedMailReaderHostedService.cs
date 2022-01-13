@@ -183,51 +183,56 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
 
                 };
 
-                if (message.Attachments is not null && message.Attachments.Any())
+                try
                 {
-
-                    emailMessage.AttachemntFiles = new List<EmailAttachmentDto>();
-                    foreach (var attachment in message.Attachments)
+                    if (message.Attachments is not null && message.Attachments.Any())
                     {
-                        var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
-                        var dto = new EmailAttachmentDto
+
+                        emailMessage.AttachemntFiles = new List<EmailAttachmentDto>();
+                        foreach (var attachment in message.Attachments)
                         {
-                            Name = fileName,
-                            Address = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}"
-                        };
-
-                        emailMessage.AttachemntFiles.Add(dto);
-                        fileName = dto.Address;
-
-                        Directory.CreateDirectory(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails"));
-
-                        using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails", fileName)))
-                        {
-                            if (attachment is MessagePart)
+                            var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
+                            var dto = new EmailAttachmentDto
                             {
-                                var rfc822 = (MessagePart)attachment;
+                                Name = fileName,
+                                Address = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}"
+                            };
 
-                                rfc822.Message.WriteTo(stream);
-                            }
-                            else
+                            emailMessage.AttachemntFiles.Add(dto);
+                            fileName = dto.Address;
+
+                            Directory.CreateDirectory(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails"));
+
+                            using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails", fileName)))
                             {
-                                var part = (MimePart)attachment;
+                                if (attachment is MessagePart)
+                                {
+                                    var rfc822 = (MessagePart)attachment;
 
-                                part.Content.DecodeTo(stream);
+                                    rfc822.Message.WriteTo(stream);
+                                }
+                                else
+                                {
+                                    var part = (MimePart)attachment;
+
+                                    part.Content.DecodeTo(stream);
+                                }
                             }
                         }
+
                     }
-                    //emailMessage.ToAddresses.AddRange(message.To.Select(x => (MailboxAddress)x).Select(x => new EmailAddressDto { Address = x.Address, Name = x.Name }));
-                    //emailMessage.FromAddresses.AddRange(message.From.Select(x => (MailboxAddress)x).Select(x => new EmailAddressDto { Address = x.Address, Name = x.Name }));
-                    //emails.Add(emailMessage);
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogException(ex);
+                }
+
                 result.Add(emailMessage);
             }
             _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
 
             result = result.OrderBy(a => a.CreateDate).ToList();
             return result;
-
         }
 
     }
