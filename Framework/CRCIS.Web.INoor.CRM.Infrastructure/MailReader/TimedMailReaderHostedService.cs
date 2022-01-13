@@ -236,6 +236,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                 result.Add(emailMessage);
             }
             _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
+            _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(result));
 
             result = result.OrderBy(a => a.CreateDate).ToList();
             return result;
