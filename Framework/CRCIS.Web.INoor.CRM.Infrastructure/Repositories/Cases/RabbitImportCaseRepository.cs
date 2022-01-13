@@ -23,7 +23,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
         private readonly ILogger<RabbitImportCaseRepository> _logger;
         public RabbitImportCaseRepository(
             ISqlConnectionFactory sqlConnectionFactory,
-            ILogger<RabbitImportCaseRepository> logger) 
+            ILogger<RabbitImportCaseRepository> logger)
             : base(sqlConnectionFactory)
         {
             _logger = logger;
@@ -74,7 +74,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
         }
 
-        public async Task<DataResponse<int>> CreateFromMailboxImportAsync(IEnumerable<MailboxImportCommand> mailboxImportCommands,int sourceConfigId, DateTime processDateTimeNow)
+        public async Task<DataResponse<int>> CreateFromMailboxImportAsync(IEnumerable<MailboxImportCommand> mailboxImportCommands, int sourceConfigId, DateTime processDateTimeNow)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                     var caseHistoryId =
                                       await dbConnection
                                      .QueryFirstOrDefaultAsync<long>(sqlCaseHistory, commandCaseHistory, commandType: CommandType.StoredProcedure, transaction: transaction);
-                   
+
 
                     _logger.LogCritical("mail Import datetime :{now} id :casehistoryId {casehistoryId}", DateTime.Now, caseHistoryId);
                 }
@@ -116,8 +116,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                     LastUpdate = processDateTimeNow
                 };
                 var sqlSourceConfigUpdateLastUpdateTime = _sqlConnectionFactory.SpInstanceFree("CRM", "SourceConfig", "UpdateLastUpdateTime");
-           var a=     await dbConnection
-                                .QueryFirstOrDefaultAsync<long>(sqlSourceConfigUpdateLastUpdateTime, sqlSourceConfigUpdateLastTimeCommand, commandType: CommandType.StoredProcedure, transaction: transaction);
+                var a = await dbConnection
+                                     .QueryFirstOrDefaultAsync<long>(sqlSourceConfigUpdateLastUpdateTime, sqlSourceConfigUpdateLastTimeCommand, commandType: CommandType.StoredProcedure, transaction: transaction);
 
                 transaction.Commit();
                 return new DataResponse<int>(true);
