@@ -158,7 +158,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             var selecedIds = seleced.Select(a => a.UId).ToList();
 
             var index = mailClient.Count == 0 ? 0 : mailClient.Count - 1;
-            for (int i = 0; i < mailClient.Count/* && i < maxCount*/; i++)
+            for (int i = index; i >= 0/* && i < maxCount*/; i--)
             {
 
                 var uid = mailClient.GetMessageUid(i);
