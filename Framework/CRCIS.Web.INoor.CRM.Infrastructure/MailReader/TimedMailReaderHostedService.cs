@@ -187,7 +187,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     FromEmail = address,
                     CreateDate = messageDateTime,
                     ToMailBox = mailAddress,
-
                 };
 
                 try
