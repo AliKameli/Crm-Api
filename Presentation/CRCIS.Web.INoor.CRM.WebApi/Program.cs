@@ -30,7 +30,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 {
                     //logging.ClearProviders();
                     logging.AddConsole();
-                    //logging.AddInDbLogger();
+                    logging.AddInDbLogger();
                     logging.AddSentry(dsn: config.GetSection("Sentry").Get<SentrySettings>().Dsn);
                 })
             .ConfigureWebHostDefaults(webBuilder =>
