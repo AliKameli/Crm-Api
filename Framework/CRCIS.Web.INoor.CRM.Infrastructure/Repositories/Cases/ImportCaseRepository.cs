@@ -20,6 +20,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CRCIS.Web.INoor.CRM.Utility.Enums;
 using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
+using Microsoft.Extensions.Logging;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 {
@@ -27,9 +29,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
     {
         private readonly IIdentity _identity;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         protected override string TableName => "ImportCase";
-        public ImportCaseRepository(ISqlConnectionFactory sqlConnectionFactory, IIdentity identity, IMapper mapper) : base(sqlConnectionFactory)
+        public ImportCaseRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory,
+            IIdentity identity, IMapper mapper) : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<ImportCaseRepository>();
             _identity = identity;
             _mapper = mapper;
         }
@@ -55,7 +60,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<ImportCaseGetFullDto>>(errors);
                 return result;
@@ -116,8 +121,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;
@@ -199,7 +203,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);

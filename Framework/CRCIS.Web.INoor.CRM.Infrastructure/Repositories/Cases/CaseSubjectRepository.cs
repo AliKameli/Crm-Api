@@ -4,8 +4,10 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Queries;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,8 +20,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
     public class CaseSubjectRepository : BaseRepository, ICaseSubjectRepository
     {
         protected override string TableName => "CaseSubject";
-        public CaseSubjectRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        private readonly ILogger _logger;
+        public CaseSubjectRepository(ISqlConnectionFactory sqlConnectionFactory,ILoggerFactory loggerFactory) : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<CaseSubjectRepository>();
         }
         public async Task<DataTableResponse<IEnumerable<CaseSubjectGetDto>>> GetAsync(CaseSubjectDataTableQuery query)
         {
@@ -40,7 +44,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<CaseSubjectGetDto>>(errors);
                 return result;
@@ -69,8 +73,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<CaseSubjectModel>(errors);
                 return result;
@@ -92,8 +95,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;
@@ -115,8 +117,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;

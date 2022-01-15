@@ -5,8 +5,10 @@ using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries;
 using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,10 +21,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
     public class CaseHistoryRepository : BaseRepository, ICaseHistoryRepository
     {
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
         protected override string TableName => throw new NotImplementedException();
-        public CaseHistoryRepository(ISqlConnectionFactory sqlConnectionFactory, IMapper mapper) : base(sqlConnectionFactory)
+        public CaseHistoryRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory,IMapper mapper) : base(sqlConnectionFactory)
         {
             _mapper = mapper;
+            _logger = loggerFactory.CreateLogger<CaseHistoryRepository>();
         }
         public async Task<DataResponse<CaseHistoriesFullDto>> GetReportForCaseAsync(long id)
         {
@@ -48,8 +52,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در دریافت تاریخچه از بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<CaseHistoriesFullDto>(errors);
                 return result;

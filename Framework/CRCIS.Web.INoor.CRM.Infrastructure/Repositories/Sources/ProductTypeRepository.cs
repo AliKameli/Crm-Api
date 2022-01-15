@@ -6,8 +6,10 @@ using CRCIS.Web.INoor.CRM.Domain.Sources.ProductType.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.ProductType.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Sources.ProductType.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Dtos;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,9 +22,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
     public class ProductTypeRepository : BaseRepository, IProductTypeRepository
     {
         protected override string TableName => "ProductType";
+        private readonly ILogger _logger;
 
-        public ProductTypeRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        public ProductTypeRepository(ILoggerFactory loggerFactory, ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<ProductTypeRepository>();
         }
         public async Task<DataResponse<IEnumerable<ProductTypeGetDto>>> GetAsync(ProductTypeDataTableQuery query)
         {
@@ -43,7 +47,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<ProductTypeGetDto>>(errors);
                 return result;
@@ -72,8 +76,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<ProductTypeModel>(errors);
                 return result;
@@ -99,7 +102,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<IEnumerable<DropDownListDto>>(errors);
                 return result;
@@ -121,8 +124,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;
@@ -144,8 +146,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;
@@ -167,8 +168,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;

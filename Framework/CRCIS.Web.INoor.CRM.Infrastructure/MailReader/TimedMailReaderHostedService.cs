@@ -37,7 +37,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-              TimeSpan.FromMinutes(2));
+              TimeSpan.FromMinutes(5));
 
             return Task.CompletedTask;
         }
