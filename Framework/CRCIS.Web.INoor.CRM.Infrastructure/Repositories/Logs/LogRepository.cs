@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Data.Database;
 using CRCIS.Web.INoor.CRM.Domain.Logs.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,12 +17,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs
     public class LogRepository : BaseRepository, ILogRepository
     {
         protected override string TableName => "Log";
-        public LogRepository(ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        public LogRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory) : base(sqlConnectionFactory)
         {
 
         }
 
-        public DataResponse<int> Create(LogCreateCommand command) {
+        public DataResponse<int> Create(LogCreateCommand command)
+        {
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
@@ -34,7 +36,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs
 
                 return new DataResponse<int>(true);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 //_logger.LogError(ex.Message);
 
@@ -43,8 +45,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs
                 return result;
             }
         }
-        
-        public async Task<DataResponse<int>> CreateAsync(LogCreateCommand command) {
+
+        public async Task<DataResponse<int>> CreateAsync(LogCreateCommand command)
+        {
             try
             {
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
@@ -57,16 +60,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs
 
                 return new DataResponse<int>(true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //_logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
                 return result;
             }
         }
 
-        public async Task<DataResponse<int>>CreateRangeAsync(IList<LogCreateCommand> commands, CancellationToken cancellationToken)
+        public async Task<DataResponse<int>> CreateRangeAsync(IList<LogCreateCommand> commands, CancellationToken cancellationToken)
         {
             try
             {
@@ -82,9 +84,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Logs
 
                 return new DataResponse<int>(true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //_logger.LogError(ex.Message);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);

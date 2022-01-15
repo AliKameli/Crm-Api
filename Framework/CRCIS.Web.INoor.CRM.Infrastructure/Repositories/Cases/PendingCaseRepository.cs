@@ -12,8 +12,10 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case;
 using CRCIS.Web.INoor.CRM.Utility.Enums;
 using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Dapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,9 +29,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
     {
         private readonly IMapper _mapper;
         private readonly IIdentity _identity;
+        private readonly ILogger _logger;
         protected override string TableName => "PendingCase";
-        public PendingCaseRepository(ISqlConnectionFactory sqlConnectionFactory, IMapper mapper, IIdentity identity) : base(sqlConnectionFactory)
+        public PendingCaseRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory,
+            IMapper mapper, IIdentity identity) : base(sqlConnectionFactory)
         {
+            _logger = loggerFactory.CreateLogger<PendingCaseRepository>();
             _mapper = mapper;
             _identity = identity;
         }
@@ -54,6 +59,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<PendingCaseGetFullDto>>(errors);
                 return result;
@@ -107,8 +113,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
-
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<PendingCaseFullDto>(errors);
                 return result;
@@ -177,7 +182,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
@@ -251,7 +256,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.Message);
+                _logger.LogException(ex);
 
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<int>(errors);
