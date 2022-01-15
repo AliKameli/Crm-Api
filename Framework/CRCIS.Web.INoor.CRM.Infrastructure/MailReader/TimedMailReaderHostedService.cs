@@ -153,19 +153,24 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             var seleced = ids.Select(a => new { UId = a, Date = a.GetMailDate() })
                 .Where(a => a.Date >= lastUpdateDate);
 
-            _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(seleced));
+            _logger.LogInformation($"{mailAddress} > seleced {System.Text.Json.JsonSerializer.Serialize(seleced)}");
 
             var selecedIds = seleced.Select(a => a.UId).ToList();
 
             var index = mailClient.Count == 0 ? 0 : mailClient.Count - 1;
             for (int i = index; i >= 0/* && i < maxCount*/; i--)
             {
+                if (selecedIds.Any() == false)
+                {
+                    break;
+                }
 
                 var uid = mailClient.GetMessageUid(i);
                 if (selecedIds.Contains(uid) == false)
                 {
                     continue;
                 }
+                selecedIds.Remove(uid);
 
                 var messageDateTime = uid.GetMailDate();
                 var message = mailClient.GetMessage(i);
