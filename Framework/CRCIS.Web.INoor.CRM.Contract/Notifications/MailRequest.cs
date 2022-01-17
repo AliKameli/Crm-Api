@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace CRCIS.Web.INoor.CRM.Contract.Notifications
         public string ToEmail { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
-        public List<IFormFile> Attachments { get; set; }
+        public List<AnsweringAttachmentItemDto> Attachments { get; set; }
     }
+
+
 }

@@ -23,6 +23,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Extensions
             services.AddSingleton(sp => mapperConfig.CreateMapper());
 
             return services;
-        }
+        }   
     }
 }

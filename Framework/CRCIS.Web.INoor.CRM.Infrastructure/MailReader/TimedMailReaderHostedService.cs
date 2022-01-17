@@ -211,8 +211,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
 
                             emailMessage.AttachemntFiles.Add(dto);
                             fileName = dto.Address;
-
-                            Directory.CreateDirectory(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails"));
+                            if (!Directory.Exists(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails")))
+                            {
+                                Directory.CreateDirectory(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails"));
+                            }
 
                             using (var stream = File.Create(Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "mails", fileName)))
                             {
@@ -241,7 +243,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                 result.Add(emailMessage);
             }
             _logger.LogInformation($"{mailAddress} > end {DateTime.Now}");
-            _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(result));
+            _logger.LogInformation($"mails {System.Text.Json.JsonSerializer.Serialize(result)}");
 
             result = result.OrderBy(a => a.CreateDate).ToList();
             return result;

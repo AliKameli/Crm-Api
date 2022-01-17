@@ -1,6 +1,9 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Notifications;
+using CRCIS.Web.INoor.CRM.Utility.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -11,9 +14,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
     public class MailService : IMailService
     {
         private readonly ILogger _logger;
-        public MailService(ILoggerFactory loggerFactory)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public MailService(ILoggerFactory loggerFactory, IWebHostEnvironment hostEnvironment)
         {
             _logger = loggerFactory.CreateLogger<MailService>();
+            _hostEnvironment = hostEnvironment;
         }
         public async Task<bool> SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
         {
@@ -28,8 +33,21 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                        SubjectEncoding = new UTF8Encoding(),
                        Body = mailRequest.Body,
                        BodyEncoding = new UTF8Encoding(),
-                       IsBodyHtml = true
+                       IsBodyHtml = true,
                    };
+                if (mailRequest.Attachments is not null)
+                {
+                    foreach (var item in mailRequest.Attachments)
+                    {
+                        var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "uploads", item.Address);
+                        using FileStream fsSource = new FileStream(filePath,FileMode.Open,FileAccess.Read);
+                        byte[] bytes = new byte[fsSource.Length];
+
+                        var attachment = new Attachment(fsSource, item.Name);
+
+                        oMail.Attachments.Add(attachment);
+                    }
+                }
 
                 using var smtpClient = new SmtpClient
                 {
@@ -41,21 +59,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
 
                 smtpClient.Send(oMail);
-                result = true; 
+                result = true;
                 oMail.Dispose();
             }
             catch (Exception ex)
             {
                 result = false;
-                var s = ex.Message;
-                _logger.LogError(ex.Message);
-                _logger.LogError(ex.StackTrace);
-                _logger.LogError(ex.InnerException?.Message);
-                _logger.LogError(ex.InnerException?.StackTrace);
-                // ignoared
-
+                _logger.LogException(ex);
             }
-          
+
             return result;
 
         }

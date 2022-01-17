@@ -39,7 +39,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                 var sqlCaseHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "CaseHistory", "Create");
                 var commandCaseHistory = new CaseHistoryCreateCommand(
                     dto.AdminId, dto.CaseId, DateTime.Now,
-                    4//پاسخ دهی ادمین
+                    4 //پاسخ دهی ادمین
                     );
                 var caseHistoryId =
                      await dbConnection
@@ -48,7 +48,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                 var commandPendingHistory = new PendingHistoryCreateCommand(caseHistoryId,
                     dto.AnswerMethodId,
                     dto.AnswerText,
-                    dto.AnswerSource);
+                    dto.AnswerSource,
+                    dto.Attachments == null ? null : System.Text.Json.JsonSerializer.Serialize(dto.Attachments));
 
                 var sqlPendingHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "PendingHistory", "Create");
                 var pendingHistoryId = await dbConnection
