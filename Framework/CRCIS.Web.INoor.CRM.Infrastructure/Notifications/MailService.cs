@@ -35,16 +35,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                        BodyEncoding = new UTF8Encoding(),
                        IsBodyHtml = true,
                    };
+
                 if (mailRequest.Attachments is not null)
                 {
                     foreach (var item in mailRequest.Attachments)
                     {
                         var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "uploads", item.Address);
                         FileStream fsSource = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                        byte[] bytes = new byte[fsSource.Length];
-
                         var attachment = new Attachment(fsSource, item.Name);
-
                         oMail.Attachments.Add(attachment);
                     }
                 }
@@ -57,21 +55,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                     Port = mailSettings.Port,// 25
                 };
 
-
                 smtpClient.Send(oMail);
                 result = true;
                 if (mailRequest.Attachments is not null)
                     for (int i = 0; i < mailRequest.Attachments.Count; i++)
                     {
-                        try
-                        {
-                            oMail.Attachments[i].Dispose();
-                        }
-                        catch (Exception)
-                        {
-                        }
+                        try { oMail.Attachments[i].Dispose(); }
+                        catch (Exception) { }
                     }
-
 
                 oMail.Dispose();
             }
@@ -80,9 +71,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 result = false;
                 _logger.LogException(ex);
             }
-
             return result;
-
         }
     }
 }
