@@ -1,4 +1,5 @@
-﻿using CRCIS.Web.INoor.CRM.Utility.Enums;
+﻿using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,16 @@ namespace CRCIS.Web.INoor.CRM.Domain.Notify.Commands
         public string AnswerSource { get;private set; }
         public string AnswerText { get;private set; }
         public long PendingHistoryId { get;private set; }
+        public List<AnsweringAttachmentItemDto> AttachmentItems{ get;private set; }
 
-        public SendNotifiyCommand(int answerMethodId, long caseId, string answerSource, string answerText, long pendingHistoryId)
+        public SendNotifiyCommand(int answerMethodId, long caseId, string answerSource, string answerText, long pendingHistoryId, List<AnsweringAttachmentItemDto> attachmentItems)
         {
             AnswerMethodId = answerMethodId;
             CaseId = caseId;
-            AnswerSource= answerSource;
+            AnswerSource = answerSource;
             AnswerText = answerText;
             PendingHistoryId = pendingHistoryId;
+            AttachmentItems = attachmentItems;
         }
-
     }
 }

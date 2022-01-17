@@ -18,6 +18,7 @@ using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Commands;
 using MassTransit;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications;
+using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 {
@@ -57,7 +58,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             if (command.AnswerMethodId == 2)
             {
                 responseSend = await this.SendEmailAsync(
-                    command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId);
+                    command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId,command.AttachmentItems);
             }
 
             if (responseSend == null)
@@ -69,7 +70,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
         }
 
 
-        private async Task<DataResponse<string>> SendEmailAsync(long caseId, string fromMailBox, string message, long pendingHistoryId)
+        private async Task<DataResponse<string>> SendEmailAsync(long caseId, string fromMailBox, string message,
+            long pendingHistoryId, List<AnsweringAttachmentItemDto> answeringAttachments)
         {
             var responsePendingCase = await _pendingCaseRepository.GetByIdAsync(caseId);
             if (responsePendingCase.Success == false || responsePendingCase.Data == null)
@@ -109,7 +111,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             {
                 ToEmail = responsePendingCase?.Data?.Email,
                 Subject = "پاسخگویی مرکز نور",
-                Body = message
+                Body = message,
+                Attachments = answeringAttachments
             };
             var mailSetting = new MailSettings()
             {

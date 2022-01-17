@@ -13,6 +13,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands
         public DateTime OperationDateTime { get; private set; }
         public int OperationTypeId { get; private set; }
 
+
         public CaseHistoryCreateCommand(int? adminId, long caseId,
             DateTime operationDateTime, int operationTypeId)
         {
@@ -21,5 +22,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Commands
             OperationDateTime = operationDateTime;
             OperationTypeId = operationTypeId;
         }
+
     }
 }

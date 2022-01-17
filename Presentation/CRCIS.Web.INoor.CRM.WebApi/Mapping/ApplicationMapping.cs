@@ -27,6 +27,7 @@ using CRCIS.Web.INoor.CRM.WebApi.Models.SourceType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Subject;
 using CRCIS.Web.INoor.CRM.WebApi.Models.UpdateCaseSubject;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
@@ -103,9 +104,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #endregion
 
             #region Answering
-            CreateMap<AnsweringCreateModel, AnsweringCreateDto>();
+            CreateMap<AnsweringCreateModel, AnsweringCreateDto>()
+                .ConvertUsing(src => mapAnsweringCreateModelToAnsweringCreateDto(src));
             #endregion
-
         }
 
         private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseCreateModel model)
@@ -171,6 +172,18 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
                 model.IsActive,
                 model.Priority,
                 model.Code
+                );
+        }
+
+        private AnsweringCreateDto mapAnsweringCreateModelToAnsweringCreateDto(AnsweringCreateModel model)
+        {
+            return new AnsweringCreateDto(
+                model.AnswerText,
+                model.AnswerSource,
+                model.AnswerMethodId,
+                model.CaseId,
+                model.AdminId,
+                null
                 );
         }
     }
