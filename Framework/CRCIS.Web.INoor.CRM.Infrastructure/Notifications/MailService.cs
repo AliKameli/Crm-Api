@@ -40,7 +40,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                     foreach (var item in mailRequest.Attachments)
                     {
                         var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot", "uploads", item.Address);
-                        using FileStream fsSource = new FileStream(filePath,FileMode.Open,FileAccess.Read);
+                        FileStream fsSource = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                         byte[] bytes = new byte[fsSource.Length];
 
                         var attachment = new Attachment(fsSource, item.Name);
@@ -49,7 +49,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                     }
                 }
 
-                using var smtpClient = new SmtpClient
+                var smtpClient = new SmtpClient
                 {
                     Host = mailSettings.Host,
                     Credentials = new NetworkCredential(mailSettings.Mail, mailSettings.Password),
@@ -60,6 +60,19 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 
                 smtpClient.Send(oMail);
                 result = true;
+                if (mailRequest.Attachments is not null)
+                    for (int i = 0; i < mailRequest.Attachments.Count; i++)
+                    {
+                        try
+                        {
+                            oMail.Attachments[i].Dispose();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+
                 oMail.Dispose();
             }
             catch (Exception ex)
