@@ -20,6 +20,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos
         public long RowNumber { get; set; }
         public string SourceTypeTitle { get; set; }
         public string FirstSubject { get; set; }
+        public bool IsRead { get; set; }
         public long TotalCount { get; set; }
     }
 }
