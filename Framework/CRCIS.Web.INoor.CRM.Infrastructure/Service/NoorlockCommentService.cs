@@ -22,21 +22,24 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             _reportRepository = reportRepository;
         }
 
-        public  Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppReportPaging(
-            int pageSize,int pageIndex,
+        public Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppReportPaging(
+            int pageSize, int pageIndex,
            Guid inoorId,
            string productSecret = null)
-        {;
+        {
+            
             var query = new NoorLockReportPagingQuery(inoorId, productSecret, pageIndex, pageSize);
 
             return _reportRepository.GetNoorAppPagingReport(query);
         }
 
-        public  Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppGetByCaseId(long caseId, Guid noorUserId, string productSecret)
+
+        public Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppGetByCaseId(long caseId, Guid noorUserId, string productSecret)
         {
-            var query = new NoorAppReportCaseIdQuery(caseId,noorUserId,productSecret);
+            var query = new NoorAppReportCaseIdQuery(caseId, noorUserId, productSecret);
             return _reportRepository.GetNoorAppReportByCaseId(query);
         }
+
         public Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorlockPaging(int pageSize,
            int pageIndex,
            bool? typeOfComment = null,
