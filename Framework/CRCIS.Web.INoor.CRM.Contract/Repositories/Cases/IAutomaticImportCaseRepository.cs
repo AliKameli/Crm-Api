@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
-    public interface IRabbitImportCaseRepository
+    public interface IAutomaticImportCaseRepository
     {
         Task<DataResponse<int>> CreateFromMailboxImportAsync(IEnumerable<MailboxImportCommand> mailboxImportCommands, int sourceConfigId, DateTime processDateTimeNow);
         Task<DataResponse<int>> CreateFromRabbiImportAsync(RabbitImportCaseCreateCommand command);

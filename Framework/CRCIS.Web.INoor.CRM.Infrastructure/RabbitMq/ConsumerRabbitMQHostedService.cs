@@ -5,6 +5,8 @@ using CRCIS.Web.INoor.CRM.Contract.Security;
 using CRCIS.Web.INoor.CRM.Contract.Settings;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Dtos;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
+using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -44,8 +46,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             var factory = new ConnectionFactory
             {
                 HostName = _rabbitmqSettings.HostName,//"webrabbit.pars.local",
-                VirtualHost =_rabbitmqSettings.VirtualHost,// "crm",
-                UserName =_rabbitmqSettings.Username ,//"crm",
+                VirtualHost = _rabbitmqSettings.VirtualHost,// "crm",
+                UserName = _rabbitmqSettings.Username,//"crm",
                 Password = _rabbitmqSettings.Password,//"jxeF5#e7Fp",
                 Port = 5672
             };
@@ -75,6 +77,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (ch, ea) =>
             {
+
                 // received message  
                 var content = System.Text.Encoding.UTF8.GetString(ea.Body.ToArray());
 
@@ -130,6 +133,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                     var productId = productResponse.Data.Id;
                     var mobile = string.IsNullOrEmpty(dto?.MessageInfo?.Mobile) ? "" : dto?.MessageInfo?.Mobile;
 
+                    var _sourceTypeId = SourceType.SupportFormFromRabbit.ToInt32();//1
+                    if (dto.Client.ClientSecret.Equals("908d129c-6cc3-4c05-925c-5c8005b1d634"))//پیامک های نورلاک
+                    {
+                        _sourceTypeId = SourceType.Sms.ToInt32();//5
+                    }
+
                     var appKeyHash = dto?.AppKey == null ?
                         null :
                         _securityService.GetSha256HashHex(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
@@ -138,7 +147,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                         dto.MessageInfo?.NameFamily,
                         dto.MessageInfo?.Email,
                         dto.MessageInfo?.Description,
-                        1,
+                        sourceTypeId: _sourceTypeId,
                         noorUserId,
                         productId,
                         null,
@@ -166,7 +175,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
 
                     using (IServiceScope scope2 = _serviceProvider.CreateScope())
                     {
-                        IRabbitImportCaseRepository _importCaseRepository = scope2.ServiceProvider.GetRequiredService<IRabbitImportCaseRepository>();
+                        IAutomaticImportCaseRepository _importCaseRepository = scope2.ServiceProvider.GetRequiredService<IAutomaticImportCaseRepository>();
                         var insertResponse = _importCaseRepository.CreateFromRabbiImportAsync(command).Result;
 
                         if (insertResponse.Success == false)

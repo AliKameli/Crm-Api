@@ -141,7 +141,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<ICaseStatusRepository, CaseStatusRepository>();
             services.AddScoped<IOperationTypeRepository, OperationTypeRepository>();
             services.AddScoped<IImportCaseRepository, ImportCaseRepository>();
-            services.AddScoped<IRabbitImportCaseRepository, RabbitImportCaseRepository>();
+            services.AddScoped<IAutomaticImportCaseRepository, AutomaticImportCaseRepository>();
             services.AddScoped<IPendingCaseRepository, PendingCaseRepository>();
             services.AddScoped<IArchiveCaseRepository, ArchiveCaseRepository>();
             services.AddScoped<ICaseHistoryRepository, CaseHistoryRepository>();

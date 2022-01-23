@@ -118,7 +118,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             {
                 using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
-                    IRabbitImportCaseRepository _importCaseRepository = scope.ServiceProvider.GetRequiredService<IRabbitImportCaseRepository>();
+                    IAutomaticImportCaseRepository _importCaseRepository = scope.ServiceProvider.GetRequiredService<IAutomaticImportCaseRepository>();
                     var insertResponse = _importCaseRepository
                         .CreateFromMailboxImportAsync(
                         mailboxImportCommands,
