@@ -17,17 +17,17 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 {
-    public class RabbitImportCaseRepository : BaseRepository, IRabbitImportCaseRepository
+    public class AutomaticImportCaseRepository : BaseRepository, IAutomaticImportCaseRepository
     {
         protected override string TableName => "ImportCase";
 
-        private readonly ILogger<RabbitImportCaseRepository> _logger;
-        public RabbitImportCaseRepository(
+        private readonly ILogger<AutomaticImportCaseRepository> _logger;
+        public AutomaticImportCaseRepository(
             ISqlConnectionFactory sqlConnectionFactory,
             ILoggerFactory  loggerFactory)
             : base(sqlConnectionFactory)
         {
-            _logger = loggerFactory.CreateLogger<RabbitImportCaseRepository>();
+            _logger = loggerFactory.CreateLogger<AutomaticImportCaseRepository>();
         }
 
 
