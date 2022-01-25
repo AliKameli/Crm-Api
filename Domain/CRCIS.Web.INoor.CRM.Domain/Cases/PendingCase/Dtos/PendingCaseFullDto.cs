@@ -24,8 +24,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos
         public string CreateTimePersian { get; set; }
         public int SourceTypeId { get; set; }
         public int CaseStatusId { get; set; }
-        public int ProductId { get; set; }
         public int AdminId { get; set; }
+        public int ProductId { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeTitle { get; set; }
         public string ProductTitle { get; set; }
         public string SourceTypeTitle { get; set; }
         public string CaseStatusTitle { get; set; }
