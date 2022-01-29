@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.RabbitImport.Commands;
 using CRCIS.Web.INoor.CRM.Utility.Enums;
+using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,30 +13,40 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case
 {
     public static class PendingCaseSuggestionsSpecification
     {
-       
+
         public static PendingCaseFullDto PairSuggestionsForAnswer(this PendingCaseFullDto dto)
         {
-            if (string.IsNullOrEmpty(dto.MoreData))
-                return dto;
-
-            try
+            if (dto.SourceTypeId == SourceType.SupportFormFromRabbit.ToInt32() )
             {
-                var moreDataObject = System.Text.Json.JsonSerializer.Deserialize<ImportCaseMoreDataObject>(dto.MoreData);
-                if (moreDataObject == null)
+                if (string.IsNullOrEmpty(dto.MoreData))
                     return dto;
 
-                if (string.IsNullOrEmpty(moreDataObject.ToMailBox))
+                try
+                {
+                    var moreDataObject = System.Text.Json.JsonSerializer.Deserialize<ImportCaseMoreDataObject>(dto.MoreData);
+                    if (moreDataObject == null)
+                        return dto;
+
+                    if (!string.IsNullOrEmpty(moreDataObject.ToMailBox))
+                    {
+                        dto.SuggestionAnswerMethod = AnswerMethod.Email;
+                        dto.SuggestionAnswerSource = moreDataObject.ToMailBox;
+                    }
                     return dto;
-
-                dto.SuggestionAnswerMethod = AnswerMethod.Email;
-                dto.SuggestionAnswerSource = moreDataObject.ToMailBox;
-                return dto;
+                }
+                catch (Exception)
+                {
+                    return dto;
+                }
             }
-            catch (Exception)
+
+            if (dto.SourceTypeId == SourceType.Sms.ToInt32())
             {
-                return dto;
+                dto.SuggestionAnswerMethod = AnswerMethod.Sms;
+                dto.SuggestionAnswerSource = "پایانه پیامک آی نور";
             }
 
+            return dto;
         }
     }
 }
