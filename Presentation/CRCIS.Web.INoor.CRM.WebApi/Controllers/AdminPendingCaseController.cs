@@ -42,13 +42,14 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             [FromQuery] string sourceTypeIds = null,
             [FromQuery] string productIds = null,
             [FromQuery] string title = null,
+            [FromQuery] string global = null,
             [FromQuery] string range = null)
         {
             var adminId = _identity.GetAdminId();
             var query = new AdminPendingCaseDataTableQuery(pageIndex, pageSize,
                 sortField, sortOrder,
                 adminId,
-                sourceTypeIds, productIds, title, range);
+                sourceTypeIds, productIds, title, global, range);
             var response = await _pendingCaseRepository.GetForAdminAsync(query);
 
             return Ok(response);

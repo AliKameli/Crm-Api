@@ -15,11 +15,12 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Queries
         public string ProductIds { get; private set; }
         //public string FirstSubject { get;private set; }
         public string Title { get; private set; }
+        public string Global { get; private set; }
         public DateTime? FromDate { get; private set; }
         public DateTime? ToDate { get; private set; }
         public ImportCaseDataTableQuery(int pageIndex, int pageSize,
             string sortField, SortOrder? sortOrder,
-            string sourceTypeTitle, string productTitle, string title,
+            string sourceTypeTitle, string productTitle, string title, string global,
             string range)
             : base(pageIndex, pageSize)
         {
@@ -32,6 +33,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Queries
             SourceTypeIds = sourceTypeTitle?.Trim();
             ProductIds = productTitle?.Trim();
             Title = title?.Trim();
+            Global = global?.Trim();
 
             if (!string.IsNullOrEmpty(range))
             {

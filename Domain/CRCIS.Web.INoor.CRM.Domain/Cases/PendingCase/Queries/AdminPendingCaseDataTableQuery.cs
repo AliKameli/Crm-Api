@@ -16,12 +16,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries
         public string SourceTypeIds { get; private set; }
         public string ProductIds { get; private set; }
         public string Title { get; private set; }
+        public string  Global { get; set; }
         public DateTime? FromDate { get; private set; }
         public DateTime? ToDate { get; private set; }
 
         public AdminPendingCaseDataTableQuery(int pageIndex, int pageSize,
             string sortField, SortOrder? sortOrder,
-            int adminId, string sourceTypeTitle, string productTitle, string title,
+            int adminId, string sourceTypeTitle, string productTitle, string title, string global,
             string range)
             : base(pageIndex, pageSize)
         {
@@ -35,6 +36,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries
             SourceTypeIds = sourceTypeTitle?.Trim();
             ProductIds = productTitle?.Trim();
             Title = title?.Trim();
+            Global = global?.Trim();
 
             if (!string.IsNullOrEmpty(range))
             {
