@@ -27,9 +27,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [FromQuery] string sourceTypeIds = null,
         [FromQuery] string productIds = null,
         [FromQuery] string title = null,
+        [FromQuery] string global = null,
         [FromQuery] string range = null)
         {
-            var query = new ArchiveCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeIds, productIds, title,range);
+            var query = new ArchiveCaseDataTableQuery(pageIndex, pageSize, sortField, sortOrder, sourceTypeIds, productIds, title,global,range);
             var response = await _archiveCaseRepository.GetAsync(query);
 
             return Ok(response);
