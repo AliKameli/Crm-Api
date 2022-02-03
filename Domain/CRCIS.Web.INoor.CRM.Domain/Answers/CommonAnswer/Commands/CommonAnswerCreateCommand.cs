@@ -12,7 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands
         public string AnswerText { get; private set; }
         public int Priority { get; private set; }
 
-        public CommonAnswerCreateCommand(string title,string answerText, int priority)
+        public CommonAnswerCreateCommand(string title, string answerText, int priority)
         {
             Title = title;
             AnswerText = answerText;

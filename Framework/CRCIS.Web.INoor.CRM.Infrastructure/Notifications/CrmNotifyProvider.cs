@@ -158,8 +158,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 return new DataResponse<string>(new List<string> { "تنظیمات مرکز پیامک یافت نشد" });
             }
 
-            var mailSettings = dataResponseMails.Data
-                .Where(d => d.Id.ToString() == fromSmsCenterId)//برای پیامک ایدی رو میگیریم
+            var mailSettings = dataResponseMails.Data//برای پیامک اولین(تنها موجود) رو میگیریم
                 .Select(m => funcSourceConfigJson(m.ConfigJson)).ToList();
             var smsSettingSelected = mailSettings.FirstOrDefault();
             if (smsSettingSelected == null)

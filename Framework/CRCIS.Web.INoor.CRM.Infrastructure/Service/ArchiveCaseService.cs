@@ -17,13 +17,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
     {
         private readonly IArchiveCaseRepository _archiveCaseRepository;
         private readonly ILogger _logger;
-        public ArchiveCaseService(IArchiveCaseRepository archiveCaseRepository,ILoggerFactory loggerFactory)
+        public ArchiveCaseService(IArchiveCaseRepository archiveCaseRepository, ILoggerFactory loggerFactory)
         {
             _archiveCaseRepository = archiveCaseRepository;
             _logger = loggerFactory.CreateLogger<ArchiveCaseService>();
         }
 
-     public async Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command)
+        public async Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToCurrentAdminCardboardCommand command)
         {
 
             var resposne = new DataResponse<int>(false);
@@ -80,8 +80,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             }
         }
 
-
-     
 
     }
 }

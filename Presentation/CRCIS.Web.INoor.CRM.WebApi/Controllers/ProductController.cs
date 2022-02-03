@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
+using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
@@ -18,9 +19,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly IProductService _productService;
         private readonly IMapper _mapper;
-        public ProductController(IProductRepository productRepository, IMapper mapper)
+        public ProductController(IProductRepository productRepository, IProductService productService, IMapper mapper)
         {
+            _productService = productService;
             _productRepository = productRepository;
             _mapper = mapper;
         }
@@ -38,9 +41,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             [FromQuery] int pageIndex,
             [FromQuery] string sortField,
             [FromQuery] SortOrder? sortOrder,
-            [FromQuery] string title = null, [FromQuery] string code = null,[FromQuery] string productTypeId = null)
+            [FromQuery] string title = null, [FromQuery] string code = null, [FromQuery] string productTypeId = null)
         {
-            var query = new ProductDataTableQuery(pageIndex, pageSize, sortField, sortOrder, title, code,productTypeId);
+            var query = new ProductDataTableQuery(pageIndex, pageSize, sortField, sortOrder, title, code, productTypeId);
             var response = await _productRepository.GetAsync(query);
 
             return Ok(response);
@@ -50,7 +53,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Post(ProductCreateModel model)
         {
             var command = _mapper.Map<ProductCreateCommand>(model);
-            var response = await _productRepository.CreateAsync(command);
+            var response = await _productService.CreateAsync(command);
             return Ok(response);
         }
 
@@ -58,7 +61,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         public async Task<IActionResult> Put(ProductUpdateModel model)
         {
             var command = _mapper.Map<ProductUpdateCommand>(model);
-            var response = await _productRepository.UpdateAsync(command);
+            var response = await _productService.UpdateAsync(command);
             return Ok(response);
         }
         [HttpDelete("{id}")]

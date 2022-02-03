@@ -109,6 +109,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #endregion
         }
 
+
+        private CommonAnswerCreateCommand mapCommonAnswerCreateModelToCommonAnswerCreateCommand(CommonAnswerCreateModel model)
+        {
+            return new CommonAnswerCreateCommand(model.Title, model.AnswerText, model.Priority);
+        }
+        
+
         private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseCreateModel model)
         {
             Guid noorUserId;

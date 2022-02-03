@@ -8,8 +8,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Sources.Product.Commands
 {
     public class ProductCreateCommand
     {
-        public string Title { get;private set; }
-        public int ProductTypeId { get;private set; }
+        public string Title { get; private set; }
+        public int ProductTypeId { get; private set; }
         public int? Code { get; private set; }
 
         public ProductCreateCommand(string title, int productTypeId, int? code)
