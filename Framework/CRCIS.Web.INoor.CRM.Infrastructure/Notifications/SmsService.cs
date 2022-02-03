@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
 {
@@ -22,14 +23,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             //var result = new ServiceResponse<bool>();
             try
             {
-                var url =
-                "http://www.tsms.ir/url/tsmshttp.php?" +
+                var baseUrl = "http://www.tsms.ir/url/tsmshttp.php?";
+                var queryString =
                    $"from={message.SmsCenterPanelNumber}" +
                    $"&username={message.SmsCenterUserName}" +
                    $"&password={message.SmsCenterPassword}" +
                    $"&to={message.ToMobile}" +
                    $"&message={message.Body}";
 
+                var url = baseUrl + HttpUtility.UrlEncode(queryString);
                 //var ocRequest = System.Net.WebRequest.Create(url);
                 //ocRequest.Timeout = 30000;
                 //var res = ocRequest.GetResponse();
