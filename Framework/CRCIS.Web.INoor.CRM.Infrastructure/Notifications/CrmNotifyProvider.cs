@@ -58,7 +58,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             if (command.AnswerMethodId == 2)
             {
                 responseSend = await this.SendEmailAsync(
-                    command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId,command.AttachmentItems);
+                    command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId, command.AttachmentItems);
             }
 
             if (responseSend == null)
@@ -164,6 +164,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             if (smsSettingSelected == null)
                 return new DataResponse<string>(new List<string> { "تنظیمات مرکز پیامک یافت نشد" });
 
+
+            fromSmsCenterId = $"{ dataResponseMails.Data.FirstOrDefault()?.Id}";
             if (smsSettingSelected.AllowSend == false)
                 return new DataResponse<string>(new List<string> { " مرکز پیامک دسترسی ارسال ندارد" });
 
@@ -204,19 +206,5 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                string.IsNullOrEmpty(strConfigjson) == true ? null :
                System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(strConfigjson);
 
-        private void chooseWayDecorator(AnswerMethod answerMethod)
-        {
-            switch (answerMethod)
-            {
-                case AnswerMethod.Email:
-
-                    break;
-
-                case AnswerMethod.Sms:
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 }
