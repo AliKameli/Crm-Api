@@ -30,7 +30,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                    $"&to={message.ToMobile}" +
                    $"&message={message.Body}";
 
-
                 //var ocRequest = System.Net.WebRequest.Create(url);
                 //ocRequest.Timeout = 30000;
                 //var res = ocRequest.GetResponse();
@@ -53,7 +52,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                     _logger.LogWarning(resposne.Content.ToString());
                     return false;
                 }
-                var str =await resposne.Content.ReadAsStringAsync();
+                var str = await resposne.Content.ReadAsStringAsync();
 
                 return true;
             }
@@ -61,11 +60,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             {
                 _logger.LogError(ex.Message);
                 _logger.LogError(ex.StackTrace);
-                _logger.LogError(ex?.InnerException.Message);
-                _logger.LogError(ex?.InnerException.StackTrace);
+                _logger.LogError(ex?.InnerException?.Message);
+                _logger.LogError(ex?.InnerException?.StackTrace);
                 return false;
             }
-          
+
         }
     }
 }

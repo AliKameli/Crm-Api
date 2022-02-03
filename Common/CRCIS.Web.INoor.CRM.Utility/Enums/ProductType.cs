@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Utility.Enums
 {
-    public enum AnswerMethod
+    public enum ProductType
     {
-        Sms = 1,
-        Email = 2,
-        AnsweringToDesktop = 5
+        Descktop = 1
     }
 }

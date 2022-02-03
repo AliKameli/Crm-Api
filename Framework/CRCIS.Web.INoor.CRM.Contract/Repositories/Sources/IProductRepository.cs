@@ -21,5 +21,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Sources
         Task<DataResponse<ProductModel>> GetBySecretKeyAsync(string secretKey);
         Task<DataResponse<IEnumerable<ProductDropDownListDto>>> GetDropDownListAsync();
         Task<DataResponse<int>> UpdateAsync(ProductUpdateCommand command);
+        Task<DataResponse<int>> UpdateSecretAsync(ProductUpdateSecretCommand command);
     }
 }

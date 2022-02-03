@@ -22,7 +22,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
     {
         protected override string TableName => "Product";
         private readonly ILogger _logger;
-        public ProductRepository(ILoggerFactory loggerFactory,  ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
+        public ProductRepository(ILoggerFactory loggerFactory, ISqlConnectionFactory sqlConnectionFactory) : base(sqlConnectionFactory)
         {
             _logger = loggerFactory.CreateLogger<ProductRepository>();
         }
@@ -124,7 +124,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                 list = list.Select(p => new ProductDropDownListDto
                 {
                     Id = p.Id,
-                    Title = $"{ p.Title }  {p.Code}".Trim(),
+                    Title = $"{ p.Title } {p.Code}".Trim(),
                     Code = p.Code,
                     ProductTypeId = p.ProductTypeId
                 });
@@ -142,30 +142,21 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
         }
         public async Task<DataResponse<int>> CreateAsync(ProductCreateCommand command)
         {
-            try
-            {
-                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Create");
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var execute =
-                     await dbConnection
-                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Create");
 
-                return new DataResponse<int>(true);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogException(ex);
-                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<int>(errors);
-                return result;
-            }
+            var id =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+            return new DataResponse<int>(id);
+
         }
         public async Task<DataResponse<int>> UpdateAsync(ProductUpdateCommand command)
         {
-            try
-            {
+           
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Update");
@@ -175,6 +166,22 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                     .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
 
                 return new DataResponse<int>(true);
+          
+        }
+
+        public async Task<DataResponse<int>> UpdateSecretAsync(ProductUpdateSecretCommand command)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "UpdateSecret");
+
+                var execute =
+                     await dbConnection
+                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+                return new DataResponse<int>(true);
             }
             catch (Exception ex)
             {
@@ -184,6 +191,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                 return result;
             }
         }
+
         public async Task<DataResponse<int>> DeleteAsync(int id)
         {
             try

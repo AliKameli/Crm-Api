@@ -139,9 +139,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq
                         _sourceTypeId = SourceType.Sms.ToInt32();//5
                     }
 
-                    var appKeyHash = dto?.AppKey == null ?
-                        null :
-                        _securityService.GetSha256HashHex(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
+                    string appKeyHash = null;
+
+                    if (dto?.AppKey != null)
+                    {
+                        //dto.AppKey.NoorLockActivationCode == dto.AppKey?.NoorLockActivationCode ==  dto.AppKey?.NoorLockActivationCode?.Trim();
+                        //dto.AppKey.NoorLockActivationCode == dto.AppKey?.NoorLockActivationCode?.Trim();
+                        appKeyHash = dto?.AppKey == null ?
+                           null :
+                           _securityService.GetSha256HashHex(System.Text.Json.JsonSerializer.Serialize(dto.AppKey));
+                    }
 
                     var command = new RabbitImportCaseCreateCommand(dto.MessageInfo.Title,
                         dto.MessageInfo?.NameFamily,
