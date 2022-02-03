@@ -45,7 +45,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case
                 dto.SuggestionAnswerMethod = AnswerMethod.Sms;
                 //dto.SuggestionAnswerSource = "پایانه پیامک آی نور";
             }
-            if (dto.SourceTypeId == SourceType.SupportFormFromRabbit.ToInt32() && dto.ProductTypeId == ProductType.Descktop.ToInt32())
+            if (dto.ProductTypeId == ProductType.Descktop.ToInt32())
             {
                 dto.SuggestionAnswerMethod = AnswerMethod.AnsweringToDesktop;
             }
