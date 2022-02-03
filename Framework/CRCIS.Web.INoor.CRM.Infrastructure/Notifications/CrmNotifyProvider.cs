@@ -165,7 +165,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 return new DataResponse<string>(new List<string> { "تنظیمات مرکز پیامک یافت نشد" });
 
 
-            fromSmsCenterId = $"{ dataResponseMails.Data.FirstOrDefault()?.Id}";
+            var sourceConfigId = (dataResponseMails.Data.FirstOrDefault()?.Id).Value;
             if (smsSettingSelected.AllowSend == false)
                 return new DataResponse<string>(new List<string> { " مرکز پیامک دسترسی ارسال ندارد" });
 
@@ -187,7 +187,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             //}
 
             await this.SendNotifyToQuequeAsync(caseId,
-                Convert.ToInt32(fromSmsCenterId),
+                sourceConfigId,
                 pendingHistoryId, AnswerMethod.Sms, null, null, smsRequest);
             return new DataResponse<string>(true, null, "در صف ارسال قرار گرفت");
         }
