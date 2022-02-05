@@ -1,4 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Notifications;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,9 +16,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
     public class SmsService : ISmsService
     {
         private readonly ILogger _logger;
-        public SmsService(ILoggerFactory loggerFactory)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public SmsService(ILoggerFactory loggerFactory, IWebHostEnvironment webHostEnvironment)
         {
             _logger = loggerFactory.CreateLogger<SmsService>();
+            _webHostEnvironment = webHostEnvironment;
         }
         public async Task<bool> SendSmsAsync(SmsRequest message)
         {
@@ -31,30 +35,43 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                    $"&to={message.ToMobile}" +
                    $"&message={message.Body}";
 
-                var url = baseUrl + HttpUtility.UrlEncode(queryString);
-                //var ocRequest = System.Net.WebRequest.Create(url);
-                //ocRequest.Timeout = 30000;
-                //var res = ocRequest.GetResponse();
+                var url = baseUrl + queryString;
 
-                var handler = new HttpClientHandler
+                string str = null;
+                if (_webHostEnvironment.IsDevelopment())
                 {
-                    Proxy = new WebProxy()
+                    using var httpClient = new HttpClient();
+
+                    var resposne = await httpClient.GetAsync(url);
+                    if (resposne.StatusCode != HttpStatusCode.OK)
                     {
-                        Address = new Uri("http://172.16.20.207:3128"),
-                        BypassProxyOnLocal = true,
-                        UseDefaultCredentials = false,
+                        _logger.LogWarning(resposne.Content.ToString());
+                        return false;
                     }
-                };
-
-                using var httpClient = new HttpClient(handler);
-
-                var resposne = await httpClient.GetAsync(url);
-                if (resposne.StatusCode != HttpStatusCode.OK)
-                {
-                    _logger.LogWarning(resposne.Content.ToString());
-                    return false;
+                    str = await resposne.Content.ReadAsStringAsync();
                 }
-                var str = await resposne.Content.ReadAsStringAsync();
+                else
+                {
+                    using var handler = new HttpClientHandler
+                    {
+                        Proxy = new WebProxy()
+                        {
+                            Address = new Uri("http://172.16.20.207:3128"),
+                            BypassProxyOnLocal = true,
+                            UseDefaultCredentials = false,
+                        }
+                    };
+                    using var httpClient = new HttpClient(handler);
+
+                    var resposne = await httpClient.GetAsync(url);
+                    if (resposne.StatusCode != HttpStatusCode.OK)
+                    {
+                        _logger.LogWarning(resposne.Content.ToString());
+                        return false;
+                    }
+                    str = await resposne.Content.ReadAsStringAsync();
+                }
+
 
                 return true;
             }
