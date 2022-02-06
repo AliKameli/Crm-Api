@@ -16,7 +16,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case
 
         public static PendingCaseFullDto PairSuggestionsForAnswer(this PendingCaseFullDto dto)
         {
-            if (dto.SourceTypeId == SourceType.SupportFormFromRabbit.ToInt32() )
+            if (dto.SourceTypeId == SourceType.Email.ToInt32() )
             {
                 if (string.IsNullOrEmpty(dto.MoreData))
                     return dto;
@@ -32,11 +32,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case
                         dto.SuggestionAnswerMethod = AnswerMethod.Email;
                         dto.SuggestionAnswerSource = moreDataObject.ToMailBox;
                     }
-                    return dto;
                 }
                 catch (Exception)
                 {
-                    return dto;
                 }
             }
 
