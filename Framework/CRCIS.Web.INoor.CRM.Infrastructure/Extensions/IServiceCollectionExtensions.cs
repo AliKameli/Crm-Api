@@ -156,6 +156,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<IPendingCaseService, PendingCaseService>();
             services.AddScoped<IArchiveCaseService, ArchiveCaseService>();
             services.AddScoped<ICaseSubjectService, CaseSubjectService>();
+            services.AddScoped<IProductService, ProductService>();
 
             //BL Admin
             services.AddTransient<IAdminService, AdminService>();
