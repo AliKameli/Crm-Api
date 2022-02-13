@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Answers\Answering\Queries\" />
+    <Folder Include="Permissions\RoleAdmin\Queris\" />
     <Folder Include="Sources\SourceConfig\Queries\" />
   </ItemGroup>
 
