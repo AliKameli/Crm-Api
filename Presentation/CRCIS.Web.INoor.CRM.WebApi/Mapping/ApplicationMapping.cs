@@ -8,6 +8,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.OperationType.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands;
+using CRCIS.Web.INoor.CRM.Domain.Permissions.Role.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.ProductType.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceTypes.Commands;
@@ -23,6 +24,7 @@ using CRCIS.Web.INoor.CRM.WebApi.Models.CommonAnswer;
 using CRCIS.Web.INoor.CRM.WebApi.Models.OpreationType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Product;
 using CRCIS.Web.INoor.CRM.WebApi.Models.ProductType;
+using CRCIS.Web.INoor.CRM.WebApi.Models.Role;
 using CRCIS.Web.INoor.CRM.WebApi.Models.SourceType;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Subject;
 using CRCIS.Web.INoor.CRM.WebApi.Models.UpdateCaseSubject;
@@ -107,6 +109,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             CreateMap<AnsweringCreateModel, AnsweringCreateDto>()
                 .ConvertUsing(src => mapAnsweringCreateModelToAnsweringCreateDto(src));
             #endregion
+
+            #region Role
+            CreateMap<RoleCreateModel, RoleCreateCommand>();
+            CreateMap<RoleUpdateModel, RoleUpdateCommand>();
+            #endregion
+
         }
 
 
@@ -114,7 +122,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
         {
             return new CommonAnswerCreateCommand(model.Title, model.AnswerText, model.Priority);
         }
-        
+
 
         private ImportCaseCreateCommand mapImportCaseCreateModelToImportCaseCreateCommand(CaseCreateModel model)
         {

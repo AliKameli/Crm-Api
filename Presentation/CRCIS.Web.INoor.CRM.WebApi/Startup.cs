@@ -56,7 +56,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddScoped<ICrmNotifyManager, CrmNotifyProvider>();
 
             services.AddControllers();
-
+            services.AddMemoryCache();
             services.AddAutoMapper();
             services.AddDatabaseServices(Configuration);
             services.AddMasstransitServices(Configuration);

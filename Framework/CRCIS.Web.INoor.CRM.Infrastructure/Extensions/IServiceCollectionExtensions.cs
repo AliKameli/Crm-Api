@@ -39,6 +39,14 @@ using GreenPipes;
 using RabbitMQ.Client;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.UserReportSupports;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.Menu;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.Menu;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.AdminAction;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.AdminAction;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.Role;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.Role;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.RoleAdmin;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.RoleAdmin;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 {
@@ -150,6 +158,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             //Users:
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<IActionRepository, ActionRepository>();
+            services.AddScoped<IAdminActionRepository, AdminActionRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRoleActionRepository, RoleActionRepository>();
+            services.AddScoped<IRoleAdminRepository, RoleAdminRepository>();
 
             //BL Databases
             services.AddScoped<ICaseNewService, CaseNewService>();
@@ -162,6 +175,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<INoorlockCommentService, NoorlockCommentService>();
             services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
+            services.AddTransient<IPermissionService, PermissionService>();
 
             return services;
         }
