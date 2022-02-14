@@ -44,7 +44,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             {
                 ExpireAtUtc = expireDate,
                 ValidToMilliseconds = (expireDate - DateTime.UtcNow).TotalMilliseconds,
-                User = responseUser.Data.Id == 1 ? "crmAdministrator" : "admin",//hard code permission
+                //User = responseUser.Data.Id == 1 ? "crmAdministrator" : "admin",//hard code permission
                 AccessToken = responseToken,
                 RedreshToken = Guid.NewGuid().ToString()
             };
