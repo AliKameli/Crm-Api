@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Dtos
         public string Title { get; set; }
         public string AnswerText { get; set; }
         public int Priority { get; private set; }
+        public bool IsActive { get; set; }
         public int RowNumber { get; set; }
         public int TotalCount { get; set; }
     }
