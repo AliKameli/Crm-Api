@@ -8,6 +8,7 @@ namespace CRCIS.Web.INoor.CRM.Utility.Enums
 {
     public enum ProductType
     {
-        Descktop = 1
+        Descktop = 1,
+        Web = 2 
     }
 }

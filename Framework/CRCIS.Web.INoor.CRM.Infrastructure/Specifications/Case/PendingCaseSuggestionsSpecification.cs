@@ -16,7 +16,21 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case
 
         public static PendingCaseFullDto PairSuggestionsForAnswer(this PendingCaseFullDto dto)
         {
-            if (dto.SourceTypeId == SourceType.Email.ToInt32() )
+
+            if (dto.SourceTypeId == SourceType.Sms.ToInt32())
+            {
+                dto.SuggestionAnswerMethod = AnswerMethod.Sms;
+                //dto.SuggestionAnswerSource = "پایانه پیامک آی نور";
+            }
+            else if (dto.SourceTypeId == SourceType.SupportFormFromRabbit.ToInt32() && dto.ProductTypeId == ProductType.Descktop.ToInt32())
+            {
+                dto.SuggestionAnswerMethod = AnswerMethod.AnsweringToDesktop;
+            }
+
+            else if (dto.SourceTypeId == SourceType.Email.ToInt32()
+                 ||
+                 dto.SourceTypeId == SourceType.SupportFormFromRabbit.ToInt32() && dto.ProductTypeId == ProductType.Web.ToInt32()
+                 )
             {
                 if (string.IsNullOrEmpty(dto.MoreData))
                     return dto;
@@ -38,15 +52,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Case
                 }
             }
 
-            if (dto.SourceTypeId == SourceType.Sms.ToInt32())
-            {
-                dto.SuggestionAnswerMethod = AnswerMethod.Sms;
-                //dto.SuggestionAnswerSource = "پایانه پیامک آی نور";
-            }
-            if (dto.SourceTypeId == SourceType.SupportFormFromRabbit.ToInt32() && dto.ProductTypeId == ProductType.Descktop.ToInt32())
-            {
-                dto.SuggestionAnswerMethod = AnswerMethod.AnsweringToDesktop;
-            }
             return dto;
         }
     }
