@@ -57,6 +57,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             }
             if (command.AnswerMethodId == 2)
             {
+
+
+
+
                 responseSend = await this.SendEmailAsync(
                     command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId, command.AttachmentItems);
             }
@@ -73,6 +77,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
         private async Task<DataResponse<string>> SendEmailAsync(long caseId, string fromMailBox, string message,
             long pendingHistoryId, List<AnsweringAttachmentItemDto> answeringAttachments)
         {
+            //اصلاح راستچین ادیتور به راستچین 
+            //html
+            message = message?.Replace("class=\"ql-align-right\"", "style='direction:rtl'");
+
+
+
             var responsePendingCase = await _pendingCaseRepository.GetByIdAsync(caseId);
             if (responsePendingCase.Success == false || responsePendingCase.Data == null)
                 return new DataResponse<string>(new List<string> { "خطا در واکشی اطلاعات" });
