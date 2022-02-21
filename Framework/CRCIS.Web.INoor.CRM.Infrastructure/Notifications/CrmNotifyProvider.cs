@@ -57,10 +57,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             }
             if (command.AnswerMethodId == 2)
             {
-
-
-
-
                 responseSend = await this.SendEmailAsync(
                     command.CaseId, command.AnswerSource, command.AnswerText, command.PendingHistoryId, command.AttachmentItems);
             }

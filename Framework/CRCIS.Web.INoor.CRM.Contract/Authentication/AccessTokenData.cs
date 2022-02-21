@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRCIS.Web.INoor.CRM.Domain.Permissions.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace CRCIS.Web.INoor.CRM.Contract.Authentication
         public string Action { get; set; }
         public string jsonData { get; set; }
         public string Admin { get; set; }
+
+        public IEnumerable<PermissionDto> Permissions { get; set; }
     }
  
 }

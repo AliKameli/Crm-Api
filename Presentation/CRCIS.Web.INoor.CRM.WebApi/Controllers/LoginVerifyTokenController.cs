@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Authentication;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
+using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Account;
 using Microsoft.AspNetCore.Http;
@@ -19,15 +20,17 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         private readonly IAdminVerifyTokenRepository _adminVerifyTokenRepository;
         private readonly IJwtProvider _jwtProvider;
         private readonly ITokenStoreService _tokenStoreService;
+        private readonly IPermissionService _permissionService;
         private readonly ILogger _logger;
         public LoginVerifyTokenController(IAdminVerifyTokenRepository adminVerifyTokenRepository,
             IJwtProvider jwtProvider, ITokenStoreService tokenStoreService,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory, IPermissionService permissionService)
         {
             _adminVerifyTokenRepository = adminVerifyTokenRepository;
             _jwtProvider = jwtProvider;
             _tokenStoreService = tokenStoreService;
             _logger = loggerFactory.CreateLogger<LoginVerifyTokenController>();
+            _permissionService = permissionService;
         }
 
         [HttpPost]
@@ -50,6 +53,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 Username = responseUser.Data.Username,
             };
             var (expireDate, responseToken) = await _jwtProvider.GenerateAsync(adminModel);
+            var resposnePermissions = await _permissionService.GetPermissionsByAdminIdAsync(adminModel.Id);
             var accessTokenData = new AccessTokenData
             {
                 ExpireAtUtc = expireDate,
@@ -59,7 +63,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 RedreshToken = Guid.NewGuid().ToString(),
                 Action = responseUser.Data.Action,
                 jsonData = responseUser.Data.JsonData,
-                Admin = responseUser.Data.Family
+                Admin = responseUser.Data.Family,
+                Permissions = resposnePermissions.Data
             };
 
             _logger.LogCritical($"AccessToken generated : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");

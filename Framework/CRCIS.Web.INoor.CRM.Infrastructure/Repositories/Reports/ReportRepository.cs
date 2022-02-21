@@ -23,6 +23,9 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Queries;
 using Microsoft.Extensions.Logging;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Dashboard.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -32,7 +35,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
         private readonly IMapper _mapper;
         private readonly IIdentity _identity;
         private readonly ILogger _logger;
-        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory,ILoggerFactory loggerFactory,
+        public ReportRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory,
             IMapper mapper, IIdentity identity) : base(sqlConnectionFactory)
         {
             _mapper = mapper;
@@ -40,7 +43,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             _logger = loggerFactory.CreateLogger<ReportRepository>();
         }
 
-        public async Task<DataResponse<CaseHistoryChartDto>> GetCaseHistoryReportAsync()
+        public async Task<DataResponse<ReportLastWeekHistoryDto>> GetCaseHistoryReportAsync()
         {
             try
             {
@@ -52,7 +55,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                     .QueryAsync<CaseHistoryLastWeekDto>(sql, commandType: CommandType.StoredProcedure);
 
                 var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
-                var colors = new List<string> { "#2f4860", "#00bb7e", "#ef6262", "#e262a2", "#0f6262", "#5562a2" };
+                var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
                 var types = list.Select(a => a.OperationTypeId).Distinct().OrderBy(a => a);
 
                 IList<CaseHistoryLastWeekChartDto> finalResult = new List<CaseHistoryLastWeekChartDto>();
@@ -80,13 +83,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 }
 
                 var firstDate = new DateTime(DateTime.Now.Year, 1, 1);
-                var historyChartDto = new CaseHistoryChartDto
+                var historyChartDto = new ReportLastWeekHistoryDto
                 {
                     DayNumbers = days.Select(d => firstDate.AddDays(d - 1).ToPersinDateString()).ToList(),
                     Datasets = finalResult
                 };
 
-                var result = new DataResponse<CaseHistoryChartDto>(historyChartDto);
+                var result = new DataResponse<ReportLastWeekHistoryDto>(historyChartDto);
                 return result;
             }
             catch (Exception ex)
@@ -94,7 +97,37 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 _logger.LogError(ex.Message);
                 _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<CaseHistoryChartDto>(errors);
+                var result = new DataResponse<ReportLastWeekHistoryDto>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataResponse<ReportDashboardDto>> GetTotalCountsReportDashboardAsync()
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Dashboard");
+
+                var dto =
+
+                await dbConnection
+                  .QueryFirstOrDefaultAsync<ReportDashboardDto>(sql, new { }, commandType: CommandType.StoredProcedure);
+
+                if (dto == null)
+                {
+                    return new DataResponse<ReportDashboardDto>(false);
+                }
+
+                var result = new DataResponse<ReportDashboardDto>(dto);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<ReportDashboardDto>(errors);
                 return result;
             }
         }
@@ -131,6 +164,42 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReport(CaseReportQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Case");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<ReportCaseDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var listFull = list
+                    .Select(r => (r == null) ? null :
+                        _mapper.Map<ReportCaseResponseFullDto>(r)
+                    )
+                    .Select(r => (r == null) ? null :
+                            r.PairCommandAccess(_identity.GetAdminId())
+                    );
+
+                var result = new DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>(listFull, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>(errors);
                 return result;
             }
         }
