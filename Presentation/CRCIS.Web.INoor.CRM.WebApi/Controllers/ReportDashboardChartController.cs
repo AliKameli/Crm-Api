@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,11 +11,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReportController : ControllerBase
+    [Authorize]
+    public class ReportDashboardChartController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
 
-        public ReportController(IReportRepository reportRepository)
+        public ReportDashboardChartController(IReportRepository reportRepository)
         {
             _reportRepository = reportRepository;
         }

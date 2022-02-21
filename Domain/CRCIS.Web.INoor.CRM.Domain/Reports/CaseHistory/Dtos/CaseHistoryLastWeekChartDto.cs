@@ -7,19 +7,11 @@ using System.Threading.Tasks;
 namespace CRCIS.Web.INoor.CRM.Domain.Reports.CaseHistory.Dtos
 {
 
-    public  class CaseHistoryChartDto
-    {
-        public List<string> DayNumbers { get; set; }
-        public IEnumerable<CaseHistoryLastWeekChartDto> Datasets { get; set; }
-    }
-    public class CaseHistoryLastWeekChartDto
-    {
-        public int TypeId { get; set; }
-        public string Label { get; set; }
-        public bool Fill { get; set; }
-        public string BackgroundColor { get; set; }
-        public string BorderColor { get; set; }
-        public List<int> Data { get; set; }
-    }
+    //public  class CaseHistoryChartDto
+    //{
+    //    public List<string> DayNumbers { get; set; }
+    //    public IEnumerable<CaseHistoryLastWeekChartDto> Datasets { get; set; }
+    //}
+   
 
 }

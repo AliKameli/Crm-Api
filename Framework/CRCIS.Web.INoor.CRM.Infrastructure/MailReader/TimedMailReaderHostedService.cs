@@ -36,7 +36,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.Zero,
+            _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(5),
               TimeSpan.FromMinutes(5));
 
             return Task.CompletedTask;
@@ -193,6 +193,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     CreateDate = messageDateTime,
                     ToMailBox = mailAddress,
                 };
+                try
+                {
+                    var addresses = message.ReplyTo;
+                    var first = addresses.FirstOrDefault();
+                var n = first?.Name;
+
+                }
+                catch (Exception)
+                {
+
+                }
 
                 try
                 {

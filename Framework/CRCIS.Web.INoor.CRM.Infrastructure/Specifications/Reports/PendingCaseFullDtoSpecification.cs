@@ -1,4 +1,5 @@
-﻿using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos;
+﻿using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,23 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Specifications.Reports
             dto.AllowBackFromArchiveToMe = (dto.TblNumber == 3);
 
             return dto;
+        }
+
+
+        public static ReportCaseResponseFullDto PairCommandAccess(this ReportCaseResponseFullDto dto, int currentAdminId)
+        {
+            {
+                if (dto == null)
+                    return null;
+
+                dto.AllowAssignToMe = (dto.TblNumber == 1);
+                dto.AllowAnswerByMe = (dto.TblNumber == 2 && dto.AdminId != null && dto.AdminId == currentAdminId);
+                dto.AllowAssignToOther = (dto.TblNumber == 2 && dto.AdminId != null && dto.AdminId == currentAdminId);
+                dto.AllowBackFromArchiveToMe = (dto.TblNumber == 3);
+
+                return dto;
+
+            }
         }
     }
 }
