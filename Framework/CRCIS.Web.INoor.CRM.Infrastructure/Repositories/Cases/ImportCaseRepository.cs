@@ -66,7 +66,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
-        public async Task<DataResponse<int>> CreateAsync(ImportCaseCreateCommand command, List<int> caseSubjectIds)
+        /// <summary>
+        /// یک مورد جدید ثبت و شناسه ان برمیگرداند
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="caseSubjectIds"></param>
+        /// <returns></returns>
+        public async Task<DataResponse<long>> CreateAsync(ImportCaseCreateCommand command, List<int> caseSubjectIds)
         {
             var AdminId = _identity.GetAdminId();
             try
@@ -117,13 +123,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 
                 transaction.Commit();
 
-                return new DataResponse<int>(true);
+                return new DataResponse<long>(true, null, id);
             }
             catch (Exception ex)
             {
                 _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<int>(errors);
+                var result = new DataResponse<long>(errors);
                 return result;
             }
         }
