@@ -1,5 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.CaseHistory.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Dashboard.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.NoorLock.Dtos;
@@ -24,5 +26,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Reports
         Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppPagingReport(NoorLockReportPagingQuery query);
         Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppReportByCaseId(NoorAppReportCaseIdQuery query);
         Task<DataResponse<ReportDashboardDto>> GetTotalCountsReportDashboardAsync();
+        Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query);
     }
 }

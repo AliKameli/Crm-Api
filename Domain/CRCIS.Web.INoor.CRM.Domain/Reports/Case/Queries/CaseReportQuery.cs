@@ -15,8 +15,12 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries
         public string ProductIds { get; private set; }
         //public string FirstSubject { get; set; }
         public string Title { get; private set; }
+        public string Global { get; private set; }
+        public DateTime? FromDate { get; private set; }
+        public DateTime? ToDate { get; private set; }
         public CaseReportQuery(int pageIndex, int pageSize,
-            string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title)
+            string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title, 
+            string global,string range)
             : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
@@ -27,6 +31,15 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries
             SourceTypeIds = sourceTypeIds?.Trim();
             ProductIds = productIds?.Trim();
             Title = title?.Trim();
+
+            Global = global?.Trim();
+
+            if (!string.IsNullOrEmpty(range))
+            {
+                var sDates = range.Split(',');
+                FromDate = DateTime.Parse(sDates[0]);
+                ToDate = DateTime.Parse(sDates[1]);
+            }
         }
     }
 }
