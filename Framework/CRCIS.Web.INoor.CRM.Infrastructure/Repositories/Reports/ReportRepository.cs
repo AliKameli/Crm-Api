@@ -160,15 +160,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                _logger.LogError(ex.StackTrace);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(errors);
                 return result;
             }
         }
 
-        public async Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReport(CaseReportQuery query)
+        public async Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query)
         {
             try
             {
@@ -328,4 +327,3 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
     }
 }
-

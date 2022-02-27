@@ -13,6 +13,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
         public DateTime CreateDateTime { get; set; }
         public string ProductTitle { get; set; }
         public long RowNumber { get; set; }
+        public Guid? NoorPersonId { get; set; }
         public string SourceTypeTitle { get; set; }
         public int TblNumber { get; set; }
         public string TblName { get; set; }

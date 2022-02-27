@@ -32,9 +32,17 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
           [FromQuery] SortOrder? sortOrder,
           [FromQuery] string sourceTypeIds = null,
           [FromQuery] string productIds = null,
-          [FromQuery] string title = null)
+          [FromQuery] string title = null,
+          [FromQuery] string global = null,
+          [FromQuery] string range = null)
         {
-            return Ok();
+            var query = new Domain.Reports.Case.Queries.CaseReportQuery(pageIndex, pageSize,
+                sortField, sortOrder,
+                sourceTypeIds, productIds,
+                title, global, range
+                );
+            var resposne = await _reportRepository.GetCaseReportAsync(query);
+            return Ok(resposne);
         }
     }
 }
