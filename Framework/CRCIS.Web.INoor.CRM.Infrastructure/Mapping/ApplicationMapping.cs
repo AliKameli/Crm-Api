@@ -44,6 +44,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.AllowBackFromArchiveToMe, opt => opt.Ignore());
 
             CreateMap<ReportCaseDto, ReportCaseResponseFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
                 .ForMember(dest => dest.AllowAssignToMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
