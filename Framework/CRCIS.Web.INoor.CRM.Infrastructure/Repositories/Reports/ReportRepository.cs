@@ -26,6 +26,8 @@ using Microsoft.Extensions.Logging;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Dashboard.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -94,8 +96,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                _logger.LogError(ex.StackTrace);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataResponse<ReportLastWeekHistoryDto>(errors);
                 return result;
@@ -325,5 +326,37 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
         }
 
+        public async Task<DataTableResponse<IEnumerable<ReportOperatorResponseFullDto>>> GetOperatorReportAsync(OperatorReportQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Operator");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<ReportOperatorDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var listFull = list
+                    .Select(r => (r == null) ? null :
+                        _mapper.Map<ReportOperatorResponseFullDto>(r)
+                    );
+
+                var result = new DataTableResponse<IEnumerable<ReportOperatorResponseFullDto>>(listFull, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<ReportOperatorResponseFullDto>>(errors);
+                return result;
+            }
+        }
     }
 }
