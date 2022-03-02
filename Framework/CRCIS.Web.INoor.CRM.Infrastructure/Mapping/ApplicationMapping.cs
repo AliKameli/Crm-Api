@@ -6,6 +6,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using System;
@@ -49,6 +50,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowBackFromArchiveToMe, opt => opt.Ignore());
+
+            CreateMap<ReportOperatorDto, ReportOperatorResponseFullDto>()
+                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
+                ;
 
 
             CreateMap<ImportCaseGetDto, ImportCaseGetFullDto>()
