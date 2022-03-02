@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos
 {
- public   class ReportOperatorDto
+    public class ReportOperatorDto
     {
         public long Id { get; set; }
         public string Title { get; set; }
