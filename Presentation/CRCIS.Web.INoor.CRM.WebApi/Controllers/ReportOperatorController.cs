@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
@@ -33,9 +34,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
              [FromQuery] string global = null,
              [FromQuery] string range = null)
         {
-            var query = new Domain.Reports.Operator.Queries.OperatorReportQuery(pageIndex, pageSize,
+            var query = new OperatorReportQuery(pageIndex, pageSize,
               sortField, sortOrder,
-              sourceTypeIds, productIds,
+              sourceTypeIds, productIds,adminIds,
               title, global, range
               );
 

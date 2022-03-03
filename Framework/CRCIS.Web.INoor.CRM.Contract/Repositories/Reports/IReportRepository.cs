@@ -10,6 +10,8 @@ using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using System;
 using System.Collections.Generic;
@@ -30,5 +32,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Reports
         Task<DataResponse<ReportDashboardDto>> GetTotalCountsReportDashboardAsync();
         Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query);
         Task<DataTableResponse<IEnumerable<ReportOperatorResponseFullDto>>> GetOperatorReportAsync(OperatorReportQuery query);
+        Task<DataTableResponse<IEnumerable<ReportSubjectResponseFullDto>>> GetSubjectReportAsync(SubjectReportQuery query);
     }
 }

@@ -8,6 +8,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Dtos;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
 
             CreateMap<ReportOperatorDto, ReportOperatorResponseFullDto>()
                  .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(opt => opt.OperationTypeDateTime.ToPersinDateString(true, false)))
+                ;
+              CreateMap<ReportSubjectDto, ReportSubjectResponseFullDto>()
+                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.SubjectCaseCreateAtPersian, opt => opt.MapFrom(opt => opt.SubjectCaseCreateAt.ToPersinDateString(true, false)))
                 ;
 
 
