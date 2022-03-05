@@ -29,5 +29,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos
         public int CaseHistoryId { get; set; }
         public string CreateDateTimePersian { get; set; }
         public string OperationTypeDateTimePersian { get; set; }
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string NameFamily { get; set; }
     }
 }

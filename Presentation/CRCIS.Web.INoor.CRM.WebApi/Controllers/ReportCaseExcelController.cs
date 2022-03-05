@@ -57,10 +57,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 var namedStyle = xlPackage.Workbook.Styles.CreateNamedStyle("HyperLink");
                 namedStyle.Style.Font.UnderLine = true;
                 namedStyle.Style.Font.Color.SetColor(Color.Blue);
-                const int startRow =2;
+                const int startRow = 2;
 
                 //Create Headers and format them
-             
+
 
                 worksheet.Cells["A1"].Value = "ردیف";
                 worksheet.Cells["B1"].Value = "عنوان";
@@ -78,6 +78,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 worksheet.Cells["A1:L1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
                 worksheet.Cells["A1:L1"].Style.Font.Bold = true;
 
+                worksheet.DefaultColWidth = 25;
+              
+
                 var row = startRow;
 
                 foreach (var item in resposne.Data)
@@ -93,21 +96,21 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                     worksheet.Cells[row, 9].Value = item.Email;
                     worksheet.Cells[row, 10].Value = item.Mobile;
                     worksheet.Cells[row, 11].Value = item.NameFamily;
-                    worksheet.Cells[row, 12].Value = item.NoorUserId == null?"":item.NoorUserId.ToString();
+                    worksheet.Cells[row, 16].Value = (item.NoorUserId == null || item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
 
                     row++;
                 }
 
                 // set some core property values
                 xlPackage.Workbook.Properties.Title = "Case List";
-                xlPackage.Workbook.Properties.Author = "CRM Noot";
+                xlPackage.Workbook.Properties.Author = "CRM Noor";
                 xlPackage.Workbook.Properties.Subject = "Case List";
                 // save the new spreadsheet
                 xlPackage.Save();
                 // Response.Clear();
             }
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",$"گزارش موارد - {range}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موارد - {range}.xlsx");
 
         }
     }
