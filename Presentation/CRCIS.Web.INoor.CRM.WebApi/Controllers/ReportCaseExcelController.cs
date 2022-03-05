@@ -39,11 +39,15 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
           [FromQuery] string global = null,
           [FromQuery] string range = null)
         {
+            pageIndex = 1;
+            pageSize = 999999;
             var query = new Domain.Reports.Case.Queries.CaseReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
                 sourceTypeIds, productIds,
                 title, global, range
                 );
+
+
             var resposne = await _reportRepository.GetCaseReportAsync(query);
 
             var stream = new MemoryStream();
