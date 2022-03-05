@@ -39,11 +39,15 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
           [FromQuery] string global = null,
           [FromQuery] string range = null)
         {
+            pageIndex = 1;
+            pageSize = 999999;
             var query = new Domain.Reports.Case.Queries.CaseReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
                 sourceTypeIds, productIds,
                 title, global, range
                 );
+
+
             var resposne = await _reportRepository.GetCaseReportAsync(query);
 
             var stream = new MemoryStream();
@@ -62,9 +66,17 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 worksheet.Cells["B1"].Value = "عنوان";
                 worksheet.Cells["C1"].Value = "توضیحات";
                 worksheet.Cells["D1"].Value = "تاریخ درج";
-                worksheet.Cells["A1:D1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A1:D1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
-                worksheet.Cells["A1:D1"].Style.Font.Bold = true;
+                worksheet.Cells["E1"].Value = "محصول";
+                worksheet.Cells["F1"].Value = "منشا";
+                worksheet.Cells["G1"].Value = "وضعیت";
+                worksheet.Cells["H1"].Value = "موضوع";
+                worksheet.Cells["I1"].Value = "ایمیل";
+                worksheet.Cells["J1"].Value = "موبایل";
+                worksheet.Cells["K1"].Value = "نام";
+                worksheet.Cells["L1"].Value = "شناسه آی نور نور";
+                worksheet.Cells["A1:L1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:L1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
+                worksheet.Cells["A1:L1"].Style.Font.Bold = true;
 
                 var row = startRow;
 
@@ -74,6 +86,14 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                     worksheet.Cells[row, 2].Value = item.Title;
                     worksheet.Cells[row, 3].Value = item.Description;
                     worksheet.Cells[row, 4].Value = item.CreateDateTimePersian;
+                    worksheet.Cells[row, 5].Value = item.ProductTitle;
+                    worksheet.Cells[row, 6].Value = item.SourceTypeTitle;
+                    worksheet.Cells[row, 7].Value = item.TblName;
+                    worksheet.Cells[row, 8].Value = item.FirstSubject;
+                    worksheet.Cells[row, 9].Value = item.Email;
+                    worksheet.Cells[row, 10].Value = item.Mobile;
+                    worksheet.Cells[row, 11].Value = item.NameFamily;
+                    worksheet.Cells[row, 12].Value = item.NoorUserId == null?"":item.NoorUserId.ToString();
 
                     row++;
                 }
