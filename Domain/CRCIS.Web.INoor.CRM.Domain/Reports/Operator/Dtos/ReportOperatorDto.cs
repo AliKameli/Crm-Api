@@ -27,5 +27,8 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos
         public long TotalCount { get; set; }
         public long CaseId { get; set; }
         public long CaseHistoryId { get; set; }
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string NameFamily { get; set; }
     }
 }
