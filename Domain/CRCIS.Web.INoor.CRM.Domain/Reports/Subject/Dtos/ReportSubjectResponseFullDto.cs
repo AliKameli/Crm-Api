@@ -27,5 +27,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Dtos
 
         public string SubjectCaseCreateAtPersian { get; set; }
         public string CreateDateTimePersian { get; set; }
+
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string NameFamily { get; set; }
+        public bool IsPrimary { get; set; }
     }
 }

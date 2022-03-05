@@ -73,7 +73,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 worksheet.Cells["I1"].Value = "ایمیل";
                 worksheet.Cells["J1"].Value = "موبایل";
                 worksheet.Cells["K1"].Value = "نام";
-                worksheet.Cells["L1"].Value = "شناسه آی نور نور";
+                worksheet.Cells["L1"].Value = "شناسه آی نور";
                 worksheet.Cells["A1:L1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells["A1:L1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
                 worksheet.Cells["A1:L1"].Style.Font.Bold = true;
