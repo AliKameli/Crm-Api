@@ -25,5 +25,10 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Dtos
         public int SubjectId { get; set; }
         public string SubjectTitle { get; set; }
         public DateTime SubjectCaseCreateAt { get; set; }
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string NameFamily { get; set; }
+
+        public bool IsPrimary { get; set; }
     }
 }

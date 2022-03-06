@@ -33,7 +33,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             var query = new SubjectReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
-                productIds,subjectIds,sourceTypeIds,
+                productIds, subjectIds, sourceTypeIds,
                 global, range);
             var response = await _reportRepository.GetSubjectReportAsync(query);
 
