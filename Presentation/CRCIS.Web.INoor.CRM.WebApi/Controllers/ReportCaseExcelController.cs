@@ -41,6 +41,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             pageIndex = 1;
             pageSize = 999999;
+
             var query = new Domain.Reports.Case.Queries.CaseReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
                 sourceTypeIds, productIds,

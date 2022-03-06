@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries
+namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
 {
-    public class CaseReportQuery : AbstractDataTableQuery
+    public class AnswerReportQuery : AbstractDataTableQuery
     {
         public string Order { get; private set; }
 
@@ -17,10 +17,11 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Case.Queries
         public string Global { get; private set; }
         public DateTime? FromDate { get; private set; }
         public DateTime? ToDate { get; private set; }
-        public CaseReportQuery(int pageIndex, int pageSize,
-            string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title, 
-            string global,string range)
-            : base(pageIndex, pageSize)
+
+        public AnswerReportQuery(int pageIndex, int pageSize,
+         string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title,
+         string global, string range)
+         : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
             if (!string.IsNullOrEmpty(sortField) && sortField != null)
