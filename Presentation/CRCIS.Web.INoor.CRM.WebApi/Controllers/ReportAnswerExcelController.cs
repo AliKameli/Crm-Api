@@ -80,9 +80,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 worksheet.Cells["N1"].Value = "موبایل";
                 worksheet.Cells["O1"].Value = "نام";
                 worksheet.Cells["P1"].Value = "شناسه آی نور";
-                worksheet.Cells["A1:P1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A1:P1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
-                worksheet.Cells["A1:P1"].Style.Font.Bold = true;
+                worksheet.Cells["Q1"].Value = "روش یاسخگویی";
+                worksheet.Cells["R1"].Value = "وضعیت پاسخ";
+                worksheet.Cells["A1:R1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:R1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
+                worksheet.Cells["A1:R1"].Style.Font.Bold = true;
 
 
                 worksheet.DefaultColWidth = 25;
@@ -109,6 +111,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                     worksheet.Cells[row, 14].Value = item.Mobile;
                     worksheet.Cells[row, 15].Value = item.NameFamily;
                     worksheet.Cells[row, 16].Value = (item.NoorUserId == null || item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
+                    worksheet.Cells[row, 17].Value = item.AnswerMethodTitle;
+                    worksheet.Cells[row, 18].Value = item.PendingResultTitle;
 
                     row++;
                 }
