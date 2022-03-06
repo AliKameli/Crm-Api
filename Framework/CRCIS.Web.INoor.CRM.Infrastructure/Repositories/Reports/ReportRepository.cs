@@ -30,6 +30,8 @@ using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Dtos;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -388,6 +390,39 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<ReportSubjectResponseFullDto>>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>>GetAnsweringReportAsync(AnswerReportQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Answering");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<ReportAnswerDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var listFull = list
+                    .Select(r => (r == null) ? null :
+                        _mapper.Map<ReportAnswerResponseFullDto>(r)
+                    );
+
+                var result = new DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>(listFull, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>(errors);
                 return result;
             }
         }

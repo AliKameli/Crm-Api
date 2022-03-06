@@ -38,6 +38,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [FromQuery] string global = null,
         [FromQuery] string range = null)
         {
+            pageIndex = 1;
+            pageSize = 999999;
+
             var query = new SubjectReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
                 productIds, subjectIds, sourceTypeIds,

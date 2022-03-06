@@ -1,26 +1,28 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
-using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Reports;
+using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReportOperatorExcelController : ControllerBase
+    public class ReportAnswerExcelController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
-        public ReportOperatorExcelController(IReportRepository reportRepository)
+
+        public ReportAnswerExcelController(IReportRepository reportRepository)
         {
             _reportRepository = reportRepository;
         }
@@ -28,32 +30,31 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
-           [FromQuery] int pageIndex,
-           [FromQuery] string sortField,
-           [FromQuery] SortOrder? sortOrder,
-           [FromQuery] string adminIds,
-           [FromQuery] string sourceTypeIds = null,
-           [FromQuery] string productIds = null,
-           [FromQuery] string title = null,
-           [FromQuery] string global = null,
-           [FromQuery] string range = null)
+          [FromQuery] int pageIndex,
+          [FromQuery] string sortField,
+          [FromQuery] SortOrder? sortOrder,
+          [FromQuery] string sourceTypeIds = null,
+          [FromQuery] string productIds = null,
+          [FromQuery] string title = null,
+          [FromQuery] string global = null,
+          [FromQuery] string range = null)
         {
-
             pageIndex = 1;
             pageSize = 999999;
 
-            var query = new OperatorReportQuery(pageIndex, pageSize,
-              sortField, sortOrder,
-              sourceTypeIds, productIds, adminIds,
-              title, global, range
-              );
+            var query = new Domain.Reports.Answer.Queries.AnswerReportQuery(pageIndex, pageSize,
+                sortField, sortOrder,
+                sourceTypeIds, productIds,
+                title, global, range
+                );
 
-            var resposne = await _reportRepository.GetOperatorReportAsync(query);
+
+            var resposne = await _reportRepository.GetAnsweringReportAsync(query);
 
             var stream = new MemoryStream();
             using (var xlPackage = new ExcelPackage(stream))
             {
-                var worksheet = xlPackage.Workbook.Worksheets.Add("گزارش اپراتورها");
+                var worksheet = xlPackage.Workbook.Worksheets.Add("موارد");
                 var namedStyle = xlPackage.Workbook.Styles.CreateNamedStyle("HyperLink");
                 namedStyle.Style.Font.UnderLine = true;
                 namedStyle.Style.Font.Color.SetColor(Color.Blue);
@@ -86,6 +87,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
                 worksheet.DefaultColWidth = 25;
 
+
                 var row = startRow;
 
                 foreach (var item in resposne.Data)
@@ -106,21 +108,21 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                     worksheet.Cells[row, 13].Value = item.Email;
                     worksheet.Cells[row, 14].Value = item.Mobile;
                     worksheet.Cells[row, 15].Value = item.NameFamily;
-                    worksheet.Cells[row, 16].Value = (item.NoorUserId == null|| item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
+                    worksheet.Cells[row, 16].Value = (item.NoorUserId == null || item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
 
                     row++;
                 }
 
                 // set some core property values
-                xlPackage.Workbook.Properties.Title = "Opearatios List";
+                xlPackage.Workbook.Properties.Title = "Answering List";
                 xlPackage.Workbook.Properties.Author = "CRM Noor";
-                xlPackage.Workbook.Properties.Subject = "OpearatiosList";
+                xlPackage.Workbook.Properties.Subject = "Answering List";
                 // save the new spreadsheet
                 xlPackage.Save();
                 // Response.Clear();
             }
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موارد - {range}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش پاسخگویی - {range}.xlsx");
 
         }
     }
