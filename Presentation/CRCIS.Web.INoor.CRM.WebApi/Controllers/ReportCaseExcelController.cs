@@ -1,6 +1,9 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
 using CRCIS.Web.INoor.CRM.Domain.Reports;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Dtos;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,10 +24,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     public class ReportCaseExcelController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
+        private readonly IProductRepository _productRepository;
 
-        public ReportCaseExcelController(IReportRepository reportRepository)
+        public ReportCaseExcelController(IReportRepository reportRepository, IProductRepository productRepository)
         {
             _reportRepository = reportRepository;
+            _productRepository = productRepository;
         }
 
         [Authorize]
@@ -47,6 +52,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 sourceTypeIds, productIds,
                 title, global, range
                 );
+
+
+            var productsResponse = await _productRepository.GetDropDownListAsync();
+            var products = productsResponse.Success ? productsResponse.Data : new List<ProductDropDownListDto>();
+
 
 
             var resposne = await _reportRepository.GetCaseReportAsync(query);
@@ -75,12 +85,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 worksheet.Cells["J1"].Value = "موبایل";
                 worksheet.Cells["K1"].Value = "نام";
                 worksheet.Cells["L1"].Value = "شناسه آی نور";
-                worksheet.Cells["A1:L1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A1:L1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
-                worksheet.Cells["A1:L1"].Style.Font.Bold = true;
+                worksheet.Cells["M1"].Value = "پلتفرم";
+                worksheet.Cells["A1:M1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:M1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
+                worksheet.Cells["A1:M1"].Style.Font.Bold = true;
 
                 worksheet.DefaultColWidth = 25;
-              
+
 
                 var row = startRow;
 
@@ -98,6 +109,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                     worksheet.Cells[row, 10].Value = item.Mobile;
                     worksheet.Cells[row, 11].Value = item.NameFamily;
                     worksheet.Cells[row, 16].Value = (item.NoorUserId == null || item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
+                    worksheet.Cells[row, 17].Value = item.ProductTypeTitle;
 
                     row++;
                 }
@@ -114,5 +126,38 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موارد - {range}.xlsx");
 
         }
+
+        private Func<IEnumerable<ProductDropDownListDto>, int, string> funcGetProductTypeTitle = (list, pId) =>
+         {
+             try
+             {
+                 var p = list.FirstOrDefault(a => a.Id == pId);
+                 if (p is null)
+                 {
+                     return "";
+                 }
+                 var type = (ProductType)(p.ProductTypeId);
+                 switch (type)
+                 {
+                     case ProductType.Descktop:
+                         return "دسکتاب";
+                         break;
+                     case ProductType.Web:
+                         return "وب";
+                         break;
+                     default:
+                         break;
+                 }
+                 if (true)
+                 {
+
+                 }
+             }
+             catch (Exception)
+             {
+                 return "--Exception--";
+             }
+             return "---";
+         };
     }
 }
