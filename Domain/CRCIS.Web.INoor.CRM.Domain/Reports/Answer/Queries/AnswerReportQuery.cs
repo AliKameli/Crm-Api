@@ -17,9 +17,11 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
         public string Global { get; private set; }
         public DateTime? FromDate { get; private set; }
         public DateTime? ToDate { get; private set; }
+        public string AnswerMethodIds { get; private set; }
 
         public AnswerReportQuery(int pageIndex, int pageSize,
-         string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title,
+         string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds,string answerMethodIds,
+         string title,
          string global, string range)
          : base(pageIndex, pageSize)
         {
@@ -30,6 +32,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
             }
             SourceTypeIds = sourceTypeIds?.Trim();
             ProductIds = productIds?.Trim();
+            AnswerMethodIds = answerMethodIds?.Trim();
             Title = title?.Trim();
 
             Global = global?.Trim();
