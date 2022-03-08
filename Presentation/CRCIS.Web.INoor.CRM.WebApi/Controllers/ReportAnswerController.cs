@@ -32,13 +32,15 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
          [FromQuery] string productIds = null,
          [FromQuery] string title = null,
          [FromQuery] string global = null,
-         [FromQuery] string range = null)
+         [FromQuery] string range = null,
+         [FromQuery] string rangeAnswer = null
+            )
         {
           
             var query = new Domain.Reports.Answer.Queries.AnswerReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
                 sourceTypeIds, productIds, answerMethodIds,
-                title, global, range
+                title, global, range,rangeAnswer
                 );
 
 

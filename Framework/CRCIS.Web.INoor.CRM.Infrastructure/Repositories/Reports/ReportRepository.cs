@@ -49,7 +49,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             _logger = loggerFactory.CreateLogger<ReportRepository>();
         }
 
-        public async Task<DataResponse<ReportLastWeekHistoryDto>> GetCaseHistoryReportAsync()
+        public async Task<DataResponse<ReportLastDaysCaseHistoryDto>> GetCaseHistoryReportAsync()
         {
             try
             {
@@ -58,7 +58,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
                 var list =
                      await dbConnection
-                    .QueryAsync<CaseHistoryLastWeekDto>(sql, commandType: CommandType.StoredProcedure);
+                    .QueryAsync<CaseHistoryLastDaysDto>(sql, commandType: CommandType.StoredProcedure);
 
                 var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
                 var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
@@ -89,20 +89,78 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 }
 
                 var firstDate = new DateTime(DateTime.Now.Year, 1, 1);
-                var historyChartDto = new ReportLastWeekHistoryDto
+                var historyChartDto = new ReportLastDaysCaseHistoryDto
                 {
                     DayNumbers = days.Select(d => firstDate.AddDays(d - 1).ToPersinDateString()).ToList(),
                     Datasets = finalResult
                 };
 
-                var result = new DataResponse<ReportLastWeekHistoryDto>(historyChartDto);
+                var result = new DataResponse<ReportLastDaysCaseHistoryDto>(historyChartDto);
                 return result;
             }
             catch (Exception ex)
             {
                 _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<ReportLastWeekHistoryDto>(errors);
+                var result = new DataResponse<ReportLastDaysCaseHistoryDto>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataResponse<ReportLastDaysProductHistoryDto>> GetProductHistoryReportAsync()
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "LastWeekProductHistory");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<ProductHistoryLastDaysDto>(sql, commandType: CommandType.StoredProcedure);
+
+                var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
+                var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
+                var types = list.Select(a => a.ProductId).Distinct().OrderBy(a => a);
+
+                IList<ProductHistoryLastDayChartDto> finalResult = new List<ProductHistoryLastDayChartDto>();
+                for (int index = 0; index < types.Count(); index++)
+                {
+                    var type = types.ElementAt(index);
+                    var color = colors.ElementAt(index);
+                    var chartDto = new ProductHistoryLastDayChartDto()
+                    {
+                        TypeId = type,
+                        Label = list.First(a => a.ProductId == type)?.ProductTitle,
+                        Fill = false,
+                        BackgroundColor = color,
+                        BorderColor = color,
+                        Data = new List<int>(),
+                    };
+
+                    foreach (var day in days)
+                    {
+                        var record = list.FirstOrDefault(a => a.ProductId == type && a.Day == day);
+                        var count = (record?.CNT).GetValueOrDefault();
+                        chartDto.Data.Add(count);
+                    }
+                    finalResult.Add(chartDto);
+                }
+
+                var firstDate = new DateTime(DateTime.Now.Year, 1, 1);
+                var historyChartDto = new ReportLastDaysProductHistoryDto
+                {
+                    DayNumbers = days.Select(d => firstDate.AddDays(d - 1).ToPersinDateString()).ToList(),
+                    Datasets = finalResult
+                };
+
+                var result = new DataResponse<ReportLastDaysProductHistoryDto>(historyChartDto);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<ReportLastDaysProductHistoryDto>(errors);
                 return result;
             }
         }
@@ -394,7 +452,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
         }
 
-        public async Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>>GetAnsweringReportAsync(AnswerReportQuery query)
+        public async Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>> GetAnsweringReportAsync(AnswerReportQuery query)
         {
             try
             {

@@ -36,5 +36,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Dtos
         public string AnswerMethodTitle { get; set; }
         public int PendingResultId { get; set; }
         public string PendingResultTitle { get; set; }
+        public string AnswerText { get; set; }
     }
 }
