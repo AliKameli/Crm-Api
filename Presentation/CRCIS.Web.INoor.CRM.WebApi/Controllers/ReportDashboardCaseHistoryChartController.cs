@@ -24,7 +24,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var response = await _reportRepository.GetProductHistoryReportAsync();
+            var response = await _reportRepository.GetTotalCountsReportDashboardAsync();
             return Ok(response);
         }
     }
