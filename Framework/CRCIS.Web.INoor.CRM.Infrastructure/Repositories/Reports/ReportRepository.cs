@@ -124,7 +124,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
                 var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
                 var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
-                var types = list.Select(a => a.ProductId).Distinct().OrderBy(a => a);
+                var types = list.Select(a => a.ProductId).Distinct().OrderBy(a => a).Take(colors.Count);
 
                 IList<ProductHistoryLastDayChartDto> finalResult = new List<ProductHistoryLastDayChartDto>();
                 Random r = new Random();
