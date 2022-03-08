@@ -11,12 +11,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class ReportDashboardCaseHistoryChartController : ControllerBase
+    public class ReportDashboardProductHistoryChartController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
 
-        public ReportDashboardCaseHistoryChartController(IReportRepository reportRepository)
+        public ReportDashboardProductHistoryChartController(IReportRepository reportRepository)
         {
             _reportRepository = reportRepository;
         }
@@ -28,4 +27,5 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
     }
+
 }
