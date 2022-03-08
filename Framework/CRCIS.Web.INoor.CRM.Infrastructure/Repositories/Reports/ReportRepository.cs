@@ -32,6 +32,7 @@ using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Dtos;
+using System.Drawing;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -61,14 +62,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                     .QueryAsync<CaseHistoryLastDaysDto>(sql, commandType: CommandType.StoredProcedure);
 
                 var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
-                var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
+                var colors = new List<string> { "#6e18f5", "#6e28f5", "#6e38f5", "#6e48f5", "#6e58f5", "#6ed8f5", "#6ed8f5", "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2", "#100cf2", "#200cf2", "#300cf2", "#400cf2" };
                 var types = list.Select(a => a.OperationTypeId).Distinct().OrderBy(a => a);
 
                 IList<CaseHistoryLastWeekChartDto> finalResult = new List<CaseHistoryLastWeekChartDto>();
                 for (int index = 0; index < types.Count(); index++)
                 {
                     var type = types.ElementAt(index);
-                    var color = colors.ElementAt(index);
+
+                    var color = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0).ToString();
+
+                    try { color = colors.ElementAt(index); } catch { }
                     var chartDto = new CaseHistoryLastWeekChartDto()
                     {
                         TypeId = type,
@@ -119,14 +123,18 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                     .QueryAsync<ProductHistoryLastDaysDto>(sql, commandType: CommandType.StoredProcedure);
 
                 var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
-                var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
+                var colors = new List<string> { "#6e18f5", "#6e28f5", "#6e38f5", "#6e48f5", "#6e58f5", "#6ed8f5", "#6ed8f5", "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2", "#100cf2", "#200cf2", "#300cf2", "#400cf2" };
                 var types = list.Select(a => a.ProductId).Distinct().OrderBy(a => a);
 
                 IList<ProductHistoryLastDayChartDto> finalResult = new List<ProductHistoryLastDayChartDto>();
+                Random r = new Random();
                 for (int index = 0; index < types.Count(); index++)
                 {
                     var type = types.ElementAt(index);
-                    var color = colors.ElementAt(index);
+                    var color =  Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0).ToString();
+
+                    try { color = colors.ElementAt(index); } catch { }
+                   
                     var chartDto = new ProductHistoryLastDayChartDto()
                     {
                         TypeId = type,
