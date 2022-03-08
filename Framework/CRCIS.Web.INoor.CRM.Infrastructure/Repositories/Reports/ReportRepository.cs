@@ -64,7 +64,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
                 var colors = new List<string> { "#6e18f5", "#6e28f5", "#6e38f5", "#6e48f5", "#6e58f5", "#6ed8f5", "#6ed8f5", "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2", "#100cf2", "#200cf2", "#300cf2", "#400cf2" };
                 var types = list.Select(a => a.OperationTypeId).Distinct().OrderBy(a => a);
-
+                Random r = new Random();
                 IList<CaseHistoryLastWeekChartDto> finalResult = new List<CaseHistoryLastWeekChartDto>();
                 for (int index = 0; index < types.Count(); index++)
                 {
