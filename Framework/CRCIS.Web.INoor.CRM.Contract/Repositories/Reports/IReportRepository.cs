@@ -25,16 +25,17 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Reports
 {
     public interface IReportRepository
     {
-        Task<DataResponse<ReportLastWeekHistoryDto>> GetCaseHistoryReportAsync();
-        Task<DataTableResponse<IEnumerable<PersonReportResponseFullDto>>> GetPersonReport(PersonReportQuery query);
-        Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorLockPagingReportAsync(NoorLockReportPagingQuery query);
-        Task<DataResponse<NoorLockCaseReportDto>> GetNoorLockReportByRowNumberAsync(NoorLockReportRowNumberQuery query);
+        Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>> GetAnsweringReportAsync(AnswerReportQuery query);
+        Task<DataResponse<ReportLastDaysCaseHistoryDto>> GetCaseHistoryReportAsync();
+        Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query);
         Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppPagingReport(NoorLockReportPagingQuery query);
         Task<DataResponse<NoorLockCaseReportDto>> GetNoorAppReportByCaseId(NoorAppReportCaseIdQuery query);
-        Task<DataResponse<ReportDashboardDto>> GetTotalCountsReportDashboardAsync();
-        Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query);
+        Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorLockPagingReportAsync(NoorLockReportPagingQuery query);
+        Task<DataResponse<NoorLockCaseReportDto>> GetNoorLockReportByRowNumberAsync(NoorLockReportRowNumberQuery query);
         Task<DataTableResponse<IEnumerable<ReportOperatorResponseFullDto>>> GetOperatorReportAsync(OperatorReportQuery query);
+        Task<DataTableResponse<IEnumerable<PersonReportResponseFullDto>>> GetPersonReport(PersonReportQuery query);
+        Task<DataResponse<ReportLastDaysProductHistoryDto>> GetProductHistoryReportAsync();
         Task<DataTableResponse<IEnumerable<ReportSubjectResponseFullDto>>> GetSubjectReportAsync(SubjectReportQuery query);
-        Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>> GetAnsweringReportAsync(AnswerReportQuery query);
+        Task<DataResponse<ReportDashboardDto>> GetTotalCountsReportDashboardAsync();
     }
 }

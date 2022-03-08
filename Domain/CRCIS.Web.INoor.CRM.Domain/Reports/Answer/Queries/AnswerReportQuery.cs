@@ -18,9 +18,15 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
         public DateTime? FromDate { get; private set; }
         public DateTime? ToDate { get; private set; }
 
+        public DateTime? FromDateAnswer { get; private set; }
+        public DateTime? ToDateAnswer { get; private set; }
+
+        public string AnswerMethodIds { get; private set; }
+
         public AnswerReportQuery(int pageIndex, int pageSize,
-         string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds, string title,
-         string global, string range)
+         string sortField, SortOrder? sortOrder, string sourceTypeIds, string productIds,string answerMethodIds,
+         string title,
+         string global, string range,string rangeAnswer)
          : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
@@ -30,6 +36,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
             }
             SourceTypeIds = sourceTypeIds?.Trim();
             ProductIds = productIds?.Trim();
+            AnswerMethodIds = answerMethodIds?.Trim();
             Title = title?.Trim();
 
             Global = global?.Trim();
@@ -39,6 +46,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
                 var sDates = range.Split(',');
                 FromDate = DateTime.Parse(sDates[0]);
                 ToDate = DateTime.Parse(sDates[1]);
+            }
+
+            if (!string.IsNullOrEmpty(rangeAnswer))
+            {
+                var sDates = rangeAnswer.Split(',');
+                FromDateAnswer = DateTime.Parse(sDates[0]);
+                ToDateAnswer = DateTime.Parse(sDates[1]);
             }
         }
     }

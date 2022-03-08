@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Reports.Dashboard.Dtos
 {
-   public class ReportLastWeekHistoryDto
+    public class ReportLastDaysProductHistoryDto
     {
         public List<string> DayNumbers { get; set; }
-        public IEnumerable<CaseHistoryLastWeekChartDto> Datasets { get; set; }
+        public IEnumerable<ProductHistoryLastDayChartDto> Datasets { get; set; }
     }
-    public class CaseHistoryLastWeekChartDto
+    public class ProductHistoryLastDayChartDto
     {
         public int TypeId { get; set; }
         public string Label { get; set; }

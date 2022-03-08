@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Reports.CaseHistory.Dtos
 {
-    public class CaseHistoryLastWeekDto
+    public class CaseHistoryLastDaysDto
     {
         public int Day { get; set; }
         public int CNT { get; set; }
