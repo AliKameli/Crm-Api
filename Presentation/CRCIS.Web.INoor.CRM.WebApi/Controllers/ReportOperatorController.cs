@@ -27,7 +27,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
              [FromQuery] int pageIndex,
              [FromQuery] string sortField,
              [FromQuery] SortOrder? sortOrder,
-             [FromQuery] string adminIds,
+             [FromQuery] string adminIds= null,
              [FromQuery] string sourceTypeIds = null,
              [FromQuery] string productIds = null,
              [FromQuery] string title = null,
