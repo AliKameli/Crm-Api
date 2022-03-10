@@ -33,6 +33,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
           [FromQuery] int pageIndex,
           [FromQuery] string sortField,
           [FromQuery] SortOrder? sortOrder,
+          [FromQuery] string adminIds = null,
           [FromQuery] string sourceTypeIds = null,
           [FromQuery] string answerMethodIds = null,
           [FromQuery] string productIds = null,
@@ -46,7 +47,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
             var query = new Domain.Reports.Answer.Queries.AnswerReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
-                sourceTypeIds, productIds, answerMethodIds,
+               sourceTypeIds, productIds, adminIds, answerMethodIds,
                 title, global, range, rangeAnswer
                 );
 
