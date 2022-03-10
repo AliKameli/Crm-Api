@@ -39,6 +39,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries
             }
             SourceTypeIds = sourceTypeIds?.Trim();
             ProductIds = productIds?.Trim();
+            AdminIds = adminIds?.Trim();
             AnswerMethodIds = answerMethodIds?.Trim();
             Title = title?.Trim();
 
