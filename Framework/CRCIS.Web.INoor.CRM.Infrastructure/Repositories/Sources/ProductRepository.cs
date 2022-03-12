@@ -108,7 +108,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                 return result;
             }
         }
-        public async Task<DataResponse<IEnumerable<ProductDropDownListDto>>> GetDropDownListAsync()
+        public async Task<DataResponse<IEnumerable<ProductDropDownListDto>>> GetDropDownListAsync(bool appendCode = true)
         {
 
             try
@@ -120,14 +120,16 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
                 var list =
                      await dbConnection
                     .QueryAsync<ProductDropDownListDto>(sql, commandType: CommandType.StoredProcedure);
-
-                list = list.Select(p => new ProductDropDownListDto
+                if (appendCode)
                 {
-                    Id = p.Id,
-                    Title = $"{ p.Title } {p.Code}".Trim(),
-                    Code = p.Code,
-                    ProductTypeId = p.ProductTypeId
-                });
+                    list = list.Select(p => new ProductDropDownListDto
+                    {
+                        Id = p.Id,
+                        Title = $"{ p.Title } {p.Code}".Trim(),
+                        Code = p.Code,
+                        ProductTypeId = p.ProductTypeId
+                    });
+                }
 
                 var result = new DataResponse<IEnumerable<ProductDropDownListDto>>(list);
                 return result;
@@ -156,17 +158,17 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
         }
         public async Task<DataResponse<int>> UpdateAsync(ProductUpdateCommand command)
         {
-           
-                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Update");
+            using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
-                var execute =
-                     await dbConnection
-                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+            var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Update");
 
-                return new DataResponse<int>(true);
-          
+            var execute =
+                 await dbConnection
+                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+            return new DataResponse<int>(true);
+
         }
 
         public async Task<DataResponse<int>> UpdateSecretAsync(ProductUpdateSecretCommand command)
