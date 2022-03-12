@@ -12,5 +12,11 @@ services:
        ASPNETCORE_ENVIRONMENT: ${ASONETCORE_ENVIRONMENT}
     volumes:
       - crmapi:/app/Presentation/CRCIS.Web.INoor.CRM.WebApi/wwwroot
+    networks:
+      - crm-api_default
 volumes:
   crmapi:
+networks:
+  crm-api_default:
+    external: true
+
