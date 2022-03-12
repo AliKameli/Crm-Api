@@ -19,7 +19,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Sources
         Task<DataTableResponse<IEnumerable<ProductGetDto>>> GetAsync(ProductDataTableQuery query);
         Task<DataResponse<ProductModel>> GetByIdAsync(int id);
         Task<DataResponse<ProductModel>> GetBySecretKeyAsync(string secretKey);
-        Task<DataResponse<IEnumerable<ProductDropDownListDto>>> GetDropDownListAsync();
+        Task<DataResponse<IEnumerable<ProductDropDownListDto>>> GetDropDownListAsync(bool appendCode = true);
         Task<DataResponse<int>> UpdateAsync(ProductUpdateCommand command);
         Task<DataResponse<int>> UpdateSecretAsync(ProductUpdateSecretCommand command);
     }

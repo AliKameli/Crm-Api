@@ -84,7 +84,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                 var sqlPendingHistory = _sqlConnectionFactory.SpInstanceFree("CRM", "PendingHistory", "UpdateResult");
                 await dbConnection
                            .QueryFirstOrDefaultAsync<long>(sqlPendingHistory, command, commandType: CommandType.StoredProcedure);
-
                 return new DataResponse<int>(true);
             }
             catch (Exception ex)

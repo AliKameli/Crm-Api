@@ -54,11 +54,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 );
 
 
-            var productsResponse = await _productRepository.GetDropDownListAsync();
-            var products = productsResponse.Success ? productsResponse.Data : new List<ProductDropDownListDto>();
-
-
-
             var resposne = await _reportRepository.GetCaseReportAsync(query);
 
             var stream = new MemoryStream();
@@ -126,38 +121,5 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موارد - {range}.xlsx");
 
         }
-
-        private Func<IEnumerable<ProductDropDownListDto>, int, string> funcGetProductTypeTitle = (list, pId) =>
-         {
-             try
-             {
-                 var p = list.FirstOrDefault(a => a.Id == pId);
-                 if (p is null)
-                 {
-                     return "";
-                 }
-                 var type = (ProductType)(p.ProductTypeId);
-                 switch (type)
-                 {
-                     case ProductType.Descktop:
-                         return "دسکتاب";
-                         break;
-                     case ProductType.Web:
-                         return "وب";
-                         break;
-                     default:
-                         break;
-                 }
-                 if (true)
-                 {
-
-                 }
-             }
-             catch (Exception)
-             {
-                 return "--Exception--";
-             }
-             return "---";
-         };
     }
 }

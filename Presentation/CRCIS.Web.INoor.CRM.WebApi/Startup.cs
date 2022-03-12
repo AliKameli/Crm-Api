@@ -1,6 +1,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Notifications;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Logs;
 using CRCIS.Web.INoor.CRM.Contract.Settings;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.ClientIpCheck;
 using CRCIS.Web.INoor.CRM.Infrastructure.Extensions;
 using CRCIS.Web.INoor.CRM.Infrastructure.MailReader;
 using CRCIS.Web.INoor.CRM.Infrastructure.Notifications;
@@ -83,6 +84,16 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 //                            .AllowAnyHeader()
                 //                            .AllowAnyMethod();
                 //    });
+            });
+
+
+            services.AddScoped<ClientIpCheckActionFilter>(container =>
+            {
+                var loggerFactory = container.GetRequiredService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger<ClientIpCheckActionFilter>();
+
+                return new ClientIpCheckActionFilter(
+                    Configuration["AdminSafeList"], logger);
             });
         }
 
