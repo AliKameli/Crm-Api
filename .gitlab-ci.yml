@@ -9,6 +9,7 @@ variables:
 crm-api-prod:
   stage: production
   before_script:
+    - docker network create --driver bridge crm-api_default || true 
     - export ASONETCORE_ENVIRONMENT=production
 
   script:
