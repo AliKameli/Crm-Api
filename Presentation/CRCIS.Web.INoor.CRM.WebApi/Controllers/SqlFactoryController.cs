@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Data.Database;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.ClientIpCheck;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ServiceFilter(typeof(ClientIpCheckActionFilter))]
+
     public class SqlFactoryController : ControllerBase
     {
         ISqlConnectionFactory _sqlConnectionFactory;
