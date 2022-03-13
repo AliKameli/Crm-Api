@@ -217,12 +217,19 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 
                 long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
 
+                var adminId = 0;
+                if (_identity.IsAuthenticated)
+                {
+                    adminId = _identity.GetAdminId();
+                }
+
+
                 var listFull = list
                     .Select(r => (r == null) ? null :
                         _mapper.Map<PersonReportResponseFullDto>(r)
                     )
                     .Select(r => (r == null) ? null :
-                            r.PairCommandAccess(_identity.GetAdminId())
+                            r.PairCommandAccess(adminId)
                     );
 
                 var result = new DataTableResponse<IEnumerable<PersonReportResponseFullDto>>(listFull, totalCount);

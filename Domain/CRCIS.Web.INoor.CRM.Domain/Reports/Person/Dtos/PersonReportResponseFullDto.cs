@@ -10,8 +10,12 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
     {
         public long Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
         public DateTime CreateDateTime { get; set; }
+        public string CreateDateTimePersian { get; set; }
         public string ProductTitle { get; set; }
+        public string Mobile { get; set; }
+        public string Email { get; set; }
         public long RowNumber { get; set; }
         public Guid? NoorPersonId { get; set; }
         public string SourceTypeTitle { get; set; }
