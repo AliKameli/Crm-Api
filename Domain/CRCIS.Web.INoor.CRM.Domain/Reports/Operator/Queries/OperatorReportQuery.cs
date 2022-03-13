@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries
         public string Order { get; private set; }
 
         public string SourceTypeIds { get; private set; }
+        public string OperationTypeIds { get; private set; }
         public string ProductIds { get; private set; }
         public string AdminIds { get; private set; }
         //public string FirstSubject { get; set; }
@@ -22,7 +23,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries
 
         public OperatorReportQuery(int pageIndex, int pageSize,
             string sortField, SortOrder? sortOrder,
-            string sourceTypeIds, string productIds,string adminIds,
+            string operationTypeIds, string sourceTypeIds, string productIds,string adminIds,
             string title, string global, string range)
             : base(pageIndex, pageSize)
         {
@@ -32,6 +33,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries
                 Order = $"{sortField} {sortOrder.ToString()}";
             }
             SourceTypeIds = sourceTypeIds?.Trim();
+            OperationTypeIds = operationTypeIds?.Trim();
             ProductIds = productIds?.Trim();
             Title = title?.Trim();
             AdminIds = adminIds?.Trim();

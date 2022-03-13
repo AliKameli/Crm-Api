@@ -29,6 +29,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
              [FromQuery] SortOrder? sortOrder,
              [FromQuery] string adminIds= null,
              [FromQuery] string sourceTypeIds = null,
+             [FromQuery] string operationTypeIds = null,
              [FromQuery] string productIds = null,
              [FromQuery] string title = null,
              [FromQuery] string global = null,
@@ -36,7 +37,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             var query = new OperatorReportQuery(pageIndex, pageSize,
               sortField, sortOrder,
-              sourceTypeIds, productIds,adminIds,
+              operationTypeIds,sourceTypeIds, productIds,adminIds,
               title, global, range
               );
 
