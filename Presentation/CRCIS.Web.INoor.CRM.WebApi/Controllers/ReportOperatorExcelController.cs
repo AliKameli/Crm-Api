@@ -108,7 +108,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                     worksheet.Cells[row, 13].Value = item.Email;
                     worksheet.Cells[row, 14].Value = item.Mobile;
                     worksheet.Cells[row, 15].Value = item.NameFamily;
-                    worksheet.Cells[row, 16].Value = (item.NoorUserId == null|| item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
+                    worksheet.Cells[row, 16].Value = (item.NoorUserId == null || item.NoorUserId.GetValueOrDefault().Equals(Guid.Empty)) ? "" : item.NoorUserId.ToString();
 
                     row++;
                 }
@@ -122,7 +122,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 // Response.Clear();
             }
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موارد - {range}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش اپراتور - {range}.xlsx");
 
         }
     }

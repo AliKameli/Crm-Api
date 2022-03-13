@@ -115,7 +115,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 // Response.Clear();
             }
             stream.Position = 0;
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موارد - {range}.xlsx");
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"گزارش موضوعات - {range}.xlsx");
         }
     }
 }
