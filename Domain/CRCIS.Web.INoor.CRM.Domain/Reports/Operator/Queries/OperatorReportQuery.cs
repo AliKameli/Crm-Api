@@ -20,11 +20,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries
         public string Global { get; private set; }
         public DateTime? FromDate { get; private set; }
         public DateTime? ToDate { get; private set; }
+        public DateTime? FromDateOperation { get; private set; }
+        public DateTime? ToDateOperation { get; private set; }
 
         public OperatorReportQuery(int pageIndex, int pageSize,
             string sortField, SortOrder? sortOrder,
             string operationTypeIds, string sourceTypeIds, string productIds,string adminIds,
-            string title, string global, string range)
+            string title, string global, string range,string rangeOperationDate)
             : base(pageIndex, pageSize)
         {
             sortField = sortField?.Trim();
@@ -45,6 +47,13 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries
                 FromDate = DateTime.Parse(sDates[0]);
                 ToDate = DateTime.Parse(sDates[1]);
             }
+            if (!string.IsNullOrEmpty(rangeOperationDate))
+            {
+                var sDates = rangeOperationDate.Split(',');
+                FromDateOperation = DateTime.Parse(sDates[0]);
+                ToDateOperation = DateTime.Parse(sDates[1]);
+            }
+
         }
     }
 }
