@@ -12,10 +12,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ServiceFilter(typeof(ClientIpCheckActionFilter))]
-    public class NoorProfileCaseHistorController : ControllerBase
+    public class NoorProfileCaseHistoryController : ControllerBase
     {
         private readonly ICaseHistoryRepository _caseHistoryRepository;
-        public NoorProfileCaseHistorController(ICaseHistoryRepository caseHistoryRepository)
+        public NoorProfileCaseHistoryController(ICaseHistoryRepository caseHistoryRepository)
         {
             _caseHistoryRepository = caseHistoryRepository;
         }

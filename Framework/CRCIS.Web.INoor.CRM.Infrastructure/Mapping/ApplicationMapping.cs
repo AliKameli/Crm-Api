@@ -41,41 +41,42 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
 
 
             CreateMap<PersonReportDto, PersonReportResponseFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
                 .ForMember(dest => dest.AllowAssignToMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowBackFromArchiveToMe, opt => opt.Ignore());
 
             CreateMap<ReportCaseDto, ReportCaseResponseFullDto>()
-                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
                 .ForMember(dest => dest.AllowAssignToMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAnswerByMe, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowAssignToOther, opt => opt.Ignore())
                 .ForMember(dest => dest.AllowBackFromArchiveToMe, opt => opt.Ignore());
 
             CreateMap<ReportOperatorDto, ReportOperatorResponseFullDto>()
-                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
-                 .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(opt => opt.OperationTypeDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(src => src.OperationTypeDateTime.ToPersinDateString(true, false)))
                 ;
              CreateMap<ReportAnswerDto, ReportAnswerResponseFullDto>()
-                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
-                 .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(opt => opt.OperationTypeDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(src => src.OperationTypeDateTime.ToPersinDateString(true, false)))
                 ;
 
               CreateMap<ReportSubjectDto, ReportSubjectResponseFullDto>()
-                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)))
-                 .ForMember(dest => dest.SubjectCaseCreateAtPersian, opt => opt.MapFrom(opt => opt.SubjectCaseCreateAt.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+                 .ForMember(dest => dest.SubjectCaseCreateAtPersian, opt => opt.MapFrom(src => src.SubjectCaseCreateAt.ToPersinDateString(true, false)))
                 ;
 
 
             CreateMap<ImportCaseGetDto, ImportCaseGetFullDto>()
-                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)));
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)));
 
             CreateMap<PendingCaseGetDto, PendingCaseGetFullDto>()
-                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)));
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)));
 
             CreateMap<ArchiveCaseGetDto, ArchiveCaseGetFullDto>()
-                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(opt => opt.CreateDateTime.ToPersinDateString(true, false)));
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)));
 
         }
     }
