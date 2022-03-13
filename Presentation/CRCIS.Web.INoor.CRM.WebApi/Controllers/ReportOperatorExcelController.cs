@@ -33,20 +33,22 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
            [FromQuery] SortOrder? sortOrder,
            [FromQuery] string adminIds,
            [FromQuery] string sourceTypeIds = null,
+           [FromQuery] string operationTypeIds = null,
            [FromQuery] string productIds = null,
            [FromQuery] string title = null,
            [FromQuery] string global = null,
-           [FromQuery] string range = null)
+           [FromQuery] string range = null,
+           [FromQuery] string rangeOperationDate = null)
         {
 
             pageIndex = 1;
             pageSize = 999999;
 
             var query = new OperatorReportQuery(pageIndex, pageSize,
-              sortField, sortOrder,
-              sourceTypeIds, productIds, adminIds,
-              title, global, range
-              );
+             sortField, sortOrder,
+             operationTypeIds, sourceTypeIds, productIds, adminIds,
+             title, global, range, rangeOperationDate
+             );
 
             var resposne = await _reportRepository.GetOperatorReportAsync(query);
 
