@@ -33,6 +33,8 @@ using CRCIS.Web.INoor.CRM.Domain.Reports.Subject.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Dtos;
 using System.Drawing;
+using CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Queries;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -496,6 +498,38 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 _logger.LogError(ex.StackTrace);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>(errors);
+                return result;
+            }
+        }
+
+        public async Task<DataTableResponse<IEnumerable<AdminCardboardFullDto>>> GetAdminCardboardReportAsync(AdminCardboardReportQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "AdminCardboard");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<AdminCardboardDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var listFull = list
+                    .Select(r => (r == null) ? null :
+                        _mapper.Map<AdminCardboardFullDto>(r)
+                    );
+
+                var result = new DataTableResponse<IEnumerable<AdminCardboardFullDto>>(listFull, totalCount);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<AdminCardboardFullDto>>(errors);
                 return result;
             }
         }

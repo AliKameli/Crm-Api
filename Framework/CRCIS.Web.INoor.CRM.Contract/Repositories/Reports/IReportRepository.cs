@@ -1,5 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports;
+using CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Case.Dtos;
@@ -25,6 +27,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Reports
 {
     public interface IReportRepository
     {
+        Task<DataTableResponse<IEnumerable<AdminCardboardFullDto>>> GetAdminCardboardReportAsync(AdminCardboardReportQuery query);
         Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>> GetAnsweringReportAsync(AnswerReportQuery query);
         Task<DataResponse<ReportLastDaysCaseHistoryDto>> GetCaseHistoryReportAsync();
         Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query);
