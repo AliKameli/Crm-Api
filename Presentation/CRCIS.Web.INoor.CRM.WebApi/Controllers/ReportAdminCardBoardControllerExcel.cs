@@ -108,9 +108,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 }
 
                 // set some core property values
-                xlPackage.Workbook.Properties.Title = "Opearatios List";
+                xlPackage.Workbook.Properties.Title = "AdminCardboard List";
                 xlPackage.Workbook.Properties.Author = "CRM Noor";
-                xlPackage.Workbook.Properties.Subject = "OpearatiosList";
+                xlPackage.Workbook.Properties.Subject = "AdminCardboardList";
                 // save the new spreadsheet
                 xlPackage.Save();
                 // Response.Clear();
