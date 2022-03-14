@@ -20,7 +20,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Dtos
         public string TblName { get; set; }
         public int? AdminId { get; set; }
         public string FirstSubject { get; set; }
-        public string OperationTypeTitle { get; set; }
         public string AdminFullName { get; set; }
         public long TotalCount { get; set; }
         public long CaseId { get; set; }
