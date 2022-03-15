@@ -20,10 +20,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReportAdminCardBoardControllerExcel : ControllerBase
+    public class ReportAdminCardBoardExcelController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
-        public ReportAdminCardBoardControllerExcel(IReportRepository reportRepository)
+        public ReportAdminCardBoardExcelController(IReportRepository reportRepository)
         {
             _reportRepository = reportRepository;
         }
