@@ -61,25 +61,23 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
 
                 worksheet.Cells["A1"].Value = "ردیف";
-                worksheet.Cells["B1"].Value = "عملیات";
-                worksheet.Cells["C1"].Value = "زمان";
-                worksheet.Cells["D1"].Value = "نام کاربر";
+                worksheet.Cells["B1"].Value = "نام کاربر";
 
-                worksheet.Cells["E1"].Value = "شناسه مورد";
-                worksheet.Cells["F1"].Value = "عنوان";
-                worksheet.Cells["G1"].Value = "توضیحات";
-                worksheet.Cells["H1"].Value = "تاریخ درج";
-                worksheet.Cells["I1"].Value = "محصول";
-                worksheet.Cells["J1"].Value = "منشا";
-                worksheet.Cells["K1"].Value = "وضعیت";
-                worksheet.Cells["L1"].Value = "موضوع";
-                worksheet.Cells["M1"].Value = "ایمیل";
-                worksheet.Cells["N1"].Value = "موبایل";
-                worksheet.Cells["O1"].Value = "نام";
-                worksheet.Cells["P1"].Value = "شناسه آی نور";
-                worksheet.Cells["A1:P1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A1:P1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
-                worksheet.Cells["A1:P1"].Style.Font.Bold = true;
+                worksheet.Cells["C1"].Value = "شناسه مورد";
+                worksheet.Cells["D1"].Value = "عنوان";
+                worksheet.Cells["E1"].Value = "توضیحات";
+                worksheet.Cells["F1"].Value = "تاریخ درج";
+                worksheet.Cells["G1"].Value = "محصول";
+                worksheet.Cells["H1"].Value = "منشا";
+                worksheet.Cells["I1"].Value = "وضعیت";
+                worksheet.Cells["J1"].Value = "موضوع";
+                worksheet.Cells["K1"].Value = "ایمیل";
+                worksheet.Cells["L1"].Value = "موبایل";
+                worksheet.Cells["M1"].Value = "نام";
+                worksheet.Cells["N1"].Value = "شناسه آی نور";
+                worksheet.Cells["A1:N1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:N1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(184, 204, 228));
+                worksheet.Cells["A1:N1"].Style.Font.Bold = true;
 
 
                 worksheet.DefaultColWidth = 25;
