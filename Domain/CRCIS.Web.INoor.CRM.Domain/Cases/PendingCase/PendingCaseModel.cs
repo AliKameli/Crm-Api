@@ -21,6 +21,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase
         public int SourceTypeId { get; set; }
         public int CaseStatusId { get; set; }
         public int ProductId { get; set; }
+        public int ProductCode { get; set; }
         public int ProductTypeId { get; set; }
         public string ProductTypeTitle { get; set; }
         public int AdminId { get; set; }
