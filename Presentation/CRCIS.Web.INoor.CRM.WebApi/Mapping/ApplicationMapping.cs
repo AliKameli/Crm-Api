@@ -96,6 +96,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
             #region CasePending
             CreateMap<CaseUpdateModel, PendingCaseUpdateCommand>()
                  .ConvertUsing(src => mapImportCaseUpdateModelToImportCaseUpdateCommand(src));
+            CreateMap<CaseUpdateProductModel, CaseUpdateProductCommand>();
             #endregion
 
             #region Admin
