@@ -29,6 +29,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Reports
     {
         Task<DataTableResponse<IEnumerable<AdminCardboardFullDto>>> GetAdminCardboardReportAsync(AdminCardboardReportQuery query);
         Task<DataTableResponse<IEnumerable<ReportAnswerResponseFullDto>>> GetAnsweringReportAsync(AnswerReportQuery query);
+        Task<DataResponse<ReportLastDaysAnswerResultHistoryDto>> GetAnswerResultHistoryReportAsync();
         Task<DataResponse<ReportLastDaysCaseHistoryDto>> GetCaseHistoryReportAsync();
         Task<DataTableResponse<IEnumerable<ReportCaseResponseFullDto>>> GetCaseReportAsync(CaseReportQuery query);
         Task<DataTableResponse<IEnumerable<NoorLockCaseReportDto>>> GetNoorAppPagingReport(NoorLockReportPagingQuery query);

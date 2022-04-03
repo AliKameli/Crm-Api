@@ -90,7 +90,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             var dataResponseMails = _sourceConfigRepository.GetByAnswerMethodIdAsync((int)AnswerMethod.Email).Result;
             if (dataResponseMails.Success == false || dataResponseMails.Data == null)
             {
-                _logger.LogCritical("GetBySourceTypeId faild reading mail settings {fromMailBox}", fromMailBox);
+                _logger.LogWarning("GetBySourceTypeId faild reading mail settings {fromMailBox}", fromMailBox);
                 return new DataResponse<string>(new List<string> { "تنظیمات ایمیل باکس یافت نشد" });
             }
 
@@ -160,7 +160,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             var dataResponseMails = _sourceConfigRepository.GetByAnswerMethodIdAsync((int)AnswerMethod.Sms).Result;
             if (dataResponseMails.Success == false || dataResponseMails.Data == null)
             {
-                _logger.LogCritical("GetBySourceTypeId faild reading mail settings {fromMailBox}", fromSmsCenterId);
+                _logger.LogWarning("GetBySourceTypeId faild reading mail settings {fromMailBox}", fromSmsCenterId);
                 return new DataResponse<string>(new List<string> { "تنظیمات مرکز پیامک یافت نشد" });
             }
 

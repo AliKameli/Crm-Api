@@ -113,6 +113,67 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
             }
         }
 
+        public async Task<DataResponse<ReportLastDaysAnswerResultHistoryDto>> GetAnswerResultHistoryReportAsync()
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "LastWeekAnswerResultHistory");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<AnswerResultHistoryLastDaysDto>(sql, commandType: CommandType.StoredProcedure);
+
+                var days = list.Select(a => a.Day).Distinct().OrderBy(a => a).ToList();
+                var colors = new List<string> { "#6ed8f5", "#00bb7e", "#ef6262", "#e262a2", "#f2ea00", "#000cf2" };
+                var types = list.Select(a => a.PendingResultId).Distinct().OrderBy(a => a);
+                Random r = new Random();
+                IList<LastDaysAnswerResultHistoryDto> finalResult = new List<LastDaysAnswerResultHistoryDto>();
+                for (int index = 0; index < types.Count(); index++)
+                {
+                    var type = types.ElementAt(index);
+
+                    var color = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0).ToString();
+
+                    try { color = colors.ElementAt(index); } catch { }
+                    var chartDto = new LastDaysAnswerResultHistoryDto()
+                    {
+                        TypeId = type,
+                        Label = list.First(a => a.PendingResultId == type)?.PendingResultMessage,
+                        Fill = false,
+                        BackgroundColor = color,
+                        BorderColor = color,
+                        Data = new List<int>(),
+                    };
+
+                    foreach (var day in days)
+                    {
+                        var record = list.FirstOrDefault(a => a.PendingResultId == type && a.Day == day);
+                        var count = (record?.CNT).GetValueOrDefault();
+                        chartDto.Data.Add(count);
+                    }
+                    finalResult.Add(chartDto);
+                }
+
+                var firstDate = new DateTime(DateTime.Now.Year, 1, 1);
+                var historyChartDto = new ReportLastDaysAnswerResultHistoryDto
+                {
+                    DayNumbers = days.Select(d => firstDate.AddDays(d - 1).ToPersinDateString()).ToList(),
+                    Datasets = finalResult
+                };
+
+                var result = new DataResponse<ReportLastDaysAnswerResultHistoryDto>(historyChartDto);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<ReportLastDaysAnswerResultHistoryDto>(errors);
+                return result;
+            }
+        }
+
         public async Task<DataResponse<ReportLastDaysProductHistoryDto>> GetProductHistoryReportAsync()
         {
             try
