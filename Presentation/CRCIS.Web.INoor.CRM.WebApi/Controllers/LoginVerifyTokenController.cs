@@ -36,13 +36,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(LoginVerifyTokenModel verifyToken)
         {
-            _logger.LogCritical($"LoginVerifyTokenModel start : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
+            _logger.LogInformation($"LoginVerifyTokenModel start : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
             var responseUser = await _adminVerifyTokenRepository.GetAdminByVerifyToken(Guid.Parse(verifyToken.VerifyToken));
             if (responseUser.Success == false)
             {
                 return Ok(responseUser);
             }
-            _logger.LogCritical($"VerifyToken founded : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
+            _logger.LogInformation($"VerifyToken founded : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
             var adminModel = new Domain.Users.Admin.AdminModel
             {
                 Id = responseUser.Data.Id,
@@ -67,11 +67,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 Permissions = resposnePermissions.Data
             };
 
-            _logger.LogCritical($"AccessToken generated : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
+            _logger.LogInformation($"AccessToken generated : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
 
             var responseStore = await _tokenStoreService.CreateAsync(accessTokenData, responseUser.Data.Id);
 
-            _logger.LogCritical($"AccessToken stored : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
+            _logger.LogInformation($"AccessToken stored : {DateTime.Now} VerifyToken : {verifyToken?.VerifyToken}");
 
             if (responseStore.Success)
             {
