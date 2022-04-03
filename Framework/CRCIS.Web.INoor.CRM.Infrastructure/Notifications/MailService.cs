@@ -25,9 +25,23 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             bool result = false;
             try
             {
+
+                //var oMail =
+                //   new MailMessage(new MailAddress(mailSettings.Mail),
+                //   new MailAddress(mailRequest.ToEmail))
+                //   {
+                //       Subject = mailRequest.Subject,
+                //       SubjectEncoding = new UTF8Encoding(),
+                //       Body = mailRequest.Body,
+                //       BodyEncoding = new UTF8Encoding(),
+                //       IsBodyHtml = true,
+                //   };
+
+                var fromMail = new MailAddress(mailSettings.Mail,null,Encoding.UTF8);
+                var toMail = new MailAddress(mailRequest.ToEmail, null,Encoding.UTF8);
+
                 var oMail =
-                   new MailMessage(new MailAddress(mailSettings.Mail),
-                   new MailAddress(mailRequest.ToEmail))
+                   new MailMessage(fromMail,toMail)
                    {
                        Subject = mailRequest.Subject,
                        SubjectEncoding = new UTF8Encoding(),
@@ -35,6 +49,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                        BodyEncoding = new UTF8Encoding(),
                        IsBodyHtml = true,
                    };
+
+
+           
 
                 if (mailRequest.Attachments is not null)
                 {
