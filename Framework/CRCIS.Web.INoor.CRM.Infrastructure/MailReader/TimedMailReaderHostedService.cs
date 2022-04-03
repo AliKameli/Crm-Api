@@ -77,13 +77,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
                     {
                         if (string.IsNullOrEmpty(item.ConfigJson))
                         {
-                            _logger.LogCritical("(string.IsNullOrEmpty(item.ConfigJson)  {item.ConfigJson} ", item.ConfigJson);
+                            _logger.LogInformation("(string.IsNullOrEmpty(item.ConfigJson)  {item.ConfigJson} ", item.ConfigJson);
                             continue;
                         }
                         var configJsonDto = System.Text.Json.JsonSerializer.Deserialize<SourceConfigJsonDto>(item.ConfigJson);
                         if (configJsonDto == null)
                         {
-                            _logger.LogCritical("(configJsonDto == null  {configJsonDto} ", configJsonDto);
+                            _logger.LogInformation("(configJsonDto == null  {configJsonDto} ", configJsonDto);
                             continue;
                         }
                         _logger.LogInformation(configJsonDto.MailAddress);
@@ -131,7 +131,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             }
             catch (Exception ex)
             {
-                _logger.LogCritical("Exception {ex}", ex.Message);
+                _logger.LogError("Exception {ex}", ex.Message);
             }
         }
 
