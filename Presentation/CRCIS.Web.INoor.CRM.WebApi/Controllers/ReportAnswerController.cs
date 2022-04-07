@@ -41,7 +41,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
             var query = new Domain.Reports.Answer.Queries.AnswerReportQuery(pageIndex, pageSize,
                 sortField, sortOrder,
-                sourceTypeIds, productIds,adminIds, answerMethodIds,pendingResultIds
+                sourceTypeIds, productIds,adminIds, answerMethodIds,pendingResultIds,
                 title, global, range, rangeAnswer
                 );
 
