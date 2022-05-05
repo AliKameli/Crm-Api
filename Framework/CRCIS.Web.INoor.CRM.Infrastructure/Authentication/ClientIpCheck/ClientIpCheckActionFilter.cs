@@ -27,7 +27,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication.ClientIpCheck
             var remoteIp = context.HttpContext.Connection.RemoteIpAddress;
             _logger.LogDebug("Remote IpAddress: {RemoteIp}", remoteIp);
             var ip = _safelist.Split(';');
-            var badIp = true;
+            //var badIp = true;
+            var badIp = false;
 
             if (remoteIp.IsIPv4MappedToIPv6)
             {
