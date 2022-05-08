@@ -38,7 +38,7 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit;
 using GreenPipes;
 using RabbitMQ.Client;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications;
-using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.UserReportSupports;
+//using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.UserReportSupports;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.Menu;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.Menu;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.AdminAction;
@@ -210,7 +210,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<NotificationConsumer>();
-                x.AddConsumer<UserReportSupportConsumer>();
+                //x.AddConsumer<UserReportSupportConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {

@@ -14,7 +14,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ServiceFilter(typeof(ClientIpCheckActionFilter))]
+    //[ServiceFilter(typeof(ClientIpCheckActionFilter))]
     public class NoorProfileReportPersonController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;

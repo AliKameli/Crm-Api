@@ -29,5 +29,6 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
         public bool AllowAnswerByMe { get; set; }
         public bool AllowAssignToOther { get; set; }
         public bool AllowBackFromArchiveToMe { get; set; }
+        public int AnswersCounts { get; set; }
     }
 }
