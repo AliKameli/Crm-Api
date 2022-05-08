@@ -22,6 +22,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Reports.Person.Dtos
         public string TblName { get; set; }
         public int? AdminId { get; set; }
         public string FirstSubject { get; set; }
+        public int AnswersCounts { get; set; }
         public long TotalCount { get; set; }
     }
 }
