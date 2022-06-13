@@ -13,20 +13,30 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Specifications.CommonAnswer;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
 {
     public class CommonAnswerRepository : BaseRepository, ICommonAnswerRepository
     {
         protected override string TableName =>"CommonAnswer";
-        private ILogger _logger;
-        public CommonAnswerRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory)
+        private readonly ILogger _logger;
+        private readonly IIdentity _identity;
+        private readonly IMapper _mapper;
+        public CommonAnswerRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory, IIdentity identity, IMapper mapper)
             : base(sqlConnectionFactory)
         {
             _logger = loggerFactory.CreateLogger<CommonAnswerRepository>();
+            _identity = identity;
+            _mapper = mapper;
         }
-        public async Task<DataResponse<IEnumerable<CommonAnswerGetDto>>> GetAsync(CommonAnswerDataTableQuery query)
+       
+        public async Task<DataResponse<IEnumerable<CommonAnswerGetFullDto>>> GetAsync(CommonAnswerDataTableQuery query)
         {
             try
             {
@@ -38,7 +48,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                      await dbConnection
                     .QueryAsync<CommonAnswerGetDto>(sql, query, commandType: CommandType.StoredProcedure);
                 int totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
-                var result = new DataTableResponse<IEnumerable<CommonAnswerGetDto>>(list,totalCount);
+
+                var dtoFull = list.AsQueryable().ProjectTo<CommonAnswerGetFullDto>(_mapper.ConfigurationProvider)
+                    .Select(a => a.PairCommandAccess(_identity.GetAdminId())).ToList();
+
+                var result = new DataTableResponse<IEnumerable<CommonAnswerGetFullDto>>(dtoFull, totalCount);
                 return result;
                     
             }
@@ -46,7 +60,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
             {
                 _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<IEnumerable<CommonAnswerGetDto>>(errors);
+                var result = new DataResponse<IEnumerable<CommonAnswerGetFullDto>>(errors);
                 return result;
             }
         }
@@ -132,6 +146,29 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Answers
                 using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Update");
+
+                var execute =
+                     await dbConnection
+                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+                return new DataResponse<int>(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<int>(errors);
+                return result;
+            }
+        }
+        public async Task<DataResponse<int>> EditByOperatoreAsync(CommonAnswerEditByOperatorPatchCommand command)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "EditByOperatorUpdate");
 
                 var execute =
                      await dbConnection

@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.CommonAnswer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
@@ -21,10 +23,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     {
         private readonly ICommonAnswerRepository _commonAnswerRepository;
         private readonly IMapper _mapper;
-        public CommonAnswerController(IMapper mapper, ICommonAnswerRepository commonAnswerRepository)
+        private readonly IIdentity _identity;
+        public CommonAnswerController(IMapper mapper, ICommonAnswerRepository commonAnswerRepository, IIdentity identity)
         {
             _mapper = mapper;
             _commonAnswerRepository = commonAnswerRepository;
+            _identity = identity;
         }
 
         [HttpGet("{id}")]
@@ -52,6 +56,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> Post(CommonAnswerCreateModel model)
         {
+            model.CreatorAdminId = _identity.GetAdminId();
             var command = _mapper.Map<CommonAnswerCreateCommand>(model);
             var response = await _commonAnswerRepository.CreateAsync(command);
             return Ok(response);
@@ -59,11 +64,20 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> Put(CommonAnswerUpadateModel model)
+        public async Task<IActionResult> Put(CommonAnswerUpdateModel model)
         {
+            model.ConfirmedAdminId = _identity.GetAdminId();
             var command = _mapper.Map<CommonAnswerUpdateCommand>(model);
             var response = await _commonAnswerRepository.UpdateAsync(command);
             return Ok(response);
+        }
+        [HttpPatch]
+        [Authorize]
+        public async Task<IActionResult> Patch(CommonAnswerEditByOperatorPatchModel model)
+        {
+            var command = _mapper.Map<CommonAnswerEditByOperatorPatchCommand>(model);
+            var resposne = await _commonAnswerRepository.EditByOperatoreAsync(command);
+            return Ok(resposne);
         }
 
         [HttpDelete("{id}")]
