@@ -16,7 +16,8 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Answers
     {
         Task<DataResponse<int>> CreateAsync(CommonAnswerCreateCommand command);
         Task<DataResponse<int>> DeleteAsync(int id);
-        Task<DataResponse<IEnumerable<CommonAnswerGetDto>>> GetAsync(CommonAnswerDataTableQuery query);
+        Task<DataResponse<int>> EditByOperatoreAsync(CommonAnswerEditByOperatorPatchCommand command);
+        Task<DataResponse<IEnumerable<CommonAnswerGetFullDto>>> GetAsync(CommonAnswerDataTableQuery query);
         Task<DataResponse<CommonAnswerModel>> GetByIdAsync(int id);
         Task<DataResponse<IEnumerable<DropDownListDto>>> GetDropDownListAsync();
         Task<DataResponse<int>> UpdateAsync(CommonAnswerUpdateCommand command);

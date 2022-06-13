@@ -48,7 +48,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 
             #region CommonAnswer
             CreateMap<CommonAnswerCreateModel, CommonAnswerCreateCommand>();
-            CreateMap<CommonAnswerUpadateModel, CommonAnswerUpdateCommand>();
+            CreateMap<CommonAnswerUpdateModel, CommonAnswerUpdateCommand>();
+            CreateMap<CommonAnswerEditByOperatorPatchModel, CommonAnswerEditByOperatorPatchCommand>();
             #endregion
 
             #region AnswerMethod
@@ -121,7 +122,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Mapping
 
         private CommonAnswerCreateCommand mapCommonAnswerCreateModelToCommonAnswerCreateCommand(CommonAnswerCreateModel model)
         {
-            return new CommonAnswerCreateCommand(model.Title, model.AnswerText, model.Priority);
+            return new CommonAnswerCreateCommand(model.Title, model.AnswerText, model.Priority,model.CreatorAdminId);
         }
 
 

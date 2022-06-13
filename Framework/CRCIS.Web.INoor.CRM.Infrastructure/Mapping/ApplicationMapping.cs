@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries;
@@ -30,6 +31,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.ImportDateTimePersian, opt => opt.MapFrom(src => src.ImportDateTime.ToPersinDateString(true, false)))
                 .ForMember(dest => dest.SuggestionAnswerMethod, opt => opt.Ignore())
                 .ForMember(dest => dest.SuggestionAnswerSource, opt => opt.Ignore())
+                ;
+
+            CreateMap<CommonAnswerGetDto, CommonAnswerGetFullDto>()
+                .ForMember(dest => dest.AccessOperatorBeforConfirmAdmin, opt => opt.MapFrom(src => false))
                 ;
 
             CreateMap<CaseHistoriesQuery, CaseHistoriesDto>()
