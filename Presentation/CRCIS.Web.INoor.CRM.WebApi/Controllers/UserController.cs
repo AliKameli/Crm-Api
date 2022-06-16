@@ -25,19 +25,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(string username, string fullname,string email , string mobile)
         {
-            if (username is null) username = "";
-            else username = $"${username}*";
-            
-            if (fullname is null) fullname = "";
-            else fullname = $"${fullname}*";
-            
-            if (email is null) email = "";
-            else email = $"${email}*";
-            
-            if (mobile is null) mobile = "";
-            else mobile = $"${mobile}*";
-            
-
             //var model = new SearchUserGlobalSearchInputDto { SearchText = search };
             //var client = new ApiHttpClient();
             //var data = await client.GetUsersGlobalSearchAsync(model);
