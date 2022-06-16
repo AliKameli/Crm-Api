@@ -47,6 +47,8 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.Role;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.Role;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.RoleAdmin;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.RoleAdmin;
+using CRCIS.Web.INoor.CRM.Contract.ElkSearch;
+using CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 {
@@ -177,6 +179,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddTransient<IAdminVerifyTokenRepository, AdminVerifyTokenRepository>();
             services.AddTransient<IPermissionService, PermissionService>();
 
+            //Elk
+            services.AddSingleton<IUserSearch, UserSearch>();
+
             return services;
         }
 
@@ -210,6 +215,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<NotificationConsumer>();
+                //x.AddConsumer<CaseSubjectConsumer>();
                 //x.AddConsumer<UserReportSupportConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
@@ -236,10 +242,27 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
                         oq.ConfigureConsumer<NotificationConsumer>(provider);
                     });
 
+                    //config.ReceiveEndpoint(rabbitmqSettings.QueueCaseSujectUpdate, oq =>
+                    //{
+                    //    oq.Bind(rabbitmqSettings.ExchangeCaseSujectUpdate, x =>
+                    //    {
+                    //        x.Durable = true;
+                    //        x.AutoDelete = false;
+                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                    //                                             //x.RoutingKey = "8675309";
+                    //    });
+                    //    oq.UseMessageRetry(r => r.Interval(2, 100));
+                    //    oq.ConfigureConsumer<CaseSubjectConsumer>(provider);
+                    //});
+
                     config.Publish<NotificationValueDataEntered>(x =>
                     {
                         x.Exclude = true; // do not create an exchange for this type
                     });
+                    //config.Publish<CaseSubjectUpdated>(x =>
+                    //{
+                    //    x.Exclude = true; // do not create an exchange for this type
+                    //});
 
                     //config.ReceiveEndpoint(rabbitmqSettings.QueueFeedback, oq =>
                     //{

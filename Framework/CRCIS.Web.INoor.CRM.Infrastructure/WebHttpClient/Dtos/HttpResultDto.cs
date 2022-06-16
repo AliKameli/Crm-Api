@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.WebHttpClient.Dtos
 {
-    public class HttResultDto<TData> where TData :class
+    public class HttpResultDto<TData> where TData :class
     {
         public bool IsSuccess { get; private set; }
 
