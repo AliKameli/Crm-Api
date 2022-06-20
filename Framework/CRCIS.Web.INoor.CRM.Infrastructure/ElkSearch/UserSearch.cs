@@ -171,8 +171,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
                         Should = new List<QueryContainer>
                     {
                         new MatchPhraseQuery{Field ="identities.identityValue" ,Query = identity, Boost = 4},
-                         new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.And , Boost = 2 },
-                         new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.Or , Boost = 1 },
+                        new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.And , Boost = 2 },
+                        new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.Or , Boost = 1 },
                     }
                     };
                     mustQueries.Add(q2);
