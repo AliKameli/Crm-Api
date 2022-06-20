@@ -57,15 +57,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
 
             foreach (var item in listTemp)
             {
-                var identities = listElk
-                    .Where(a => a.Id == item.UserId).SelectMany(i => i.Identities).ToList();
+                var identities = listElk.Where(a => a.Id == item.UserId).SelectMany(i => i.Identities).ToList();
                 listFinal.Add(new SeadrchUserDto
                 {
                     UserId = item.UserId.ToString(),
                     Fullname = item.Fullname,
-                    Username = string.Join(",", identities.Where(a => a.IdentityTypeId == 3).Select(a => a.IdentityValue).ToArray()),
-                    Email = string.Join(",", identities.Where(a => a.IdentityTypeId == 2).Select(a => a.IdentityValue).ToArray()),
-                    Mobile = string.Join(",", identities.Where(a => a.IdentityTypeId == 1).Select(a => a.IdentityValue).ToArray()),
+                    Username = string.Join(" , ", identities.Where(a => a.IdentityTypeId == 3).Select(a => a.IdentityValue).ToArray()),
+                    Email = string.Join(" , ", identities.Where(a => a.IdentityTypeId == 2).Select(a => a.IdentityValue).ToArray()),
+                    Mobile = string.Join(" , ", identities.Where(a => a.IdentityTypeId == 1).Select(a => a.IdentityValue).ToArray()),
 
                 });
 
@@ -86,8 +85,18 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
 
             if (string.IsNullOrEmpty(mobile) == false)
             {
-                var t = addIdentity(mobile);
-                mustQueries.AddRange(t);
+                if (mobile.StartsWith("09"))
+                {
+                    var temp = mobile.Substring(1);
+                    var withStarStarting = $"+98-{temp}";
+                    var qStared = addIdentity(withStarStarting);
+                    mustQueries.AddRange(qStared);
+                }
+                else
+                {
+                    var t = addIdentity(mobile);
+                    mustQueries.AddRange(t);
+                }
             }
             if (string.IsNullOrEmpty(email) == false)
             {
@@ -115,27 +124,45 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
 
         private QueryContainer addFullName(string fullname)
         {
+            if (fullname.Contains('*'))
+            {
+                var qWildcardQuery = new WildcardQuery { Field = "fullName", Value = fullname, Boost = 4 };
+                return qWildcardQuery;
+            }
+
             var qFullName = new BoolQuery
             {
                 Should = new List<QueryContainer>
                 {
                     new MatchPhraseQuery{Field ="fullName" ,Query = fullname , Boost = 4 },
-                    new MatchQuery{Field="fullName" ,Query =fullname, Operator = Operator.And,Boost = 2},
+                    new MatchQuery{Field="fullName" ,Query =fullname, Operator = Operator.And, Boost = 2},
+                    new MatchQuery{Field="fullName" ,Query =fullname, Operator = Operator.Or, Boost = 1},
                 }
             };
 
             return qFullName;
         }
 
-        private List<QueryContainer> addIdentity(string identity)
+        private static List<QueryContainer> addIdentity(string identity)
         {
             List<QueryContainer> mustQueries = new List<QueryContainer>();
             if (string.IsNullOrEmpty(identity) == false)
             {
                 if (identity.Contains('*'))
                 {
-                    var qWildcardQuery = new WildcardQuery { Field = "identities.identityValue", Value = identity, };
-                    mustQueries.Add(qWildcardQuery);
+                    var q1 = new BoolQuery
+                    {
+                        Should = new List<QueryContainer>
+                        {
+                            new WildcardQuery { Field = "identities.identityValue", Value = identity, Boost = 4},
+                            new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.And , Boost = 2 },
+                            new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.Or  , Boost = 1 },
+                        },
+
+                    };
+
+                    //var qWildcardQuery = new WildcardQuery { Field = "identities.identityValue", Value = identity, };
+                    mustQueries.Add(q1);
                 }
                 else
                 {
@@ -144,8 +171,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
                         Should = new List<QueryContainer>
                     {
                         new MatchPhraseQuery{Field ="identities.identityValue" ,Query = identity, Boost = 4},
-                         new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.And , Boost = 2 },
-                         new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.Or , Boost = 1 },
+                        new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.And , Boost = 2 },
+                        new MatchQuery{Field="identities.identityValue" ,Query = identity, Operator = Operator.Or , Boost = 1 },
                     }
                     };
                     mustQueries.Add(q2);
