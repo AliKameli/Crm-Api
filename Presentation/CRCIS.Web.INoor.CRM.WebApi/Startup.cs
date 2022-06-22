@@ -92,8 +92,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 var loggerFactory = container.GetRequiredService<ILoggerFactory>();
                 var logger = loggerFactory.CreateLogger<ClientIpCheckActionFilter>();
 
-                return new ClientIpCheckActionFilter(
-                    Configuration["AdminSafeList"], logger);
+                return new ClientIpCheckActionFilter(Configuration["AdminSafeList"], logger);
             });
         }
 

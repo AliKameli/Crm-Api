@@ -18,6 +18,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Settings
         public string ExchangeNotification { get; set; }
         public string QueueNotification { get; set; }
 
+        public string ExchangeCaseSujectUpdate { get; set; }
+        public string QueueCaseSujectUpdate { get; set; }
+
         public string HostName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

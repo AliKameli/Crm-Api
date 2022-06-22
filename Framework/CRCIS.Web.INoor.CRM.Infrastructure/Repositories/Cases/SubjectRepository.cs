@@ -131,7 +131,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 return result;
             }
         }
-        public async Task<DataResponse<IEnumerable<SubjectDropDownListDto>>> GetSearchDropDownList(SubjectSearchDropDownQuery query)
+        public async Task<DataResponse<IEnumerable<SubjectSearchDropDownListDto>>> GetSearchDropDownList(SubjectSearchDropDownQuery query)
         {
             try
             {
@@ -141,23 +141,25 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
 
                 var list =
                      await dbConnection
-                    .QueryAsync<SubjectDropDownListDto>(sql, query,commandType: CommandType.StoredProcedure);
+                    .QueryAsync<SubjectSearchDropDownListDto>(sql, query,commandType: CommandType.StoredProcedure);
 
-                list = list.Select(p => new SubjectDropDownListDto
+                var resultList = list.Select(p => new SubjectSearchDropDownListDto
                 {
                     Id = p.Id,
                     Title = $"{ p.Title }  {p.Code}".Trim(),
                     Code = p.Code,
-                });
+                    Priority = p.Priority,
+                    Weight = p.Weight,
+                }).ToList();
 
-                var result = new DataResponse<IEnumerable<SubjectDropDownListDto>>(list);
+                var result = new DataResponse<IEnumerable<SubjectSearchDropDownListDto>>(resultList);
                 return result;
             }
             catch (Exception ex)
             {
                 _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataResponse<IEnumerable<SubjectDropDownListDto>>(errors);
+                var result = new DataResponse<IEnumerable<SubjectSearchDropDownListDto>>(errors);
                 return result;
             }
         }
