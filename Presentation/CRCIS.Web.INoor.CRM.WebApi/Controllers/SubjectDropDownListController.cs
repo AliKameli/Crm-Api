@@ -14,7 +14,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
     public class SubjectDropDownListController : ControllerBase
     {
         private readonly ISubjectRepository _subjectRepository;
-        public SubjectDropDownListController(ISubjectRepository subjectRepository )
+        public SubjectDropDownListController(ISubjectRepository subjectRepository)
         {
             _subjectRepository = subjectRepository;
         }
@@ -25,12 +25,20 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{searchWord}")]
-        public async Task<IActionResult>Get([FromRoute] string searchWord)
+        [HttpGet("search")]
+        public async Task<IActionResult> Get([FromQuery] string searchword, [FromQuery] int? productId)
         {
-            var query = new SubjectSearchDropDownQuery(searchWord);
-            var response = await _subjectRepository.GetSearchDropDownList(query);
-            return Ok(response);
+            if (searchword == null)
+            {
+                var response = await _subjectRepository.GetDropDownListAsync();
+                return Ok(response);
+            }
+            else
+            {
+                var query = new SubjectSearchDropDownQuery(searchword, productId);
+                var response = await _subjectRepository.GetSearchDropDownList(query);
+                return Ok(response);
+            }
         }
     }
 }

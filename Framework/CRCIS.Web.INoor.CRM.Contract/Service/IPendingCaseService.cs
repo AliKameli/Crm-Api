@@ -15,5 +15,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Service
         Task<DataResponse<int>> MoveCaseToAdminAsync(MoveCaseToPartnerAdminCardboardMultiCommand commandMulti);
         Task<DataResponse<int>> MoveCaseToArchiveAsync(MoveCaseToArchiveCommand command);
         Task<DataResponse<int>> MoveCaseToArchiveAsync(MoveCaseToArchiveMultiCommand commandMulti);
+        Task<DataResponse<int>> UpdateCaseAsync(PendingCaseUpdateCommand command);
     }
 }

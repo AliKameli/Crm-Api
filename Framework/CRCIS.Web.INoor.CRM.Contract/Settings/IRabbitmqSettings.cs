@@ -13,8 +13,12 @@ namespace CRCIS.Web.INoor.CRM.Contract.Settings
 
         string ExchangeFeedback { get; set; }
         string QueueFeedback { get; set; }
+
         string ExchangeNotification { get; set; }
         string QueueNotification { get; set; }
+
+        string ExchangeCaseSujectUpdate { get; set; }
+        string QueueCaseSujectUpdate { get; set; }
 
         string HostName { get; set; }
         string Username { get; set; }

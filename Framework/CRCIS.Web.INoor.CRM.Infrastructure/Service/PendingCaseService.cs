@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.CaseSubject;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using MassTransit;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
 {
@@ -21,11 +23,15 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
         private readonly IIdentity _identity;
         private readonly ILogger<PendingCaseService> _logger;
         private readonly IPendingCaseRepository _pendingCaseRepository;
-        public PendingCaseService(IPendingCaseRepository pendingCaseRepository, ILoggerFactory loggerFactory, IIdentity identity)
+
+        private readonly IBus _bus;
+        public PendingCaseService(IPendingCaseRepository pendingCaseRepository, ILoggerFactory loggerFactory,
+            IIdentity identity, IBus bus)
         {
             _logger = loggerFactory.CreateLogger<PendingCaseService>();
             _pendingCaseRepository = pendingCaseRepository;
             _identity = identity;
+            _bus = bus;
         }
 
 
@@ -129,6 +135,41 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
                 }
             }
             return resposne;
+        }
+
+
+
+        public async Task<DataResponse<int>> UpdateCaseAsync(PendingCaseUpdateCommand command)
+        {
+            var response = await _pendingCaseRepository.UpdateCaseAsync(command);
+
+            await triggerUpdateSubjects(command.SubjectIds);
+
+            return response;
+        }
+
+        private async Task triggerUpdateSubjects(string subjectIds)
+        {
+            try
+            {
+                var listIds = subjectIds.Split(',');
+                foreach (var id in listIds)
+                {
+                    try
+                    {
+                        var @event = new CaseSubjectUpdated(Convert.ToInt32(id));
+                        await _bus.Publish(@event);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogException(e);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+            }
         }
     }
 }
