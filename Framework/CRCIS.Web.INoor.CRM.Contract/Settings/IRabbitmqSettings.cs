@@ -20,6 +20,9 @@ namespace CRCIS.Web.INoor.CRM.Contract.Settings
         string ExchangeCaseSujectUpdate { get; set; }
         string QueueCaseSujectUpdate { get; set; }
 
+        string ExchangeNoorlockSoftwareInserted { get; }
+        string QueueNoorlockSoftwareInserted { get; }
+
         string HostName { get; set; }
         string Username { get; set; }
         string Password { get; set; }
