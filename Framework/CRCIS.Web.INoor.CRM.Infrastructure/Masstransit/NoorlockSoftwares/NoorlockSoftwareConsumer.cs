@@ -24,11 +24,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.NoorlockSoftwares
 
         public async Task Consume(ConsumeContext<NoorlockSoftwareInserted> context)
         {
-            if (string.IsNullOrEmpty(context.Message.JsonString) == false)
-            {
+            //if (string.IsNullOrEmpty(context.Message.JsonString) == false)
+            //{
                 try
                 {
-                    var model = System.Text.Json.JsonSerializer.Deserialize<NoorlockSoftwareInsertedModel>(context.Message.JsonString);
+                    var model = context.Message;
+                    //var model = System.Text.Json.JsonSerializer.Deserialize<NoorlockSoftwareInsertedModel>(context.Message.JsonString);
                     var command = new ProductBySecretCreateCommand
                     {
                         Title = model.SotwareName,
@@ -42,7 +43,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.NoorlockSoftwares
                     //_logger.LogException(ex);
                     throw ex;
                 }
-            }
+            //}
         }
     }
 }

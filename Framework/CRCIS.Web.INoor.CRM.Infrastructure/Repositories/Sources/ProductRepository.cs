@@ -151,9 +151,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Sources
 
             var id =
                  await dbConnection
-                .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+                .QueryAsync<int>(sql, command, commandType: CommandType.StoredProcedure);
 
-            return new DataResponse<int>(id);
+            return new DataResponse<int>(id.FirstOrDefault());
 
         }
         public async Task<DataResponse<int>> UpdateAsync(ProductUpdateCommand command)

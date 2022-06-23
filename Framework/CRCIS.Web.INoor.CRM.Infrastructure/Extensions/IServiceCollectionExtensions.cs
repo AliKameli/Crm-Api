@@ -260,28 +260,30 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
                         oq.ConfigureConsumer<CaseSubjectConsumer>(provider);
                     });
 
-                    //config.ReceiveEndpoint(rabbitmqSettings.QueueNoorlockSoftwareInserted, oq =>
-                    //{
-                    //    oq.Bind(rabbitmqSettings.ExchangeFeedback, x =>
-                    //    {
-                    //        x.Durable = true;
-                    //        x.AutoDelete = false;
-                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
-                    //                                             //x.routingkey = "8675309";
-                    //    });
-                    //    oq.UseMessageRetry(r => r.Interval(2, 100));
-                    //    oq.ConfigureConsumer<NoorlockSoftwareConsumer>(provider);
-                    //});
+                    config.ReceiveEndpoint(rabbitmqSettings.QueueNoorlockSoftwareInserted, oq =>
+                    {
+                        oq.ClearMessageDeserializers();
+                        oq.UseRawJsonSerializer();
+                        oq.Bind(rabbitmqSettings.ExchangeNoorlockSoftwareInserted, x =>
+                        {
+                            x.Durable = true;
+                            x.AutoDelete = false;
+                            x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                                                                 //x.routingkey = "8675309";
+                        });
+                        oq.UseMessageRetry(r => r.Interval(2, 100));
+                        oq.ConfigureConsumer<NoorlockSoftwareConsumer>(provider);
+                    });
 
-                    //config.ReceiveEndpoint($"{rabbitmqSettings.QueueNoorlockSoftwareInserted}-logs", oq =>
-                    //{
-                    //    oq.Bind(rabbitmqSettings.ExchangeNoorlockSoftwareInserted, x =>
-                    //    {
-                    //        x.Durable = true;
-                    //        x.AutoDelete = false;
-                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
-                    //    });
-                    //});
+                    config.ReceiveEndpoint($"{rabbitmqSettings.QueueNoorlockSoftwareInserted}-logs", oq =>
+                    {
+                        oq.Bind(rabbitmqSettings.ExchangeNoorlockSoftwareInserted, x =>
+                        {
+                            x.Durable = true;
+                            x.AutoDelete = false;
+                            x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                        });
+                    });
 
                     config.Publish<NotificationValueDataEntered>(x =>
                     {
