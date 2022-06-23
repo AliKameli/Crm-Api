@@ -38,7 +38,6 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit;
 using GreenPipes;
 using RabbitMQ.Client;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications;
-//using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.UserReportSupports;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.Menu;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.Menu;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Permissions.AdminAction;
@@ -52,6 +51,7 @@ using CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.CaseSubject;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.ProductSubject;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.ProductSubject;
+using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.NoorlockSoftwares;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 {
@@ -220,6 +220,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             {
                 x.AddConsumer<NotificationConsumer>();
                 x.AddConsumer<CaseSubjectConsumer>();
+                x.AddConsumer<NoorlockSoftwareConsumer>();
                 //x.AddConsumer<UserReportSupportConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
@@ -259,6 +260,29 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
                         oq.ConfigureConsumer<CaseSubjectConsumer>(provider);
                     });
 
+                    config.ReceiveEndpoint(rabbitmqSettings.QueueNoorlockSoftwareInserted, oq =>
+                    {
+                        oq.Bind(rabbitmqSettings.ExchangeFeedback, x =>
+                        {
+                            x.Durable = true;
+                            x.AutoDelete = false;
+                            x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                                                                 //x.routingkey = "8675309";
+                        });
+                        oq.UseMessageRetry(r => r.Interval(2, 100));
+                        oq.ConfigureConsumer<NoorlockSoftwareConsumer>(provider);
+                    });
+
+                    config.ReceiveEndpoint($"{rabbitmqSettings.QueueNoorlockSoftwareInserted}-logs", oq =>
+                    {
+                        oq.Bind(rabbitmqSettings.ExchangeNoorlockSoftwareInserted, x =>
+                        {
+                            x.Durable = true;
+                            x.AutoDelete = false;
+                            x.ExchangeType = ExchangeType.Fanout;// "fanout"
+                        });
+                    });
+
                     config.Publish<NotificationValueDataEntered>(x =>
                     {
                         x.Exclude = true; // do not create an exchange for this type
@@ -267,32 +291,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
                     {
                         x.Exclude = true; // do not create an exchange for this type
                     });
-
-                    //config.ReceiveEndpoint(rabbitmqSettings.QueueFeedback, oq =>
-                    //{
-                    //    oq.Bind(rabbitmqSettings.ExchangeFeedback, x =>
-                    //    {
-                    //        x.Durable = true;
-                    //        x.AutoDelete = false;
-                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
-                    //                                             //x.RoutingKey = "8675309";
-                    //    });
-                    //    oq.ConfigureConsumer<UserReportSupportConsumer>(provider);
-                    //});
+                     config.Publish<NoorlockSoftwareInserted>(x =>
+                    {
+                        x.Exclude = true; // do not create an exchange for this type
+                    });
 
 
-                    //config.ReceiveEndpoint($"{rabbitmqSettings.QueueFeedback}-logs", oq =>
-                    //{
-                    //    oq.Lazy = true;
-                    //    oq.Bind(rabbitmqSettings.ExchangeFeedback, x =>
-                    //    {
-                    //        x.Durable = true;
-                    //        x.AutoDelete = false;
-                    //        x.ExchangeType = ExchangeType.Fanout;// "fanout"
-                    //    });
-                    //    //oq.Bind<UserReportSupportConsumer>();
-                    //    //oq.ConfigureConsumer<UserReportSupportConsumer>(provider);
-                    //});
                 }));
             });
 
