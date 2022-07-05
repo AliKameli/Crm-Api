@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Queries;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Configuration;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
@@ -28,10 +29,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         private readonly ITokenStoreService _tokenStoreService;
         private readonly IPermissionService _permissionService;
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
         public LoginController(IAdminRepository adminRepository, IMapper mapper,
             IJwtProvider jwtProvider, ITokenStoreService tokenStoreService,
             IPermissionService permissionService, ILoggerFactory loggerFactory,
-            IAdminService adminService)
+            IAdminService adminService, IConfiguration configuration)
         {
             _adminRepository = adminRepository;
             _mapper = mapper;
@@ -40,6 +42,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _permissionService = permissionService;
             _logger = loggerFactory.CreateLogger<LoginController>(); ;
             _adminService = adminService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -70,7 +73,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             }
             admin = await _adminRepository.FindAdminAsync(personId);
             var dataResponse = await _adminService.GetVerifyTokenForNoorAdmin(username, name, family, personId, "Dashboard", null);
-            return Redirect($"http://localhost:8080/login?verifytoken={dataResponse.Data.ToString()}");
+            return Redirect($"{_configuration["VueUrl"]}login?verifytoken={dataResponse.Data}");
 
         }
 

@@ -152,8 +152,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
                 options.ClientSecret = appSettings.AuthOptions.ClientSecret;
                 options.ResponseType = "code";
                 options.ResponseMode = "form_post";
-                options.CallbackPath = "/signin-oidc";
-                options.SignedOutCallbackPath = "/signout-callback-oidc";
+                options.CallbackPath = $"/signin-oidc";
+                options.SignedOutCallbackPath = $"/signout-callback-oidc";
 
                 options.SaveTokens = true;
                 options.Scope.Add("profile");
@@ -161,6 +161,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
 
                 options.Events.OnRedirectToIdentityProvider = context =>
                 {
+                 
+                    context.ProtocolMessage.RedirectUri = $"{configuration["ApiUrl"]}signin-oidc";
+
                     // only modify requests to the authorization endpoint
                     if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
                     {
@@ -216,61 +219,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
                     return Task.CompletedTask;
                 };
             })
-            //.AddJwtBearer(cfg =>
-            //{
-            //    var secretKey = Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]);
-            //    var encryptionKey = Encoding.UTF8.GetBytes(configuration["JwtSettings:EncryptKey"]);
-
-            //    var validationParameters = new TokenValidationParameters
-            //    {
-            //        ClockSkew = TimeSpan.Zero, // tolerance for the expiration date
-            //        RequireSignedTokens = true,
-
-            //        ValidateIssuerSigningKey = true, // verify signature to avoid tampering
-            //        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
-
-            //        RequireExpirationTime = true,
-            //        ValidateLifetime = true, // validate the expiration
-
-            //        ValidateAudience = false, // TODO: change this to avoid forwarding attacks
-            //        ValidAudience = configuration["JwtSettings:Audience"], // site that consumes the token
-
-            //        ValidateIssuer = true, // TODO: change this to avoid forwarding attacks
-            //        ValidIssuer = configuration["JwtSettings:Issuer"], // site that makes the token
-
-            //        TokenDecryptionKey = new SymmetricSecurityKey(encryptionKey),
-            //    };
-
-            //    cfg.RequireHttpsMetadata = false;
-            //    cfg.SaveToken = true;
-            //    cfg.TokenValidationParameters = validationParameters;
-            //    cfg.Events = new JwtBearerEvents
-            //    {
-            //        OnAuthenticationFailed = context =>
-            //        {
-            //            var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
-            //            logger.LogError("Authentication failed.", context.Exception);
-            //            return Task.CompletedTask;
-            //        },
-            //        OnTokenValidated = context =>
-            //        {
-            //            var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<ITokenValidator>();
-            //            return tokenValidatorService.ValidateAsync(context);
-            //        },
-            //        OnMessageReceived = context =>
-            //        {
-            //            return Task.CompletedTask;
-            //        },
-            //        OnChallenge = context =>
-            //        {
-            //            var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
-            //            logger.LogError("OnChallenge error", context.Error, context.ErrorDescription);
-            //            return Task.CompletedTask;
-            //        }
-            //    };
-            //});
-
-
             ;
 
             return services;
