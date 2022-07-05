@@ -150,7 +150,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             app.UseStaticFiles();
             app.UseCookiePolicy(new CookiePolicyOptions()
             {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None
+                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax,
+                Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
             });
             app.UseRouting();
 
