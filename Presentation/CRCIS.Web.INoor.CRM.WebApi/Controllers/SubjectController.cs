@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.Subject.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Subject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
         [HttpPost]
+        [JwtAuthorize]
         public async Task<IActionResult> Post(SubjectCreateModel model)
         {
             var command = _mapper.Map<SubjectCreateCommand>(model);
@@ -50,6 +52,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(SubjectUpdateModel model)
         {
             var command = _mapper.Map<SubjectUpdateCommand>(model);
@@ -58,6 +61,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [JwtAuthorize]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _subjectRepository.DeleteAsync(id);

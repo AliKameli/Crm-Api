@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.AnswerMethod.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.AnswerMethod.Queris;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.AnswerMethod;
 using Microsoft.AspNetCore.Http;
@@ -46,13 +47,16 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPost]
+        [JwtAuthorize]
         public async Task<IActionResult> Post(AnswerMethodCreateModel model)
         {
             var command = _mapper.Map<AnswerMethodCreateCommand>(model);
             var response = await _answerMethodRepository.CreateAsync(command);
             return Ok(response);
         }
+
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(AnswerMethodUpdateModel model)
         {
             var command = _mapper.Map<AnswerMethodUpdateCommand>(model);
@@ -61,6 +65,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [JwtAuthorize]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _answerMethodRepository.DeleteAsync(id);

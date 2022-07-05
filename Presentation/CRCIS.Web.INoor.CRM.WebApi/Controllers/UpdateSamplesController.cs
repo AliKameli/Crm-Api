@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _subjectRepository = subjectRepository;
         }
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put()
         {
             var res = await _subjectRepository.UpdateSampleAsync();

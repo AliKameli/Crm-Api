@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.AdminAction;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _adminActionRepository = adminActionRepository;
         }
         [HttpGet("{id}")]
+        [JwtAuthorize]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             var list = await _adminActionRepository.GetAdminActionByAdminIdAsync(id);

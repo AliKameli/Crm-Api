@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Operator.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
@@ -21,7 +22,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _reportRepository = reportRepository;
         }
 
-        [Authorize]
+        [JwtAuthorize]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
              [FromQuery] int pageIndex,

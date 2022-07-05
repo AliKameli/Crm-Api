@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Reports;
 using CRCIS.Web.INoor.CRM.Domain.Reports;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _reportRepository = reportRepository;
         }
 
-        [Authorize]
+        [JwtAuthorize]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
           [FromQuery] int pageIndex,

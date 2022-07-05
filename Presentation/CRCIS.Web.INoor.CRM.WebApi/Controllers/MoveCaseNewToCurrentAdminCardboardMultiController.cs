@@ -7,6 +7,7 @@ using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using CRCIS.Web.INoor.CRM.Contract.Service;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _caseNewService = caseNewService;
         }
 
-        [Authorize]
+        [JwtAuthorize]
         [HttpPut]
         public async Task<IActionResult> Put(MoveMultiCaseToCurrentAdminCardboardModel model)
         {

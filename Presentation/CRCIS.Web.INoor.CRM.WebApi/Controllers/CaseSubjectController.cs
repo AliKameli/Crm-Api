@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.WebApi.Models.CaseSubject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         //}
 
         [HttpPost]
+        [JwtAuthorize]
         public async Task<IActionResult> Post(CaseSubjectCreateModel model)
         {
             var command = _mapper.Map<CaseSubjectCreateCommand>(model);
@@ -54,6 +56,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(CaseSubjectUpdateModel model)
         {
             var command = _mapper.Map<CaseSubjectUpdateCommand>(model);

@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Contract.Repositories.Sources;
 using CRCIS.Web.INoor.CRM.Domain.Reports;
 using CRCIS.Web.INoor.CRM.Domain.Reports.Person.Queries;
 using CRCIS.Web.INoor.CRM.Domain.Sources.Product.Dtos;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Enums;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [JwtAuthorize]
     public class ReportCaseExcelController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;

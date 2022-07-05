@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Domain.Cases.OperationType.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.OperationType.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.OpreationType;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [JwtAuthorize]
     public class OperationTypeController : ControllerBase
     {
         private readonly IOperationTypeRepository _operationTypeRepository;

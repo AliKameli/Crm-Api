@@ -27,6 +27,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             _reportRepository = reportRepository;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
              [FromQuery] int pageIndex,

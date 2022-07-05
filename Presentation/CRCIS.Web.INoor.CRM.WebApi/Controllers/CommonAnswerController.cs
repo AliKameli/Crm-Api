@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.CommonAnswer;
@@ -53,7 +54,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Post(CommonAnswerCreateModel model)
         {
             model.CreatorAdminId = _identity.GetAdminId();
@@ -63,7 +64,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(CommonAnswerUpdateModel model)
         {
             model.ConfirmedAdminId = _identity.GetAdminId();
@@ -72,7 +73,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
         [HttpPatch]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Patch(CommonAnswerEditByOperatorPatchModel model)
         {
             var command = _mapper.Map<CommonAnswerEditByOperatorPatchCommand>(model);
@@ -81,7 +82,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _commonAnswerRepository.DeleteAsync(id);

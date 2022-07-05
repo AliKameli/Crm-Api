@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(CaseUpdateProductModel model)
         {
             var command = _mapper.Map<CaseUpdateProductCommand>(model);

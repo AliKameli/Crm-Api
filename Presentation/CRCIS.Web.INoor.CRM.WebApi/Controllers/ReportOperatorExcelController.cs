@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
@@ -25,7 +26,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _reportRepository = reportRepository;
         }
 
-        [Authorize]
+        [JwtAuthorize]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
            [FromQuery] int pageIndex,

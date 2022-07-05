@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
@@ -34,7 +35,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
             [FromQuery] int pageIndex,
             [FromQuery] string sortField,

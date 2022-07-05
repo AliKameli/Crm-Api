@@ -8,6 +8,7 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Notifications;
 using CRCIS.Web.INoor.CRM.Infrastructure.RabbitMq;
 using CRCIS.Web.INoor.CRM.Infrastructure.Settings;
 using CRCIS.Web.INoor.CRM.WebApi.Extensions;
+using CRCIS.Web.INoor.CRM.WebApi.OpenId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
@@ -50,6 +52,42 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddSingleton<IRabbitmqSettings>(sp =>
              Configuration.GetSection(nameof(RabbitmqSettings)).Get<RabbitmqSettings>());
 
+            #region Identity Client
+            services.AddSingleton<IIdentityClient, IdentityClient>();
+            #endregion Identity Client
+
+            #region HttpClient Factory
+            services.AddHttpClient(HttpClientNameFactory.AuthHttpClient,
+                config =>
+                {
+                    config.Timeout = TimeSpan.FromMinutes(5);
+                    // config.BaseAddress = new Uri("https://localhost:6001/");
+                    config.DefaultRequestHeaders.Add("Accept", "application/json");
+                })
+                .ConfigurePrimaryHttpMessageHandler(h =>
+                {
+                    var handler = new HttpClientHandler();
+
+                    // Enable sending request to server with untrusted SSL cert 
+                    handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    return handler;
+                })
+                .SetHandlerLifetime(TimeSpan.FromMinutes(5)); // HttpMessageHandler lifetime = 2 min
+
+            // services.AddHttpClient<IIdentityClient, IdentityClient>().SetHandlerLifetime(TimeSpan.FromMinutes(2)) // HttpMessageHandler default lifetime = 2 min
+            // .ConfigurePrimaryHttpMessageHandler(h =>
+            // {
+            //   var handler = new HttpClientHandler();
+            //   if (this.env.IsDevelopment())
+            //   {
+            //       //Allow untrusted Https connection
+            //       handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            //   }
+            //   return handler;
+            // });
+            #endregion
+
+            services.AddSingleton<IJwtSettings>(sp => Configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>());
 
             services.AddSingleton<IMailService, MailService>();
             services.AddSingleton<ISmsService, SmsService>();
@@ -62,7 +100,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddDatabaseServices(Configuration);
             services.AddMasstransitServices(Configuration);
             services.AddDatabaseRepositoris();
+
+            var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddJwtAuthentication(Configuration);
+            services.AddOpenIdAuthentication(appSettings,Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CRCIS.Web.INoor.CRM.WebApi", Version = "v1" });
@@ -85,7 +126,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 //                            .AllowAnyMethod();
                 //    });
             });
-
 
             services.AddScoped<ClientIpCheckActionFilter>(container =>
             {
