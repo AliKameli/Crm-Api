@@ -2,6 +2,7 @@
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Users.Admin.Queries;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Admin;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
+        [JwtAuthorize]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
             [FromQuery] int pageIndex,
             [FromQuery] string sortField,
@@ -46,6 +48,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPost]
+        [JwtAuthorize]
         public async Task<IActionResult> Post(AdminCreateModel model)
         {
             var command = _mapper.Map<AdminCreateCommand>(model);
@@ -53,6 +56,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             return Ok(response);
         }
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(AdminUpdateModel model)
         {
             var command = _mapper.Map<AdminUpdateCommand>(model);

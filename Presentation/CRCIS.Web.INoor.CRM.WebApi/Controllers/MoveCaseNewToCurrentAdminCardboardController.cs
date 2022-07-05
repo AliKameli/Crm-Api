@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _identity = identity;
         }
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(MoveCaseToCurrentAdminCardboardModel model)
         {
             var adminId = _identity.GetAdminId();

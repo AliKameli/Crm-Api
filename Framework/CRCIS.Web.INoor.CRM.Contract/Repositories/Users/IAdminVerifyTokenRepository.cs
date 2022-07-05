@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Users
     public interface IAdminVerifyTokenRepository
     {
         Task<DataResponse<Guid>> CreateTokenAsync(int adminId, Dictionary<string, string> queryString, string action = "");
+        Task<DataResponse<Guid>> DeleteVerifyToken(Guid verifyId);
         Task<DataResponse<AdminByVerifyTokenDto>> GetAdminByVerifyToken(Guid verifyId);
     }
 }

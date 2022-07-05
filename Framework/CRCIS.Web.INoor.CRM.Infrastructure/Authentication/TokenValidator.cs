@@ -30,11 +30,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
             }
 
             var serialNumberClaim = claimsIdentity.FindFirst(ClaimTypes.SerialNumber);
-            if (serialNumberClaim == null)
-            {
-                context.Fail("This is not our issued token. It has no serial.");
-                return;
-            }
+            //if (serialNumberClaim == null)
+            //{
+            //    context.Fail("This is not our issued token. It has no serial.");
+            //    return;
+            //}
 
             var userIdString = claimsIdentity.FindFirst(ClaimTypes.UserData).Value;
             if (!int.TryParse(userIdString, out int adminId))
@@ -51,7 +51,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
                 return;
             }
             var admin = dataResponse?.Data;
-            if (admin == null || admin.SerialNumber != serialNumberClaim.Value || !admin.IsActive)
+            if (admin == null ||/* admin.SerialNumber != serialNumberClaim.Value ||*/ !admin.IsActive)
             {
                 // user has changed his/her password/roles/stat/IsActive
                 context.Fail("This token is expired. Please login again.");

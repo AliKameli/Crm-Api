@@ -3,6 +3,7 @@ using CRCIS.Web.INoor.CRM.Contract.Notifications;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
 using CRCIS.Web.INoor.CRM.Domain.Answers.Answering.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Notify.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Answer;
@@ -41,7 +42,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Post([FromForm] AnsweringCreateModel model)
         {
             var listAttachmentFiles = new List<AnsweringAttachmentItemDto>();

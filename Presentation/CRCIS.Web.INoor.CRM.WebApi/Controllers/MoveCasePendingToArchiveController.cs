@@ -1,6 +1,7 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ImportCase.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _pendingService = pendingService;
         }
         [HttpPut]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(MoveCaseToArchiveModel model)
         {
             var command = new MoveCaseToArchiveCommand(model.Id);

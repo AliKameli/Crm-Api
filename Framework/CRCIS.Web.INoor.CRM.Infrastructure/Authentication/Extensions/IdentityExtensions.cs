@@ -29,5 +29,6 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions
             }
             throw new ArgumentException(nameof(adminId));
         }
+
     }
 }

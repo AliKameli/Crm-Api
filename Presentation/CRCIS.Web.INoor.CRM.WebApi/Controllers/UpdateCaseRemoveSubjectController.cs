@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseSubject.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.WebApi.Models.UpdateCaseSubject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [JwtAuthorize]
         public async Task<IActionResult> Put(UpdateCaseRemoveSubjectModel model)
         {
             var command = _mapper.Map<UpdateCaseRemoveSubjectCommand>(model);

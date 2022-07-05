@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,6 +20,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
+        [JwtAuthorize]
         public async Task<IActionResult> Get()
         {
             var response = await _adminRepository.GetDropDownListAsync();

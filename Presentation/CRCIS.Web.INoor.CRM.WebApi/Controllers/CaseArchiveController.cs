@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Cases;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Queris;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         {
             _archiveCaseRepository = archiveCaseRepository;
         }
+
         [HttpGet]
+        [JwtAuthorize]
         public async Task<IActionResult> Get([FromQuery] int pageSize,
         [FromQuery] int pageIndex,
         [FromQuery] string sortField,

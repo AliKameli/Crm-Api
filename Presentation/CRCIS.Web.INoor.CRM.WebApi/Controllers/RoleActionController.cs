@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Repositories.Permissions.Role;
 using CRCIS.Web.INoor.CRM.Domain.Permissions.RoleAction.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.WebApi.Models.RoleAction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +14,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [JwtAuthorize]
     public class RoleActionController : ControllerBase
     {
         private readonly IRoleActionRepository _roleActionRepository;

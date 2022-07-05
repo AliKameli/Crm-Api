@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Cases.PendingCase.Commands;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Case;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             _pendingService = pendingCaseService;
         }
 
-        [Authorize]
+        [JwtAuthorize]
         [HttpPut]
         public async Task<IActionResult> Put(MoveCaseToPartnerAdminCardboardMultiModel model)
         {

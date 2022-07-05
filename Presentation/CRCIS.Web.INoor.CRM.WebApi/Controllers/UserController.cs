@@ -1,5 +1,6 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.ElkSearch;
 using CRCIS.Web.INoor.CRM.Domain.Users.UserSearch;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.WebHttpClient;
 using CRCIS.Web.INoor.CRM.Infrastructure.WebHttpClient.Dtos.SearchUserDto;
 using CRCIS.Web.INoor.CRM.Utility.Response;
@@ -23,6 +24,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
+        [JwtAuthorize]
         public async Task<IActionResult> Get(string username, string fullname,string email , string mobile)
         {
             //var model = new SearchUserGlobalSearchInputDto { SearchText = search };

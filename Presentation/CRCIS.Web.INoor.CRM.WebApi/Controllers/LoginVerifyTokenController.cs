@@ -1,8 +1,10 @@
 ﻿using CRCIS.Web.INoor.CRM.Contract.Authentication;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Users;
 using CRCIS.Web.INoor.CRM.Contract.Service;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using CRCIS.Web.INoor.CRM.WebApi.Models.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -52,6 +54,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
                 SerialNumber = responseUser.Data.SerialNumber,
                 Username = responseUser.Data.Username,
             };
+            await _adminVerifyTokenRepository.DeleteVerifyToken(Guid.Parse(verifyToken.VerifyToken));
             var (expireDate, responseToken) = await _jwtProvider.GenerateAsync(adminModel);
             var resposnePermissions = await _permissionService.GetPermissionsByAdminIdAsync(adminModel.Id);
             var accessTokenData = new AccessTokenData

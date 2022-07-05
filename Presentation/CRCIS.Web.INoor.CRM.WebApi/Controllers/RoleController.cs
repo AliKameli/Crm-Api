@@ -11,12 +11,13 @@ using CRCIS.Web.INoor.CRM.WebApi.Models.Role;
 using AutoMapper;
 using CRCIS.Web.INoor.CRM.Domain.Permissions.Role.Commands;
 using Microsoft.AspNetCore.Authorization;
+using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [JwtAuthorize]
     public class RoleController : ControllerBase
     {
         private readonly IMapper _mapper;
