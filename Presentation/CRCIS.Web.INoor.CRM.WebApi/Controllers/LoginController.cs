@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
