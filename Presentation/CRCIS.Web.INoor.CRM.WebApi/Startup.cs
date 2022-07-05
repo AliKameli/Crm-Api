@@ -148,7 +148,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None
+            });
             app.UseRouting();
 
             app.UseCors(MyAllowSpecificOrigins);
