@@ -18,7 +18,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             var data = new List<PendingResultDto>
             {
