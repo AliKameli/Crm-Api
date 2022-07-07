@@ -113,12 +113,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
         /// <returns>Self</returns>
         public static IServiceCollection AddOpenIdAuthentication(this IServiceCollection services, AppSettings appSettings, IConfiguration configuration)
         {
-
             services.AddHttpContextAccessor();
             services.AddTransient<IIdentity>(sp =>
                 sp.GetService<IHttpContextAccessor>().HttpContext.User.Identity);
             services.AddSingleton<ISecurityService, SecurityService>();
-
 
             IdentityModelEventSource.ShowPII = true;
 
