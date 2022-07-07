@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [JwtAuthorize]
     [ApiController]
     public class AdminPendingCaseController : ControllerBase
     {

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Alarms\WarningHistory\Dtos\" />
     <Folder Include="Answers\Answering\Queries\" />
     <Folder Include="Permissions\RoleAdmin\Queris\" />
     <Folder Include="Sources\SourceConfig\Queries\" />
