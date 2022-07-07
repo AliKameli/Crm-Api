@@ -52,6 +52,10 @@ using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.CaseSubject;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.ProductSubject;
 using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.ProductSubject;
 using CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.NoorlockSoftwares;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Alarms.Warnings;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings;
+using CRCIS.Web.INoor.CRM.Contract.Repositories.Alarms.WarningHistory;
+using CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.WarningHistory;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
 {
@@ -169,6 +173,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoleActionRepository, RoleActionRepository>();
             services.AddScoped<IRoleAdminRepository, RoleAdminRepository>();
+            services.AddScoped<IWarningRepository, WarningRepository>();
+            services.AddScoped<IWarningHistoryRepository, WarningHistoryRepository>();
 
             //BL Databases
             services.AddScoped<ICaseNewService, CaseNewService>();
@@ -176,6 +182,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Extensions
             services.AddScoped<IArchiveCaseService, ArchiveCaseService>();
             services.AddScoped<ICaseSubjectService, CaseSubjectService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IWarningService, WarningService>();
 
             //BL Admin
             services.AddTransient<IAdminService, AdminService>();
