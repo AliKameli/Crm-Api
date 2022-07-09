@@ -163,9 +163,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRCIS.Web.INoor.CRM.WebApi v1"));
             }
 
-            //app.UseHttpsRedirection();
+            app.UseCookiePolicy();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseCookiePolicy();
             app.UseRouting();
 
             app.UseCors(MyAllowSpecificOrigins);
