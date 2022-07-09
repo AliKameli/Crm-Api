@@ -147,8 +147,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
                 bool isRequireHttpsMetadata = !string.IsNullOrEmpty(oidcServerBaseUrl) && oidcServerBaseUrl.StartsWith("https");
 
                 options.NonceCookie.SecurePolicy = CookieSecurePolicy.None;
+                options.NonceCookie.SameSite = SameSiteMode.Unspecified;
                 options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
-
+                options.CorrelationCookie.SameSite = SameSiteMode.Unspecified;
                 options.Authority = oidcServerBaseUrl;// string.IsNullOrEmpty() ? "https://localhost:6001" : oidcServerBaseUrl;
                 options.RequireHttpsMetadata = isRequireHttpsMetadata;
                 options.MetadataAddress = $"{oidcServerBaseUrl}/.well-known/openid-configuration";
