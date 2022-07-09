@@ -104,9 +104,17 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddJwtAuthentication(Configuration);
             services.AddOpenIdAuthentication(appSettings,Configuration);
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CRCIS.Web.INoor.CRM.WebApi", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "CRCIS.Web.INoor.CRM.WebApi", Version = "v1" });
+                options.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
             });
             services.AddCors(options =>
             {
