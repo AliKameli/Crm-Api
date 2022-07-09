@@ -87,6 +87,15 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             // });
             #endregion
 
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for 
+                //non -essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Unspecified;
+            });
+
             services.AddSingleton<IJwtSettings>(sp => Configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>());
 
             services.AddSingleton<IMailService, MailService>();
@@ -103,7 +112,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi
 
             var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddJwtAuthentication(Configuration);
-            services.AddOpenIdAuthentication(appSettings,Configuration);
+            services.AddOpenIdAuthentication(appSettings, Configuration);
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "CRCIS.Web.INoor.CRM.WebApi", Version = "v1" });
