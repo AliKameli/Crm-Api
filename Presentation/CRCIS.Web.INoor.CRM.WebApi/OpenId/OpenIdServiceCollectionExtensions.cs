@@ -132,7 +132,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
              {
                  //options.ExpireTimeSpan = TimeSpan.FromSeconds(120);
                  //options.Cookie.SameSite = SameSiteMode.Lax;
-                 options.Cookie.SameSite = SameSiteMode.None;
+                 options.Cookie.SameSite = SameSiteMode.Unspecified;
                  options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                  options.Cookie.HttpOnly = true;
              })
