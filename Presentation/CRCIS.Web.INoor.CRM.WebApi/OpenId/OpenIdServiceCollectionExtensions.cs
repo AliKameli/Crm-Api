@@ -134,6 +134,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
                  //options.Cookie.SameSite = SameSiteMode.Lax;
                  options.Cookie.SameSite = SameSiteMode.None;
                  options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                 options.Cookie.HttpOnly = true;
              })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
