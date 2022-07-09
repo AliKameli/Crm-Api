@@ -132,6 +132,8 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
              {
                  //options.ExpireTimeSpan = TimeSpan.FromSeconds(120);
                  //options.Cookie.SameSite = SameSiteMode.Lax;
+                 options.Cookie.SameSite = SameSiteMode.None;
+                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
              })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -142,6 +144,10 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
                 // Get config values from AppSetting file
                 string oidcServerBaseUrl = appSettings?.HostOptions.AuthServer;
                 bool isRequireHttpsMetadata = !string.IsNullOrEmpty(oidcServerBaseUrl) && oidcServerBaseUrl.StartsWith("https");
+
+                options.NonceCookie.SecurePolicy = CookieSecurePolicy.None;
+                options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
+
                 options.Authority = oidcServerBaseUrl;// string.IsNullOrEmpty() ? "https://localhost:6001" : oidcServerBaseUrl;
                 options.RequireHttpsMetadata = isRequireHttpsMetadata;
                 options.MetadataAddress = $"{oidcServerBaseUrl}/.well-known/openid-configuration";
