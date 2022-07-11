@@ -20,6 +20,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Alarms.WarningHistory.Commands
             WarningId = warningId;
             AdminId = adminId;
             WarningHistoryTypeId = warningHistoryType.ToInt32(); ;
+            CreateDate = DateTime.Now;
         }
     }
 }
