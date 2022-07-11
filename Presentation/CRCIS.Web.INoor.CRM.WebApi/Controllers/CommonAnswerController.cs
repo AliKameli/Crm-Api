@@ -68,7 +68,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             var response = await _commonAnswerRepository.CreateAsync(command);
             try
             {
-                await _warningService.CreateAsync(new Domain.Alarms.Warnings.Commands.WarningCreateCommand("پاسخ رایج جدید ثبت شد", WarningType.CreateCommonAnswer.ToInt32()))
+                await _warningService.CreateAsync(new Domain.Alarms.Warnings.Commands.WarningCreateCommand("پاسخ رایج جدید ثبت شد", WarningType.CreateCommonAnswer.ToInt32()));
             }
             catch (Exception)
             {
