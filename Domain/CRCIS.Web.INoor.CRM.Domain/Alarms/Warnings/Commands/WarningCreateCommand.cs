@@ -13,5 +13,11 @@ namespace CRCIS.Web.INoor.CRM.Domain.Alarms.Warnings.Commands
         public string Description { get; set; }
         public DateTime CreateDate { get; set; }
         public int WarningTypeId { get; set; }
+
+        public WarningCreateCommand(string title, int warningTypeId)
+        {
+            Title = title;
+            WarningTypeId = warningTypeId;
+        }
     }
 }

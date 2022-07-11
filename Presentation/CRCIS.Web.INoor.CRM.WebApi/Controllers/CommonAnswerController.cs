@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using CRCIS.Web.INoor.CRM.Contract.Repositories.Answers;
+using CRCIS.Web.INoor.CRM.Contract.Service;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Queries;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Attributes;
 using CRCIS.Web.INoor.CRM.Infrastructure.Authentication.Extensions;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
+using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Queries;
 using CRCIS.Web.INoor.CRM.WebApi.Models.CommonAnswer;
 using Microsoft.AspNetCore.Authorization;
@@ -25,11 +28,14 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         private readonly ICommonAnswerRepository _commonAnswerRepository;
         private readonly IMapper _mapper;
         private readonly IIdentity _identity;
-        public CommonAnswerController(IMapper mapper, ICommonAnswerRepository commonAnswerRepository, IIdentity identity)
+
+        private readonly IWarningService _warningService;
+        public CommonAnswerController(IMapper mapper, ICommonAnswerRepository commonAnswerRepository, IIdentity identity, IWarningService warningService)
         {
             _mapper = mapper;
             _commonAnswerRepository = commonAnswerRepository;
             _identity = identity;
+            _warningService = warningService;
         }
 
         [HttpGet("{id}")]
@@ -60,6 +66,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
             model.CreatorAdminId = _identity.GetAdminId();
             var command = _mapper.Map<CommonAnswerCreateCommand>(model);
             var response = await _commonAnswerRepository.CreateAsync(command);
+            try
+            {
+                await _warningService.CreateAsync(new Domain.Alarms.Warnings.Commands.WarningCreateCommand("پاسخ رایج جدید ثبت شد", WarningType.CreateCommonAnswer.ToInt32()))
+            }
+            catch (Exception)
+            {
+            }
             return Ok(response);
         }
 

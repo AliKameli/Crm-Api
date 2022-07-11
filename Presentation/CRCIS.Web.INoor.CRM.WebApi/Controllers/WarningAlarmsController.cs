@@ -9,7 +9,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[JwtAuthorize]
+    [JwtAuthorize]
     public class WarningAlarmsController : ControllerBase
     {
 
@@ -23,7 +23,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult>Get()
         {
-
             var response =await _warningService.GetImportantWarningsDayCountAsync();
             return Ok(response);   
         }

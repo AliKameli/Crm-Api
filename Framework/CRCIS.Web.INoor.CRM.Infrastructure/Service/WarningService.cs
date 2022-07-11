@@ -58,7 +58,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             return response;
 
         }
-
+        public async Task<DataResponse<long>> UpdateWarningAsVisitedAsync(long warningId)
+        {
+            var command = new WarningUpdateAsVistedCommand(warningId, _identity.GetAdminId());
+            return await _warningRepository.UpdateWarningAsVisitedAsync(command);
+        }
         public async Task<DataTableResponse<IEnumerable<WarningGetDto>>> GetWarningsAsync(WarningDataTableQuery query)
         {
             var resposnse = await _warningRepository.GetAsync(query);

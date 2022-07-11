@@ -49,6 +49,30 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
             }
         }
 
+        public async Task<DataResponse<long>> UpdateWarningAsVisitedAsync(WarningUpdateAsVistedCommand command)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "UpdateAsVisted");
+
+                var execute =
+                     await dbConnection
+                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+                return new DataResponse<long>(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<long>(errors);
+                return result;
+            }
+        } 
+
 
         public async Task<DataTableResponse<IEnumerable<WarningGetDto>>> GetAsync(WarningDataTableQuery query)
         {
