@@ -8,6 +8,12 @@ namespace CRCIS.Web.INoor.CRM.Utility.Extensions
 {
     public static class DateTimeExtensions
     {
+        public static string ToPersinDateString(this DateTime? dateTime,bool includeHoursMinutes = false,bool includeSeconds =false)
+        {
+            if (dateTime == null) return String.Empty;
+
+            return dateTime.Value.ToPersinDateString(includeHoursMinutes,includeSeconds);
+        }
         public static string ToPersinDateString(this DateTime dateTime,bool includeHoursMinutes = false,bool includeSeconds =false )
         {
             var persianCalendar = new System.Globalization.PersianCalendar();

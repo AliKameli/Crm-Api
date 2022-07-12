@@ -14,7 +14,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Service
     {
         Task<DataResponse<long>> CreateAsync(WarningCreateCommand command);
         Task<DataResponse<long>> GetImportantWarningsDayCountAsync();
-        Task<DataTableResponse<IEnumerable<WarningGetDto>>> GetWarningsAsync(WarningDataTableQuery query);
+        Task<DataTableResponse<IEnumerable<WarningGetFullDto>>> GetWarningsAsync(WarningDataTableQuery query);
         Task<DataResponse<long>> UpdateWarningAsVisitedAsync(long warningId);
     }
 }

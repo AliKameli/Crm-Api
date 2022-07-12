@@ -13,6 +13,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
+using AutoMapper.Configuration;
+using AutoMapper;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
 {
@@ -20,9 +23,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
     {
         protected override string TableName => "Warning";
         private ILogger _logger;
-        public WarningRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory) : base(sqlConnectionFactory)
+        private readonly IMapper _mapper;
+        public WarningRepository(ISqlConnectionFactory sqlConnectionFactory,
+            IMapper mapper,
+            ILoggerFactory loggerFactory) : base(sqlConnectionFactory)
         {
             _logger = loggerFactory.CreateLogger<WarningRepository>();
+            _mapper = mapper;
         }
 
         public async Task<DataResponse<long>> CreateAsync(WarningCreateCommand command)
@@ -74,7 +81,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
         } 
 
 
-        public async Task<DataTableResponse<IEnumerable<WarningGetDto>>> GetAsync(WarningDataTableQuery query)
+        public async Task<DataTableResponse<IEnumerable<WarningGetFullDto>>> GetAsync(WarningDataTableQuery query)
         {
             try
             {
@@ -87,7 +94,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
                     .QueryAsync<WarningGetDto>(sql, query, commandType: CommandType.StoredProcedure);
 
                 var totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
-                var result = new DataTableResponse<IEnumerable<WarningGetDto>>(list, totalCount);
+
+                var listFull = list.AsQueryable().ProjectTo<WarningGetFullDto>(_mapper.ConfigurationProvider).ToList();
+
+                var result = new DataTableResponse<IEnumerable<WarningGetFullDto>>(listFull, totalCount);
                 return result;
 
             }
@@ -95,7 +105,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
             {
                 _logger.LogError(ex.Message);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
-                var result = new DataTableResponse<IEnumerable<WarningGetDto>>(errors);
+                var result = new DataTableResponse<IEnumerable<WarningGetFullDto>>(errors);
                 return result;
             }
         }

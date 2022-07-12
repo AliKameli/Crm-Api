@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRCIS.Web.INoor.CRM.Domain.Alarms.Warnings.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Answers.CommonAnswer.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos;
@@ -64,19 +65,19 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                  .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
                  .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(src => src.OperationTypeDateTime.ToPersinDateString(true, false)))
                 ;
-             CreateMap<AdminCardboardDto, AdminCardboardFullDto>()
-                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
-                ;
+            CreateMap<AdminCardboardDto, AdminCardboardFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+               ;
 
-             CreateMap<ReportAnswerDto, ReportAnswerResponseFullDto>()
-                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
-                 .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(src => src.OperationTypeDateTime.ToPersinDateString(true, false)))
-                ;
+            CreateMap<ReportAnswerDto, ReportAnswerResponseFullDto>()
+                .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+                .ForMember(dest => dest.OperationTypeDateTimePersian, opt => opt.MapFrom(src => src.OperationTypeDateTime.ToPersinDateString(true, false)))
+               ;
 
-              CreateMap<ReportSubjectDto, ReportSubjectResponseFullDto>()
-                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
-                 .ForMember(dest => dest.SubjectCaseCreateAtPersian, opt => opt.MapFrom(src => src.SubjectCaseCreateAt.ToPersinDateString(true, false)))
-                ;
+            CreateMap<ReportSubjectDto, ReportSubjectResponseFullDto>()
+               .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)))
+               .ForMember(dest => dest.SubjectCaseCreateAtPersian, opt => opt.MapFrom(src => src.SubjectCaseCreateAt.ToPersinDateString(true, false)))
+              ;
 
 
             CreateMap<ImportCaseGetDto, ImportCaseGetFullDto>()
@@ -87,6 +88,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
 
             CreateMap<ArchiveCaseGetDto, ArchiveCaseGetFullDto>()
                 .ForMember(dest => dest.CreateDateTimePersian, opt => opt.MapFrom(src => src.CreateDateTime.ToPersinDateString(true, false)));
+
+            CreateMap<WarningGetDto, WarningGetFullDto>()
+                .ForMember(dest => dest.CreateDatePersian, opt => opt.MapFrom(src => src.CreateDate.ToPersinDateString(true, false)))
+                .ForMember(dest => dest.VisitDatePersian, opt => opt.MapFrom(src => src.VisitDate.ToPersinDateString(true, false)))
+           ;
+
 
         }
     }
