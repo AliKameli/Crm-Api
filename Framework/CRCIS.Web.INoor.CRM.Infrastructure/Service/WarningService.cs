@@ -63,13 +63,13 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
             var command = new WarningUpdateAsVistedCommand(warningId, _identity.GetAdminId());
             return await _warningRepository.UpdateWarningAsVisitedAsync(command);
         }
-        public async Task<DataTableResponse<IEnumerable<WarningGetDto>>> GetWarningsAsync(WarningDataTableQuery query)
+        public async Task<DataTableResponse<IEnumerable<WarningGetFullDto>>> GetWarningsAsync(WarningDataTableQuery query)
         {
             var resposnse = await _warningRepository.GetAsync(query);
 
             if (resposnse.Success)
             {
-
+                // log history view admin id
             }
 
             return resposnse;
@@ -79,7 +79,8 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Service
         {
             var showLogTypes = _configuration.GetSection("ShowLogTypes").Get<List<string>>();
             var showLogTypeIds = string.Join(',', showLogTypes.Select(a => Enum.Parse<WarningHistoryType>(a)).Select(a => a.ToInt32()));
-            var query = new ImportantWarningsDayQuery(System.DateTime.Today, showLogTypeIds);
+            var fromDay = DateTime.Today.AddDays(-5);
+            var query = new ImportantWarningsDayQuery(fromDay, showLogTypeIds);
             var response = await _warningRepository.GetImportantWarningsDayAsync(query);
             if (response.Success)
             {

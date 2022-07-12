@@ -17,6 +17,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Cases.ArchiveCase.Dtos
         public string Email { get; set; }
         public string Mobile { get; set; }
         public DateTime ImportDateTime { get; set; }
+        public string ImportDateTimePersian { get; set; }
         public long RowNumber { get; set; }
         public string SourceTypeTitle { get; set; }
         public string FirstSubject { get; set; }
