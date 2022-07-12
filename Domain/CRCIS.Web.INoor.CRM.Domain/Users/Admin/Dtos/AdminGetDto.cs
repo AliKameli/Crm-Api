@@ -12,6 +12,7 @@ namespace CRCIS.Web.INoor.CRM.Domain.Users.Admin.Dtos
         public string Username { get; set; }
         public string Name { get; set; }
         public string Family { get; set; }
+        public bool IsActive { get; set; }
         public Guid NoorPersonId { get; set; }
         public int RowNumber { get; set; }
         public string Mobile { get; set; }
