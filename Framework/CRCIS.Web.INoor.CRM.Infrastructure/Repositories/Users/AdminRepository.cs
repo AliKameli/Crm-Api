@@ -194,6 +194,30 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
                 return result;
             }
         }
+
+        public async Task<DataResponse<int>>UpdateAdminInfoAsync(UpdateAdminInfoCommand command)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "UpdateInfo");
+
+                var execute =
+                     await dbConnection
+                    .ExecuteAsync(sql, command, commandType: CommandType.StoredProcedure);
+
+                return new DataResponse<int>(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataResponse<int>(errors);
+                return result;
+            }
+        }
         public async Task<DataResponse<int>> UpdateAsync(AdminUpdateCommand command)
         {
             try
