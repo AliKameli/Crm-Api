@@ -21,6 +21,7 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Users
         Task<DataResponse<AdminModel>> GetByIdAsync(int id);
         Task<DataResponse<IEnumerable<AdminDropDownListDto>>> GetDropDownListAsync();
         Task<DataResponse<AdminGetDto>> GetProfileByIdAsync(int id);
+        Task<DataResponse<int>> UpdateAdminInfoAsync(UpdateAdminInfoCommand command);
         Task UpdateAdminLastActivityDateAsync(int adminId);
         Task<DataResponse<int>> UpdateAsync(AdminUpdateCommand command);
         Task<DataResponse<int>> UpdatePasswordHashAsync(int adminId, string newPasswordHash);

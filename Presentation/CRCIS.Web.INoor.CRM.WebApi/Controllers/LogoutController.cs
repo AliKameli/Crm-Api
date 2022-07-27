@@ -19,12 +19,9 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
-
-            return Redirect($"{_configuration["VueUrl"]}login"); 
+            return SignOut(OpenIdConnectDefaults.AuthenticationScheme);
         }
     }
 }

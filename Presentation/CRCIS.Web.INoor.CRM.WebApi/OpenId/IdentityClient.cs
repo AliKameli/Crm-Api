@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -38,11 +39,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
         /// <param name="logger">Logger</param>
         /// <param name="httpClientFactory">HttpClientFactory</param>
         public IdentityClient(
-            IOptions<AppSettings> configuration,
+            IConfiguration configuration,
             ILogger<IdentityClient> logger,
             IHttpClientFactory httpClientFactory)
         {
-            this.appSettings = configuration.Value;
+            this.appSettings = configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             this.logger = logger;
             this.httpClientFactory = httpClientFactory;
             this.remoteServiceBaseUrl = this.appSettings.HostOptions.AuthServer;
@@ -50,7 +51,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.OpenId
 
             #region Set variables
 
-            this.secret = DEFAULT_SECRET;
+            this.secret = this.appSettings?.AuthOptions?.ClientSecret ?? DEFAULT_SECRET;
             this.clientId = this.appSettings?.AuthOptions?.ClientId ?? DEFAULT_CLIENT_ID;
             #endregion
 

@@ -35,10 +35,12 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
             return _singletonClient;
         }
 
+
+
         public IEnumerable<PersonSearchViewModel> Search(string fullName, string mobile, string username, string email)
         {
             var searchRequest = buildQuery(fullName, mobile, username, email);
-            var json = getSingletonClient().RequestResponseSerializer.SerializeToString(searchRequest);
+            //var json = getSingletonClient().RequestResponseSerializer.SerializeToString(searchRequest);
             var searchResponse = getSingletonClient().Search<PersonSearchViewModel>(searchRequest);
 
             var people = searchResponse.Documents;

@@ -55,13 +55,13 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             #region Identity Client
             services.AddSingleton<IIdentityClient, IdentityClient>();
             #endregion Identity Client
-
+            var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             #region HttpClient Factory
             services.AddHttpClient(HttpClientNameFactory.AuthHttpClient,
                 config =>
                 {
                     config.Timeout = TimeSpan.FromMinutes(5);
-                    // config.BaseAddress = new Uri("https://localhost:6001/");
+                    config.BaseAddress = new Uri(appSettings.HostOptions.AuthServer);
                     config.DefaultRequestHeaders.Add("Accept", "application/json");
                 })
                 .ConfigurePrimaryHttpMessageHandler(h =>
@@ -110,7 +110,6 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             services.AddMasstransitServices(Configuration);
             services.AddDatabaseRepositoris();
 
-            var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddJwtAuthentication(Configuration);
             services.AddOpenIdAuthentication(appSettings, Configuration);
             services.AddSwaggerGen(options =>
@@ -175,6 +174,11 @@ namespace CRCIS.Web.INoor.CRM.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGet("", context =>
+                {
+                    context.Response.Redirect($"{Configuration["VueUrl"]}", permanent: false);
+                    return Task.FromResult(0);
+                });
             });
         }
     }
