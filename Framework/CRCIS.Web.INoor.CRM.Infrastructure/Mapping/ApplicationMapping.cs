@@ -38,7 +38,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Mapping
                 .ForMember(dest => dest.AccessOperatorBeforConfirmAdmin, opt => opt.MapFrom(src => false))
                 ;
 
-            CreateMap<CaseHistoriesQuery, CaseHistoriesDto>()
+            CreateMap<CasePendingHistoryReportByCaseIdDto, CaseHistoriesDto>()
                 .ForMember(dest => dest.IsAnswering, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault() < 3))
                 .ForMember(dest => dest.OnlySaving, opt => opt.MapFrom(src => src.AnswerMethodId.GetValueOrDefault() > 2))
                 .ForMember(dest => dest.AdminFullName, opt => opt.MapFrom(src => $"{src.AdminName } { src.AdminFamily}".Trim()))

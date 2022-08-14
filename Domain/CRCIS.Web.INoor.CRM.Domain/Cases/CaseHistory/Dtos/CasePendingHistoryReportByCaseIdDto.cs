@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries
 {
-    public class CaseHistoriesQuery
+    public class CasePendingHistoryReportByCaseIdDto
     {
         public long CaseId { get; set; }
         public long? PendingHistoryId { get; set; }

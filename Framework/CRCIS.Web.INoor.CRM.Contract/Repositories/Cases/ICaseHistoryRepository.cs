@@ -1,4 +1,5 @@
 ﻿using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Dtos;
+using CRCIS.Web.INoor.CRM.Domain.Cases.CaseHistory.Queries;
 using CRCIS.Web.INoor.CRM.Utility.Response;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Repositories.Cases
 {
     public interface ICaseHistoryRepository
     {
-        Task<DataResponse<CaseHistoriesFullDto>> GetReportForCaseAsync(long id);
+        Task<DataResponse<CaseHistoriesFullDto>> CasePendingHistoryReportByCaseIdAsync(CasePendingHistoryReportByCaseIdQuery query );
     }
 }

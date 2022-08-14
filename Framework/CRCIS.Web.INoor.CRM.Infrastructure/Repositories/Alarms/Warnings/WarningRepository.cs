@@ -103,7 +103,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogException(ex);
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<WarningGetFullDto>>(errors);
                 return result;
@@ -129,7 +129,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.Warnings
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogException(ex );
                 var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
                 var result = new DataTableResponse<IEnumerable<WarningImportanstOnDayListDto>>(errors);
                 return result;

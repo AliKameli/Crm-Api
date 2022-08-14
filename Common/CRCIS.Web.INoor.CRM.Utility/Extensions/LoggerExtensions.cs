@@ -19,6 +19,8 @@ namespace CRCIS.Web.INoor.CRM.Utility.Extensions
             {
                 return;
             }
+
+            //logger.LogError(exception, "exception");
             logger.LogError(exception.Message);
             logger.LogError(exception.StackTrace);
 
