@@ -22,13 +22,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        protected override string TableName => throw new NotImplementedException();
+        protected override string TableName => "";
+
         public CaseHistoryRepository(ISqlConnectionFactory sqlConnectionFactory, ILoggerFactory loggerFactory,IMapper mapper) : base(sqlConnectionFactory)
         {
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<CaseHistoryRepository>();
         }
-        public async Task<DataResponse<CaseHistoriesFullDto>> GetReportForCaseAsync(long id)
+        public async Task<DataResponse<CaseHistoriesFullDto>> CasePendingHistoryReportByCaseIdAsync(CasePendingHistoryReportByCaseIdQuery query)
         {
             try
             {
@@ -36,10 +37,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Cases
                 dbConnection.Open();
 
                 var sql = _sqlConnectionFactory.SpInstanceFree("CRM", "", "CasePendingHistoryReportByCaseId");
-                var query = new { CaseId = id };
                 var historiesQuery =
                      await dbConnection
-                    .QueryAsync<CaseHistoriesQuery>(sql, query, commandType: CommandType.StoredProcedure);
+                    .QueryAsync<CasePendingHistoryReportByCaseIdDto>(sql, query, commandType: CommandType.StoredProcedure);
 
                 var dto = historiesQuery.AsQueryable()
                     .ProjectTo<CaseHistoriesDto>(_mapper.ConfigurationProvider).AsEnumerable();
