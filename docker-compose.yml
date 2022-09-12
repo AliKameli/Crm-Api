@@ -6,10 +6,10 @@ services:
     container_name : crm-api
     restart: always
     logging:
-      driver: "json-file"
+      driver: "json-file"
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: "50m"
+        max-file: "3"
     ports:
       - '9010:80'
       #- '8012:5001'
