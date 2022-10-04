@@ -50,7 +50,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Authentication
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return (token.ValidTo, tokenHandler.WriteToken(token));
+            return await Task.FromResult<(DateTime,string)>((token.ValidTo, tokenHandler.WriteToken(token)));
         }
         private IEnumerable<Claim> _getClaims(AdminModel admin)
         {
