@@ -49,14 +49,14 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Alarms.WarningHistory
         }
 
 
-        public async Task AddLogNotifyWarningToAdmin()
-        {
+        // public async Task AddLogNotifyWarningToAdmin()
+        // {
 
-        }
-        public async Task AddLogAdminVisitedWarning()
-        {
+        // }
+        // public async Task AddLogAdminVisitedWarning()
+        // {
 
-        }
+        // }
 
     }
 }

@@ -195,7 +195,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             }
         }
 
-        public async Task<DataResponse<int>>UpdateAdminInfoAsync(UpdateAdminInfoCommand command)
+        public async Task<DataResponse<int>> UpdateAdminInfoAsync(UpdateAdminInfoCommand command)
         {
             try
             {
@@ -308,7 +308,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
         public async Task<DataResponse<AdminModel>> FindAdminAsync(Guid personId)
         {
             using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
-           
+
             var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "GetByPersonId");
             var command = new { PersonId = personId };
             var adminModel =
@@ -319,8 +319,9 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Users
             return result;
 
         }
-        public async Task UpdateAdminLastActivityDateAsync(int adminId)
+        public Task UpdateAdminLastActivityDateAsync(int adminId)
         {
+            return Task.CompletedTask;
             // throw new NotImplementedException();
         }
     }
