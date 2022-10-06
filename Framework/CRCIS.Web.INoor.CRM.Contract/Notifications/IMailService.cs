@@ -8,6 +8,6 @@ namespace CRCIS.Web.INoor.CRM.Contract.Notifications
 {
     public interface IMailService
     {
-        Task<bool> SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings);
+        bool SendEmail(MailRequest mailRequest, MailSettings mailSettings);
     }
 }

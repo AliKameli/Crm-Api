@@ -20,7 +20,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
             _logger = loggerFactory.CreateLogger<MailService>();
             _hostEnvironment = hostEnvironment;
         }
-        public async Task<bool> SendEmailAsync(MailRequest mailRequest, MailSettings mailSettings)
+        public bool SendEmail(MailRequest mailRequest, MailSettings mailSettings)
         {
             bool result = false;
             try
@@ -37,11 +37,11 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                 //       IsBodyHtml = true,
                 //   };
 
-                var fromMail = new MailAddress(mailSettings.Mail,null,Encoding.UTF8);
-                var toMail = new MailAddress(mailRequest.ToEmail, null,Encoding.UTF8);
+                var fromMail = new MailAddress(mailSettings.Mail, null, Encoding.UTF8);
+                var toMail = new MailAddress(mailRequest.ToEmail, null, Encoding.UTF8);
 
                 var oMail =
-                   new MailMessage(fromMail,toMail)
+                   new MailMessage(fromMail, toMail)
                    {
                        Subject = mailRequest.Subject,
                        SubjectEncoding = new UTF8Encoding(),
@@ -51,7 +51,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Notifications
                    };
 
 
-           
+
 
                 if (mailRequest.Attachments is not null)
                 {

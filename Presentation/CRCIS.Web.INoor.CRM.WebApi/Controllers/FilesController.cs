@@ -19,7 +19,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             var files = new Dictionary<string, object> { };
             string[] filePaths = Directory.GetFiles(Path.Combine(this.Environment.WebRootPath, "mails/"));
