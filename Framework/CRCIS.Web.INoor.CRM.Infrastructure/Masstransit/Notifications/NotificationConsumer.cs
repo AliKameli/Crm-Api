@@ -32,7 +32,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Masstransit.Notifications
             }
             if (context.Message.AnswerMethod == Utility.Enums.AnswerMethod.Email)
             {
-                var result = await _mailService.SendEmailAsync(context.Message.MailRequest, context.Message.MailSettings);
+                var result = _mailService.SendEmail(context.Message.MailRequest, context.Message.MailSettings);
                 await this.UpdateResultAsync(context.Message.PendingHistoryId, result, context.Message.SourceConfigId, context.Message.MailRequest.ToEmail);
             }
         }
