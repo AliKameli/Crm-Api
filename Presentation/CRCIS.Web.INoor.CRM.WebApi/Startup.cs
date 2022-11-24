@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 namespace CRCIS.Web.INoor.CRM.WebApi
 {
     public class Startup
-    { 
+    {
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
