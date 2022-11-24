@@ -94,10 +94,20 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.ElkSearch
                     var qStared = addIdentity(withStarStarting);
                     mustQueries.AddRange(qStared);
                 }
-                else
+
+                if (mobile.StartsWith("+989"))
                 {
-                    var t = addIdentity(mobile);
-                    mustQueries.AddRange(t);
+                    var temp = mobile.Substring(3);
+                    var withStarStarting = $"+98-{temp}";
+                    var qStared = addIdentity(withStarStarting);
+                    mustQueries.AddRange(qStared);
+                }
+                if (mobile.StartsWith("9"))
+                {
+                    var temp = mobile;
+                    var withStarStarting = $"+98-{temp}";
+                    var qStared = addIdentity(withStarStarting);
+                    mustQueries.AddRange(qStared);
                 }
             }
             if (string.IsNullOrEmpty(email) == false)

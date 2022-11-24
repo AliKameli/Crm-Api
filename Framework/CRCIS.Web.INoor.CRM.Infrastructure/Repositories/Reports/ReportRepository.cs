@@ -35,6 +35,7 @@ using CRCIS.Web.INoor.CRM.Domain.Reports.Answer.Dtos;
 using System.Drawing;
 using CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Reports.AdminCardboard.Queries;
+using CRCIS.Web.INoor.CRM.Domain.Users.UserSearch;
 
 namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
 {
@@ -194,10 +195,10 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 for (int index = 0; index < types.Count(); index++)
                 {
                     var type = types.ElementAt(index);
-                    var color =  Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0).ToString();
+                    var color = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0).ToString();
 
                     try { color = colors.ElementAt(index); } catch { }
-                   
+
                     var chartDto = new ProductHistoryLastDayChartDto()
                     {
                         TypeId = type,
@@ -594,5 +595,37 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.Repositories.Reports
                 return result;
             }
         }
+
+        public async Task<DataTableResponse<IEnumerable<SearchUserOutputDto>>> GetMobileReportAsync(PersonByMobileReportQuery query)
+        {
+            try
+            {
+                using var dbConnection = _sqlConnectionFactory.GetOpenConnection();
+
+                var sql = _sqlConnectionFactory.SpInstanceFree("CRM", TableName, "Mobile");
+
+                var list =
+                     await dbConnection
+                    .QueryAsync<AdminCardboardDto>(sql, query, commandType: CommandType.StoredProcedure);
+
+                long totalCount = (list == null || !list.Any()) ? 0 : list.FirstOrDefault().TotalCount;
+
+                var listFull = list
+                    .Select(r => (r == null) ? null :
+                        _mapper.Map<SearchUserOutputDto>(r)
+                    );
+
+                var result = new DataTableResponse<IEnumerable<SearchUserOutputDto>>(listFull, totalCount);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex);
+                var errors = new List<string> { "خطایی در ارتباط با بانک اطلاعاتی رخ داده است" };
+                var result = new DataTableResponse<IEnumerable<SearchUserOutputDto>>(errors);
+                return result;
+            }
+        }
+
     }
 }
