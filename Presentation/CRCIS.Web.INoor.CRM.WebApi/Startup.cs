@@ -130,17 +130,12 @@ namespace CRCIS.Web.INoor.CRM.WebApi
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("*")
+                        builder.SetIsOriginAllowed(origin =>true) // allow any origin
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });
-                //options.AddPolicy(name: MyAllowSpecificOrigins,
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://localhost:8080")
-                //                            .AllowAnyHeader()
-                //                            .AllowAnyMethod();
-                //    });
+              
+               
             });
 
             services.AddScoped<ClientIpCheckActionFilter>(container =>
