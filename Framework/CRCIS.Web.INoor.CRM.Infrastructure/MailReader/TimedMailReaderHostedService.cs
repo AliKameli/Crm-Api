@@ -4,6 +4,8 @@ using CRCIS.Web.INoor.CRM.Domain.Email.Commands;
 using CRCIS.Web.INoor.CRM.Domain.Email.Dtos;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig;
 using CRCIS.Web.INoor.CRM.Domain.Sources.SourceConfig.Dtos;
+using CRCIS.Web.INoor.CRM.Utility.Enums;
+using CRCIS.Web.INoor.CRM.Utility.Enums.Extensions;
 using CRCIS.Web.INoor.CRM.Utility.Extensions;
 using MailKit.Net.Pop3;
 using Microsoft.AspNetCore.Hosting;
@@ -63,7 +65,7 @@ namespace CRCIS.Web.INoor.CRM.Infrastructure.MailReader
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
                 ISourceConfigRepository _sourceConfigRepository = scope.ServiceProvider.GetRequiredService<ISourceConfigRepository>();
-                var dataResponse = _sourceConfigRepository.GetBySourceTypesIdAsync(2).Result;
+                var dataResponse = _sourceConfigRepository.GetBySourceTypesIdAsync(SourceType.Email.ToInt32()).Result;
                 if (dataResponse.Success == false)
                 {
                     _logger.LogCritical("GetBySourceTypeId faild reading mails");
