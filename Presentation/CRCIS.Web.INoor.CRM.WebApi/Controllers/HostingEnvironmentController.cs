@@ -23,7 +23,7 @@ namespace CRCIS.Web.INoor.CRM.WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var env = _webHostEnvironment.EnvironmentName;
+            var env = _webHostEnvironment.EnvironmentName + System.DateTime.Now;
             return Ok(env);
         }
     }
