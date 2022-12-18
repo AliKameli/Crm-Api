@@ -28,8 +28,8 @@ ENV http_proxy 'http://172.16.20.207:3128'
 ENV https_proxy 'http://172.16.20.207:3128' 
 ENV no_proxy 'localhost,127.0.0.0/8,.local,172.16.0.0/12,192.168.0.0/16,.ir,.noornet.net'
 
-RUN apk add --no-cache icu-libs
-RUN apk add tzdata
+# RUN apk add --no-cache icu-libs
+# RUN apk add tzdata
 ENV TZ="Asia/Tehran" 
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
