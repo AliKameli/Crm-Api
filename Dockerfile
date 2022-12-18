@@ -1,10 +1,8 @@
 FROM hub.inoor.ir/common/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 
-# ENV http_proxy 'http://172.16.20.207:3128'
-# ENV https_proxy 'http://172.16.20.207:3128' 
-ENV http_proxy 'http://172.16.8.108:3128'
-ENV https_proxy 'http://172.16.8.108:3128' 
+ENV http_proxy 'http://172.16.20.207:3128'
+ENV https_proxy 'http://172.16.20.207:3128' 
 ENV no_proxy 'localhost,127.0.0.0/8,.local,172.16.0.0/12,192.168.0.0/16,.ir,.noornet.net'
 
 # Copy csproj and restore as distinct layers
