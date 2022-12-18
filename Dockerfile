@@ -1,4 +1,4 @@
-FROM hub.inoor.ir/common/dotnet/sdk:6.0 AS build-env
+FROM hub.inoor.ir/common/crm/crm-sdk:6.0 AS build-env
 WORKDIR /app
 
 ENV http_proxy 'http://172.16.20.207:3128'
